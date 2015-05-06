@@ -1,6 +1,9 @@
 package se.mad.copterplant.actor;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 /**
  * 
@@ -11,13 +14,13 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Shape {
 	
-	private enum Type{
+	protected enum Type{
 		Circle, Polygon, Rectangle
 	}
- 	final private Type type;
+ 	final protected Type type;
 	
  	private float width, height, radius;
- 	private float[] vertices;
+ 	private Polygon polygon;
  	
 	protected Shape(float width, float height) {
 		type = Type.Rectangle;
@@ -30,31 +33,35 @@ public class Shape {
 		this.radius = radius;
 	}
 	
-	protected Shape(float[] vertices){
+	protected Shape(Polygon polygon){
 		type = Type.Polygon;
-		this.vertices = vertices; 
+		this.polygon = polygon;
 	}
 	
 	protected void renderShape(ShapeRenderer  renderer, Vector2 pos){
 		switch (type) {
 		case Circle:
-			renderer.circle(pos.x+radius,pos.y+radius, radius);
+			renderer.circle(pos.x,pos.y, radius);
 			break;
 		case Rectangle:
 			renderer.rect(pos.x, pos.y, width, height);
 			break;
 		case Polygon:
-			for(int i = 0;i < vertices.length;i++){
-				if(i%2 == 0){ //TODO it may be the opposite.  
-					vertices[i] *= pos.x;
-				}else{
-					vertices[i] *= pos.y;
-				}
-			}
-			renderer.polygon(vertices);
+			polygon.setPosition(pos.x, pos.y);
+			renderer.polygon(polygon.getTransformedVertices());
 			break;
 		}
 	}
 	
-	
+	/**
+	 * Get the polygon you can only get the polygon if the shape of the actor is polygon.
+	 * @return polygon
+	 *
+	 */
+	protected Polygon getPolygon(){
+		if(type != Type.Polygon){
+			throw new NullPointerException("You can't acces the polygon becouse the shape of the actor is of "+type);
+		}
+		return polygon;
+	}
 }

@@ -1,6 +1,7 @@
 package se.mad.copterplant.actor;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 /**
@@ -51,15 +52,25 @@ public abstract class Actor extends Shape{
 	 * @param vel
 	 * @param vertices
 	 */
-	protected Actor(Vector2 pos, Vector2 vel, float[] vertices){
+	protected Actor(Vector2 pos, Vector2 vel, Polygon vertices){
 		super(vertices);
-		collisionBox = new Rectangle(pos.x, pos.y, 100, 100); //TODO Calculate width
+		collisionBox = vertices.getBoundingRectangle();
 		setPos(pos);
 	}
 
 	private void updateCollisionbox(){
-		collisionBox.x = pos.x;
-		collisionBox.y = pos.y;
+		switch (type) {
+		case Polygon:
+			collisionBox = getPolygon().getBoundingRectangle();
+			break;
+		case Rectangle:
+			collisionBox.x = pos.x;
+			collisionBox.y = pos.y;
+			break;
+		case Circle:
+			collisionBox.setCenter(pos.x, pos.y);
+			break;
+		}
 	}
 
 	public Vector2 getPos() {
