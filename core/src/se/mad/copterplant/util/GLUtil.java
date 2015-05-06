@@ -1,9 +1,14 @@
 package se.mad.copterplant.util;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-
+/**
+ * GLUtil
+ * A util class for simple OpenGL commands.
+ * 
+ * @author DavidSkeppstedt
+ *
+ */
 public class GLUtil {
 
 	public static void CLEAR_Window(Color color){
