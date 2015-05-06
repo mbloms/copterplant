@@ -38,7 +38,7 @@ public class Shape {
 	protected void renderShape(ShapeRenderer  renderer, Vector2 pos){
 		switch (type) {
 		case Circle:
-			renderer.circle(pos.x,pos.y, radius);
+			renderer.circle(pos.x+radius,pos.y+radius, radius);
 			break;
 		case Rectangle:
 			renderer.rect(pos.x, pos.y, width, height);
