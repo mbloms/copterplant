@@ -1,26 +1,38 @@
 package se.mad.copterplant.actor;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 
-public abstract class Actor {
+public abstract class Actor extends Shape{
 	private Vector2 pos;
 	private Vector2 vel;
-	private Shape shape;
-	private Shape collisionBox;
+	private Rectangle collisionBox;
 	
-	public Actor(float posX, float posY, float velX, float velY) {
-		setPos(new Vector2(posX, posY));
-		setPos(new Vector2(velX, velY));
-		shape = new Shape();
-		collisionBox = new Shape();
-		
+	public Actor(Vector2 pos, Vector2 vel, float width, float height) {
+		super(width, height);
+		setPos(pos);
+		setPos(vel);
+		new Rectangle(vel.x, vel.y, width, height);
+	}
+	public Actor(Vector2 pos, Vector2 vel, float radius){
+		super(radius);
+		setPos(pos);
+		setPos(vel);
+		new Rectangle(vel.x, vel.y, radius*2, radius*2);
+	}
+	
+	public Actor(Vector2 pos, Vector2 vel, float[] vertices){
+		super(vertices);
+		setPos(pos);
+		setPos(vel);
+		new Rectangle(vel.x, vel.y, 100, 100); //TODO Calculate width
 	}
 	
 	public abstract void init();
 	public abstract void update(float delta);
-	public abstract void draw(SpriteBatch  batch);
+	public abstract void draw(ShapeRenderer  renderer);
 
 	public Vector2 getPos() {
 		return pos;
@@ -39,5 +51,14 @@ public abstract class Actor {
 
 	public void setVel(Vector2 vel) {
 		this.vel = vel;
+	}
+	
+	public Rectangle getCollisionBox() {
+		return collisionBox;
+	}
+	
+	public void updateCollisionbox(){
+		collisionBox.x = pos.x;
+		collisionBox.y = pos.y;
 	}
 }
