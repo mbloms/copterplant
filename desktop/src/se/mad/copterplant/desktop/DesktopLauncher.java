@@ -12,6 +12,7 @@ public class DesktopLauncher {
 		config.title = Settings.GAME_NAME;
 		config.width = Settings.GAME_WIDTH;
 		config.height =Settings.GAME_HEIGHT;
+		config.fullscreen = true;
 		new LwjglApplication(new Copterplant(), config);
 	}
 }
