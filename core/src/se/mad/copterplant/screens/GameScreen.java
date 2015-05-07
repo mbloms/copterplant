@@ -1,26 +1,25 @@
 package se.mad.copterplant.screens;
-
 import se.mad.copterplant.Copterplant;
 import se.mad.copterplant.util.GLUtil;
+import se.mad.copterplant.util.UserInput;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 
 public class GameScreen extends SimpleScreen {
-
+	
 	public GameScreen(Game game) {
 		super(game);
 	}
 
 	@Override
 	public void init() {
-		
 	}
 
 	@Override
 	public void update(float delta) {
-		
+		UserInput.POLL_USER_INPUT();
 	}
 
 	@Override
