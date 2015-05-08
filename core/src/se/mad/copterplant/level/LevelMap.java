@@ -33,8 +33,13 @@ public class LevelMap {
 		return matrix.getRowList(i);
 	}
 	
+	//TODO: Fix comment
 	public boolean isFilled(int x, int y){
 		return matrix.getBoolean(y, x);
+	}
+	
+	public void fillBlock(int x, int y){
+		matrix.setTrue(y, x);
 	}
 	
 	public void areaFill(){
