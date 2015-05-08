@@ -19,7 +19,7 @@ public abstract class Actor{
 	private Vector2 vel;
 	private Rectangle collisionBox;
 	private Color color;
-	Shape shape;
+	private Shape shape;
 	
 	/**
 	 * Create actor, the velocity is zero as default.
@@ -100,11 +100,28 @@ public abstract class Actor{
 		this.vel = vel;
 	}
 	/**
+	 * Return the render color. The default color is black
+	 *  
+	 */
+	public Color getColor() {
+		return color;
+	}
+
+	/**
+	 * Set the render color. The default color is black
+	 * @return 
+	 */
+	
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	/**
 	 * Return the collision box, you use to detect collision.
 	 *
 	 * @return collision box
 	 */
-	public Rectangle getCollisionBox() {
+	protected Rectangle getCollisionBox() {
 		return collisionBox;
 	}
 	
@@ -127,23 +144,6 @@ public abstract class Actor{
 		shape.setShapeType(shapeType);
 	}
 	
-	/**
-	 * Return the render color. The default color is black
-	 *  
-	 */
-	public Color getColor() {
-		return color;
-	}
-
-	/**
-	 * Set the render color. The default color is black
-	 * @return 
-	 */
-	
-	public void setColor(Color color) {
-		this.color = color;
-	}
-
 	public abstract void init();
 
 	public abstract void update(float delta);
