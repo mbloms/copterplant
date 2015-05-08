@@ -71,7 +71,7 @@ public class BinaryArrayList {
 	public int firstTrueBit(){
 		int i = 32;
 		int seg = 0;
-		while(seg<size){
+		while(seg<segments.length){
 			i = Integer.numberOfLeadingZeros(segments[seg]);
 			if(i!=32){
 				return i + seg*32;
@@ -81,16 +81,65 @@ public class BinaryArrayList {
 		return -1;
 	}
 	
-	//lastBit
+	/**
+	 * Calculates and returns the position of the first bit equal to 0 in the list.
+	 * @return The position of the first bit equal to 0 or -1 if all values are 1.
+	 */
+	public int firstFalseBit(){
+		int i = 32;
+		int seg = 0;
+		while(seg<segments.length){
+			i = Integer.numberOfLeadingZeros(~segments[seg]);
+			if(i!=32){
+				return i + seg*32;
+			}
+			seg++;
+		}
+		return -1;
+	}
 	
 	/**
-	 * Checks if i is out of the arrays bounds. 
+	 * Calculates and returns the position of the last bit equal to 1 in the list.
+	 * @return The position of the last bit equal to 1 or -1 if all values are 0. 
+	 */
+	public int lastTrueBit(){
+		int i = -1;
+		int seg = segments.length-1;
+		while(0<=seg){
+			i = 31-Integer.numberOfTrailingZeros(segments[seg]);
+			if(i!=-1){
+				return i + seg*32;
+			}
+			seg--;
+		}
+		return -1;
+	}
+	
+	/**
+	 * Calculates and returns the position of the last bit equal to 0 in the list.
+	 * @return The position of the last bit equal to 0 or -1 if all values are 1.
+	 */
+	public int lastFalseBit(){
+		int i = -1;
+		int seg = segments.length-1;
+		while(0<=seg){
+			i = 31-Integer.numberOfTrailingZeros(~segments[seg]);
+			if(i!=-1){
+				return i + seg*32;
+			}
+			seg--;
+		}
+		return -1;
+	}
+	
+	/**
+	 * Checks if i is out of the lists bounds. 
 	 * @param i Index
 	 * @throws IllegalArgumentException
 	 */
 	private void checkOutOfBounds(int i) throws IllegalArgumentException{
 		if (0<=size||size<=i){
-			throw new IllegalArgumentException(size+" is out of bounds.");
+			throw new IllegalArgumentException(i+" is out of bounds.");
 		}
 	}
 	
