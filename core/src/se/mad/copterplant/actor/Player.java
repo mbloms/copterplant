@@ -1,5 +1,7 @@
 package se.mad.copterplant.actor;
 
+import se.mad.copterplant.util.UserInput;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -13,38 +15,41 @@ import com.sun.scenario.effect.impl.Renderer.RendererState;
  * @author Andreas Brommund
  *
  */
-public class Player extends Actor{
-	
-	static float[] v = new float[] {
-	        50, 000,
-	        3, 100,
-	        300, 200,
-	        345, 1,
-	        200, 34,
-	        200, 110,
-	        100, 130,
-	        100, 43,
-	    };
+public class Player extends Actor implements Collidable{
+		
+	private boolean visit = false; //TODO Get from field
+	private float speed = 4;
 	
 	public Player(Vector2 pos) {
 
-		super(pos, new Vector2(0,0), new Polygon(v));
+		super(pos, 50f);
 		
-		init();
 	}
 
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
-		
 		
 	}
 
 	@Override
 	public void update(float delta) {
-		setPos(getPos().add(1, 0));
-		setPos(getPos().add(0, 1));
+		if(!visit){
+			setVel(new Vector2(0, 0));
+		}
 		
+		if (UserInput.RIGHT){
+			setVel(new Vector2(speed, 0));
+		}
+		if (UserInput.LEFT){
+			setVel(new Vector2(-speed, 0));	
+		}
+		if (UserInput.UP){
+			setVel(new Vector2(0, speed));
+		}
+		if (UserInput.DOWN){
+			setVel(new Vector2(0, -speed));
+		}
+		setPos(getPos().add(getVel()));
 	}
 
 	@Override
@@ -57,5 +62,17 @@ public class Player extends Actor{
 		renderer.rect(getCollisionBox().x, getCollisionBox().y,getCollisionBox().width, getCollisionBox().height);
 		
 		renderer.end();
+	}
+
+	@Override
+	public void collide(Collidable other) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isColliding(Collidable other) {
+		
+		return false;
 	}
 }
