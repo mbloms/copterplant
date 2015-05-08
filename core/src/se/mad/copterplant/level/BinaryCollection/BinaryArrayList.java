@@ -71,7 +71,7 @@ public class BinaryArrayList {
 		int i = 32;
 		int seg = 0;
 		while(seg<segments.length){
-			i = Integer.numberOfLeadingZeros(segments[seg]);
+			i = Integer.numberOfTrailingZeros(segments[seg]);
 			if(i!=32){
 				return i + seg*32;
 			}
@@ -88,7 +88,7 @@ public class BinaryArrayList {
 		int i = 32;
 		int seg = 0;
 		while(seg<segments.length){
-			i = Integer.numberOfLeadingZeros(~segments[seg]);
+			i = Integer.numberOfTrailingZeros(~segments[seg]);
 			if(i!=32){
 				return i + seg*32;
 			}
@@ -105,7 +105,7 @@ public class BinaryArrayList {
 		int i = -1;
 		int seg = segments.length-1;
 		while(0<=seg){
-			i = 31-Integer.numberOfTrailingZeros(segments[seg]);
+			i = 31-Integer.numberOfLeadingZeros(segments[seg]);
 			if(i!=-1){
 				return i + seg*32;
 			}
@@ -122,7 +122,7 @@ public class BinaryArrayList {
 		int i = -1;
 		int seg = segments.length-1;
 		while(0<=seg){
-			i = 31-Integer.numberOfTrailingZeros(~segments[seg]);
+			i = 31-Integer.numberOfLeadingZeros(~segments[seg]);
 			if(i!=-1){
 				return i + seg*32;
 			}
