@@ -72,6 +72,16 @@ public class BinaryArrayMatrix {
 	}
 	
 	/**
+	 * Use with caution! Returns A POINTER to the list element.
+	 * Changes to it will affect the list in the matrix.
+	 * @param i The row to return
+	 * @return A pointer to the specified list object.
+	 */
+	public BinaryArrayList getRowList(int i){
+		return rows[i];
+	}
+	
+	/**
 	 * Checks if i or j is out of the lists bounds. 
 	 * @param i row
 	 * @param j column
