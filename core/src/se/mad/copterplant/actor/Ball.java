@@ -11,13 +11,14 @@ public class Ball extends Actor  implements Collidable{
 
 	
 	public Ball(Vector2 pos) {
-		super(pos, new Vector2(0,0),25);
+		super(pos);
 	}
 
 
 	@Override
 	public void init() {
 		setVel(new Vector2(MathUtils.random(5,5),5));
+		setShape(25);
 	}
 
 	@Override
@@ -30,9 +31,7 @@ public class Ball extends Actor  implements Collidable{
 
 	@Override
 	public void draw(ShapeRenderer renderer) {
-		renderer.begin(ShapeType.Line);
-		renderShape(renderer, getPos());
-		renderer.end();
+		drawActor(renderer);
 	}
 
 
