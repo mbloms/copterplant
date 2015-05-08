@@ -18,7 +18,7 @@ public abstract class Actor extends Shape{
 	private Rectangle collisionBox;
 	
 	/**
-	 * Create a rectangle shape to the actor, you need to specify a velocity.
+	 * Create a rectangle shape to the actor, the velocity is zero as default.
 	 * 
 	 * @param pos
 	 * @param vel
@@ -32,7 +32,7 @@ public abstract class Actor extends Shape{
 	}
 	
 	/**
-	 * Create a circle shape to the actor, you need to specify a velocity.
+	 * Create a circle shape to the actor, the velocity is zero as default.
 	 * 
 	 * @param pos
 	 * @param vel
@@ -46,7 +46,7 @@ public abstract class Actor extends Shape{
 	
 	
 	/**
-	 * Create a polygon shape to the actor, you need to specify a velocity.
+	 * Create a polygon shape to the actor, the velocity is zero as default.
 	 * 
 	 * @param pos
 	 * @param vel
