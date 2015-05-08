@@ -11,5 +11,5 @@ public interface Collidable {
 	 * @param other
 	 * @return true if they are colliding.
 	 */
-	public boolean isColliding(Collidable other);
+	public boolean isColliding(Actor other);
 }
