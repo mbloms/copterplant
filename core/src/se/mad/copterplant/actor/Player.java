@@ -1,5 +1,9 @@
 package se.mad.copterplant.actor;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+
 import se.mad.copterplant.util.UserInput;
 
 import com.badlogic.gdx.graphics.Color;
@@ -16,29 +20,26 @@ import com.sun.scenario.effect.impl.Renderer.RendererState;
  *
  */
 public class Player extends Actor implements Collidable{
-		
-	private boolean visit = false; //TODO Get from field
+	
 	private float speed = 4;
 	
 	public Player(Vector2 pos) {
-
-		super(pos, 50f);
-		
+		super(pos);
 	}
 
 	@Override
 	public void init() {
-		
+		setShape(50f);
+		setShapeType(ShapeType.Filled);
+		setColor(Color.RED);
 	}
 
 	@Override
 	public void update(float delta) {
-		if(!visit){
-			setVel(new Vector2(0, 0));
-		}
 		
 		if (UserInput.RIGHT){
 			setVel(new Vector2(speed, 0));
+			setColor(Color.BLUE);
 		}
 		if (UserInput.LEFT){
 			setVel(new Vector2(-speed, 0));	
@@ -54,14 +55,7 @@ public class Player extends Actor implements Collidable{
 
 	@Override
 	public void draw(ShapeRenderer renderer) {
-		renderer.begin(ShapeType.Line);
-		renderer.setColor(Color.CYAN);
-		
-		renderShape(renderer, getPos());
-		renderer.setColor(Color.GREEN);
-		renderer.rect(getCollisionBox().x, getCollisionBox().y,getCollisionBox().width, getCollisionBox().height);
-		
-		renderer.end();
+		drawActor(renderer);
 	}
 
 	@Override
@@ -71,8 +65,8 @@ public class Player extends Actor implements Collidable{
 	}
 
 	@Override
-	public boolean isColliding(Collidable other) {
-		
+	public boolean isColliding(Actor other) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 }
