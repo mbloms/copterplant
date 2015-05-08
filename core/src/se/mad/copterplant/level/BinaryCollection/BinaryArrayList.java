@@ -137,7 +137,7 @@ public class BinaryArrayList {
 	 * @throws IllegalArgumentException
 	 */
 	private void checkOutOfBounds(int i) throws IllegalArgumentException{
-		if (0<=size||size<=i){
+		if (size<=i||i<0){
 			throw new IllegalArgumentException(i+" is out of bounds.");
 		}
 	}
