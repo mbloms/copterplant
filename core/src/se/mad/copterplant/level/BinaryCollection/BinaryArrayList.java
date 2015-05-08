@@ -1,4 +1,4 @@
-package se.mad.copterplant.level;
+package se.mad.copterplant.level.BinaryCollection;
 /**
  * BinaryList implementation using arrays.
  * @author Mikael Blomstand

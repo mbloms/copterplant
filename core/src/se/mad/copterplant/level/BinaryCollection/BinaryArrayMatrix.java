@@ -1,4 +1,4 @@
-package se.mad.copterplant.level;
+package se.mad.copterplant.level.BinaryCollection;
 
 public class BinaryArrayMatrix {
 	private int size;
@@ -25,6 +25,7 @@ public class BinaryArrayMatrix {
 	 * @return the bits boolean value.
 	 */
 	public boolean getBoolean(int i, int j){
+		checkOutOfBounds(i, j);
 		return rows[i].getBoolean(j);
 	}
 	
@@ -34,6 +35,7 @@ public class BinaryArrayMatrix {
 	 * @param j The bits column.
 	 */
 	public void setTrue(int i, int j){
+		checkOutOfBounds(i, j);
 		rows[i].setTrue(j);
 	}
 	
@@ -43,6 +45,22 @@ public class BinaryArrayMatrix {
 	 * @param j The bits column.
 	 */
 	public void setFalse(int i, int j){
+		checkOutOfBounds(i, j);
 		rows[i].setFalse(j);
+	}
+	
+	/**
+	 * Checks if i or j is out of the lists bounds. 
+	 * @param i row
+	 * @param j column
+	 * @throws IllegalArgumentException
+	 */
+	private void checkOutOfBounds(int i, int j) throws IllegalArgumentException{
+		if (size<=i||i<0){
+			throw new IllegalArgumentException(i+" is out of bounds.");
+		}
+		else if (size<=j||j<0){
+			throw new IllegalArgumentException(j+" is out of bounds.");
+		}
 	}
 }
