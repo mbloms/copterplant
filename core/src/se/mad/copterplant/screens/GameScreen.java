@@ -1,20 +1,22 @@
 package se.mad.copterplant.screens;
+import java.util.ArrayList;
 import se.mad.copterplant.Copterplant;
+import se.mad.copterplant.actor.Collidable;
 import se.mad.copterplant.util.GLUtil;
 import se.mad.copterplant.util.UserInput;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 
 public class GameScreen extends SimpleScreen {
-	
+	private ArrayList<Collidable> actors;
 	public GameScreen(Game game) {
 		super(game);
 	}
 
 	@Override
 	public void init() {
+		
 	}
 
 	@Override
