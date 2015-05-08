@@ -1,6 +1,7 @@
 package se.mad.copterplant.actor;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -12,56 +13,51 @@ import com.badlogic.gdx.math.Vector2;
  *
  */
 
-public abstract class Actor extends Shape{
+public abstract class Actor{
 	private Vector2 pos;
 	private Vector2 vel;
 	private Rectangle collisionBox;
+	Shape shape;
 	
 	/**
-	 * Create a rectangle shape to the actor, the velocity is zero as default.
+	 * Create actor, the velocity is zero as default.
 	 * 
 	 * @param pos
-	 * @param vel
-	 * @param width
-	 * @param height
 	 */
-	protected Actor(Vector2 pos, float width, float height) {
-		super(width, height);
-		collisionBox = new Rectangle(pos.x, pos.y, width, height);
-		setUpActor(pos);
-	}
-	
-	/**
-	 * Create a circle shape to the actor, the velocity is zero as default.
-	 * 
-	 * @param pos
-	 * @param vel
-	 * @param radius
-	 */
-	protected Actor(Vector2 pos, float radius){
-		super(radius);
-		collisionBox = new Rectangle(pos.x, pos.y, radius*2, radius*2);
-		setUpActor(pos);
-	}
-	
-	
-	/**
-	 * Create a polygon shape to the actor, the velocity is zero as default.
-	 * 
-	 * @param pos
-	 * @param vel
-	 * @param vertices
-	 */
-	protected Actor(Vector2 pos, Polygon vertices){
-		super(vertices);
-		collisionBox = vertices.getBoundingRectangle();
+	protected Actor(Vector2 pos){
 		setUpActor(pos);
 	}
 
+	/**
+	 * Set the shape to a rectangle.
+	 * @param width
+	 * @param height
+	 */
+	protected void setShape(float width, float height){
+		shape = new Shape(width,height);
+		collisionBox = new Rectangle(pos.x, pos.y, width, height);
+	}
+	
+	/**
+	 * Set the shape to a circle
+	 * @param radius
+	 */
+	protected void setShape(float radius){
+		shape = new Shape(radius);
+		collisionBox = new Rectangle(pos.x, pos.y, radius*2, radius*2);
+	}
+	/**
+	 * Set the shape to a polygon
+	 * @param polygon
+	 */
+	protected void setShape(Polygon polygon){
+		shape = new Shape(polygon);
+		collisionBox = polygon.getBoundingRectangle();
+	}
 	private void updateCollisionbox(){
-		switch (type) {
+		switch (shape.type) {
 		case Polygon:
-			collisionBox = getPolygon().getBoundingRectangle();
+			collisionBox = shape.getPolygon().getBoundingRectangle();
 			break;
 		case Rectangle:
 			collisionBox.x = pos.x;
@@ -86,7 +82,10 @@ public abstract class Actor extends Shape{
 
 	public void setPos(Vector2 pos) {
 		this.pos = pos;
-		updateCollisionbox();
+		if(shape != null){
+			updateCollisionbox();
+		}
+		
 	}
 
 
@@ -105,6 +104,22 @@ public abstract class Actor extends Shape{
 	 */
 	public Rectangle getCollisionBox() {
 		return collisionBox;
+	}
+	
+	/**
+	 * Render the shape.
+	 * @param renderer
+	 */
+	protected void drawActor(ShapeRenderer renderer){
+		shape.renderShape(renderer, pos);
+	}
+	
+	/**
+	 * Set the shape type, the shape type is line as default. 
+	 * @param shapeType
+	 */
+	protected void setShapeType(ShapeType shapeType){
+		shape.setShapeType(shapeType);
 	}
 	
 	public abstract void init();
