@@ -25,10 +25,10 @@ public abstract class Actor extends Shape{
 	 * @param width
 	 * @param height
 	 */
-	protected Actor(Vector2 pos, Vector2 vel, float width, float height) {
+	protected Actor(Vector2 pos, float width, float height) {
 		super(width, height);
 		collisionBox = new Rectangle(pos.x, pos.y, width, height);
-		setUpActor(pos,vel);
+		setUpActor(pos);
 	}
 	
 	/**
@@ -38,10 +38,10 @@ public abstract class Actor extends Shape{
 	 * @param vel
 	 * @param radius
 	 */
-	protected Actor(Vector2 pos, Vector2 vel, float radius){
+	protected Actor(Vector2 pos, float radius){
 		super(radius);
 		collisionBox = new Rectangle(pos.x, pos.y, radius*2, radius*2);
-		setUpActor(pos,vel);
+		setUpActor(pos);
 	}
 	
 	
@@ -52,10 +52,10 @@ public abstract class Actor extends Shape{
 	 * @param vel
 	 * @param vertices
 	 */
-	protected Actor(Vector2 pos, Vector2 vel, Polygon vertices){
+	protected Actor(Vector2 pos, Polygon vertices){
 		super(vertices);
 		collisionBox = vertices.getBoundingRectangle();
-		setUpActor(pos,vel);
+		setUpActor(pos);
 	}
 
 	private void updateCollisionbox(){
@@ -73,9 +73,9 @@ public abstract class Actor extends Shape{
 		}
 	}
 
-	private void setUpActor(Vector2 pos, Vector2 vel){
+	private void setUpActor(Vector2 pos){
 		setPos(pos);
-		setVel(vel);
+		setVel(new Vector2(0, 0));
 		init();
 	}
 	public Vector2 getPos() {
