@@ -2,7 +2,7 @@ package se.mad.copterplant.level.BinaryCollection;
 /**
  * BinaryList implementation using arrays.
  * @author Mikael Blomstand
- * @version 2015-05-06
+ * @version 2015-05-09
  */
 public class BinaryArrayList {
 	

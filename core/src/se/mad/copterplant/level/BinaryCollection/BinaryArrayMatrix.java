@@ -1,7 +1,12 @@
 package se.mad.copterplant.level.BinaryCollection;
 
+/**
+ * @author Mikael Blomstrand
+ * @version 2015-05-09
+ */
 public class BinaryArrayMatrix {
-	private int size;
+	private int m;
+	private int n;
 	private BinaryArrayList[] rows;
 	
 	/**
@@ -11,10 +16,27 @@ public class BinaryArrayMatrix {
 	 * @param capacity
 	 */
 	public BinaryArrayMatrix(int capacity){
-		this.size = capacity;
+		this.m = capacity;
+		this.n = capacity;
 		rows = new BinaryArrayList[capacity];
 		for (int i = 0; i < rows.length; i++) {
 			rows[i] = new BinaryArrayList(capacity);
+		}
+	}
+	
+	/**
+	 * Constructs a Binary Matrix with the specified number of columns and rows.
+	 * The rows are represented by Binary Lists.
+	 * These rows are then placed in an array.
+	 * @param n Number of columns
+	 * @param m Number of rows
+	 */
+	public BinaryArrayMatrix(int m, int n){
+		this.m = m;
+		this.n = n;
+		rows = new BinaryArrayList[m];
+		for (int i = 0; i < rows.length; i++) {
+			rows[i] = new BinaryArrayList(n);
 		}
 	}
 	
@@ -56,10 +78,10 @@ public class BinaryArrayMatrix {
 	 * @throws IllegalArgumentException
 	 */
 	private void checkOutOfBounds(int i, int j) throws IllegalArgumentException{
-		if (size<=i||i<0){
+		if (m<=i||i<0){
 			throw new IllegalArgumentException(i+" is out of bounds.");
 		}
-		else if (size<=j||j<0){
+		else if (n<=j||j<0){
 			throw new IllegalArgumentException(j+" is out of bounds.");
 		}
 	}
