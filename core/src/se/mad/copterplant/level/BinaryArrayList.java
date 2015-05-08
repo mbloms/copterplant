@@ -34,7 +34,6 @@ public class BinaryArrayList {
 	 * The bit at index i is in the segment i/32 (integer division).
 	 * The position in the segment is i mod 32.
 	 * @param i the bits index.
-	 * @return 
 	 * @return the bits boolean value.
 	 */
 	public boolean getBoolean(int i){
