@@ -1,5 +1,6 @@
 package se.mad.copterplant.actor;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Circle;
@@ -56,8 +57,9 @@ public class Shape {
 		this.shapeType = shapeType.Line;
 	}
 	
-	protected void renderShape(ShapeRenderer  renderer, Vector2 pos){
+	protected void renderShape(ShapeRenderer  renderer, Vector2 pos, Color color){
 		renderer.begin(shapeType);
+		renderer.setColor(color);
 		switch (type) {
 		case Circle:
 			renderer.circle(pos.x,pos.y, radius);
