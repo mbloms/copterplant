@@ -10,7 +10,7 @@ public class BinaryArrayList {
 	private int[] segments;
 	
 	/**
-	 * Constructs a BinaryList with the specified capacity.
+	 * Constructs a Binary List with the specified capacity.
 	 * The bits are placed in an array with integers.
 	 * Every array element can hold 32 integers each.
 	 * @param capacity
