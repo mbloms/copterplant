@@ -1,6 +1,8 @@
 package se.mad.copterplant.actor;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -12,56 +14,52 @@ import com.badlogic.gdx.math.Vector2;
  *
  */
 
-public abstract class Actor extends Shape{
+public abstract class Actor{
 	private Vector2 pos;
 	private Vector2 vel;
 	private Rectangle collisionBox;
+	private Color color;
+	private Shape shape;
 	
 	/**
-	 * Create a rectangle shape to the actor, you need to specify a velocity.
+	 * Create actor, the velocity is zero as default.
 	 * 
 	 * @param pos
-	 * @param vel
+	 */
+	protected Actor(Vector2 pos){
+		setUpActor(pos);
+	}
+
+	/**
+	 * Set the shape to a rectangle.
 	 * @param width
 	 * @param height
 	 */
-	protected Actor(Vector2 pos, Vector2 vel, float width, float height) {
-		super(width, height);
+	protected void setShape(float width, float height){
+		shape = new Shape(width,height);
 		collisionBox = new Rectangle(pos.x, pos.y, width, height);
-		setPos(pos);
 	}
 	
 	/**
-	 * Create a circle shape to the actor, you need to specify a velocity.
-	 * 
-	 * @param pos
-	 * @param vel
+	 * Set the shape to a circle
 	 * @param radius
 	 */
-	protected Actor(Vector2 pos, Vector2 vel, float radius){
-		super(radius);
+	protected void setShape(float radius){
+		shape = new Shape(radius);
 		collisionBox = new Rectangle(pos.x, pos.y, radius*2, radius*2);
-		setPos(pos);
 	}
-	
-	
 	/**
-	 * Create a polygon shape to the actor, you need to specify a velocity.
-	 * 
-	 * @param pos
-	 * @param vel
-	 * @param vertices
+	 * Set the shape to a polygon
+	 * @param polygon
 	 */
-	protected Actor(Vector2 pos, Vector2 vel, Polygon vertices){
-		super(vertices);
-		collisionBox = vertices.getBoundingRectangle();
-		setPos(pos);
+	protected void setShape(Polygon polygon){
+		shape = new Shape(polygon);
+		collisionBox = polygon.getBoundingRectangle();
 	}
-
 	private void updateCollisionbox(){
-		switch (type) {
+		switch (shape.type) {
 		case Polygon:
-			collisionBox = getPolygon().getBoundingRectangle();
+			collisionBox = shape.getPolygon().getBoundingRectangle();
 			break;
 		case Rectangle:
 			collisionBox.x = pos.x;
@@ -73,6 +71,11 @@ public abstract class Actor extends Shape{
 		}
 	}
 
+	private void setUpActor(Vector2 pos){
+		setPos(pos);
+		setVel(new Vector2(0, 0));
+		init();
+	}
 	public Vector2 getPos() {
 		
 		return pos;
@@ -81,7 +84,10 @@ public abstract class Actor extends Shape{
 
 	public void setPos(Vector2 pos) {
 		this.pos = pos;
-		updateCollisionbox();
+		if(shape != null){
+			updateCollisionbox();
+		}
+		
 	}
 
 
@@ -94,15 +100,53 @@ public abstract class Actor extends Shape{
 		this.vel = vel;
 	}
 	/**
+	 * Return the render color. The default color is black
+	 *  
+	 */
+	public Color getColor() {
+		return color;
+	}
+
+	/**
+	 * Set the render color. The default color is black
+	 * @return 
+	 */
+	
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	/**
 	 * Return the collision box, you use to detect collision.
 	 *
 	 * @return collision box
 	 */
-	public Rectangle getCollisionBox() {
+	protected Rectangle getCollisionBox() {
 		return collisionBox;
 	}
 	
+	/**
+	 * Render the shape.
+	 * @param renderer
+	 */
+	protected void drawActor(ShapeRenderer renderer){
+		if(color == null){
+			color = Color.BLACK;
+		}
+		shape.renderShape(renderer, pos, color);
+	}
+	
+	/**
+	 * Set the shape type, the shape type is line as default. 
+	 * @param shapeType
+	 */
+	protected void setShapeType(ShapeType shapeType){
+		shape.setShapeType(shapeType);
+	}
+	
 	public abstract void init();
+
 	public abstract void update(float delta);
+
 	public abstract void draw(ShapeRenderer  renderer);
 }
