@@ -1,27 +1,35 @@
 package se.mad.copterplant;
-
-import com.badlogic.gdx.ApplicationAdapter;
+import se.mad.copterplant.screens.GameScreen;
+import se.mad.copterplant.util.Settings;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-public class Copterplant extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+/**
+ * This is the main game entry class.
+ * From here you control the current flow of the game by changing the currentScene.
+ * @author DavidSkeppstedt
+ *
+ */
+public class Copterplant extends Game {	
+	public static OrthographicCamera CAMERA;
+	public static ShapeRenderer RENDERER;
+	private Screen currentScreen;
 	
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		CAMERA = new OrthographicCamera();
+		CAMERA.setToOrtho(false,Settings.GAME_WIDTH,Settings.GAME_HEIGHT);
+		RENDERER = new ShapeRenderer();
+		this.setScreen(new GameScreen(this));
 	}
-
 	@Override
-	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+	public void render() {
+		super.render();
+		if (Gdx.input.isKeyPressed(Keys.ESCAPE)){
+			Gdx.app.exit();
+		}
 	}
 }
