@@ -78,7 +78,7 @@ public abstract class Actor{
 	}
 	public Vector2 getPos() {
 		
-		return pos;
+		return new Vector2(pos);
 	}
 
 
@@ -92,7 +92,7 @@ public abstract class Actor{
 
 
 	public Vector2 getVel() {
-		return vel;
+		return new Vector2(vel);
 	}
 
 

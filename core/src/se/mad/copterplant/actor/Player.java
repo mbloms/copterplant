@@ -1,5 +1,9 @@
 package se.mad.copterplant.actor;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+
 import se.mad.copterplant.util.UserInput;
 
 import com.badlogic.gdx.graphics.Color;
@@ -16,8 +20,7 @@ import com.sun.scenario.effect.impl.Renderer.RendererState;
  *
  */
 public class Player extends Actor implements Collidable{
-		
-	private boolean visit = false; //TODO Get from field
+	
 	private float speed = 4;
 	
 	public Player(Vector2 pos) {
@@ -54,14 +57,7 @@ public class Player extends Actor implements Collidable{
 
 	@Override
 	public void draw(ShapeRenderer renderer) {
-		renderer.begin(ShapeType.Line);
-		renderer.setColor(Color.CYAN);
-		
 		drawActor(renderer);
-		renderer.setColor(Color.GREEN);
-		renderer.rect(getCollisionBox().x, getCollisionBox().y,getCollisionBox().width, getCollisionBox().height);
-		
-		renderer.end();
 	}
 
 	@Override
@@ -72,7 +68,7 @@ public class Player extends Actor implements Collidable{
 
 	@Override
 	public boolean isColliding(Actor other) {
-		
+		// TODO Auto-generated method stub
 		return false;
 	}
 }
