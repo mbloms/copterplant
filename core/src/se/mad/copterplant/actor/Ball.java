@@ -2,6 +2,7 @@ package se.mad.copterplant.actor;
 
 import se.mad.copterplant.util.UserInput;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
@@ -19,6 +20,8 @@ public class Ball extends Actor  implements Collidable{
 	public void init() {
 		setVel(new Vector2(MathUtils.random(5,5),5));
 		setShape(25);
+		setShapeType(ShapeType.Filled);
+		setColor(Color.CYAN);
 	}
 
 	@Override
@@ -31,15 +34,15 @@ public class Ball extends Actor  implements Collidable{
 
 	@Override
 	public void draw(ShapeRenderer renderer) {
+		renderer.setColor(Color.GREEN);
 		drawActor(renderer);
 	}
 
 
 	@Override
-	public void collide(Collidable other) {
-		Actor a = (Actor)other;
-		if(a.getPos().y+a.getCollisionBox().height < this.getPos().y || 
-		   a.getPos().y > this.getPos().y
+	public void collide(Actor other) {
+		if(other.getPos().y+other.getCollisionBox().height < this.getPos().y || 
+		   other.getPos().y > this.getPos().y
 		){	
 			setVel(new Vector2(getVel().x,-1*getVel().y));	
 			return;
@@ -51,13 +54,9 @@ public class Ball extends Actor  implements Collidable{
 			setVel(getVel().scl(-1));
 		}
 	}
-		
-	
-
 
 	@Override
 	public boolean isColliding(Actor other) {
 		return getCollisionBox().overlaps(other.getCollisionBox());
 	}
-
 }
