@@ -1,5 +1,6 @@
 package se.mad.copterplant.actor;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Circle;
@@ -15,10 +16,10 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Shape {
 	
-	protected enum Type{
+	public enum Type{
 		Circle, Polygon, Rectangle
 	}
- 	protected Type type;
+ 	public Type type;
 	
  	private float width, height, radius;
  	private Polygon polygon;
@@ -29,7 +30,7 @@ public class Shape {
  	 * @param width
  	 * @param height
  	 */
-	protected Shape(float width, float height) {
+	public Shape(float width, float height) {
 		type = Type.Rectangle;
 		this.width = width;
 		this.height = height;
@@ -40,7 +41,7 @@ public class Shape {
 	 * Set up a circle, shape type is line as default.
 	 * @param polygon
 	 */
-	protected Shape(float radius){
+	public Shape(float radius){
 		type = Type.Circle; 
 		this.radius = radius;
 		this.shapeType = shapeType.Line;
@@ -50,14 +51,15 @@ public class Shape {
 	 * Set up a polygon, shape type is line as default.
 	 * @param polygon
 	 */
-	protected Shape(Polygon polygon){
+	public Shape(Polygon polygon){
 		type = Type.Polygon;
 		this.polygon = polygon;
 		this.shapeType = shapeType.Line;
 	}
 	
-	protected void renderShape(ShapeRenderer  renderer, Vector2 pos){
+	public void renderShape(ShapeRenderer  renderer, Vector2 pos, Color color){
 		renderer.begin(shapeType);
+		renderer.setColor(color);
 		switch (type) {
 		case Circle:
 			renderer.circle(pos.x,pos.y, radius);
@@ -78,18 +80,18 @@ public class Shape {
 	 * @return polygon
 	 *
 	 */
-	protected Polygon getPolygon(){
+	public Polygon getPolygon(){
 		if(type != Type.Polygon){
 			throw new NullPointerException("You can't acces the polygon becouse the shape of the actor is of "+type);
 		}
 		return polygon;
 	}
 
-	protected ShapeType getShapeType() {
+	public ShapeType getShapeType() {
 		return shapeType;
 	}
 
-	protected void setShapeType(ShapeType shapeType) {
+	public void setShapeType(ShapeType shapeType) {
 		this.shapeType = shapeType;
 	}
 }

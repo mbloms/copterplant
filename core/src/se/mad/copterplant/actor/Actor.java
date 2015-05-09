@@ -1,5 +1,6 @@
 package se.mad.copterplant.actor;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Polygon;
@@ -17,7 +18,8 @@ public abstract class Actor{
 	private Vector2 pos;
 	private Vector2 vel;
 	private Rectangle collisionBox;
-	Shape shape;
+	private Color color;
+	private Shape shape;
 	
 	/**
 	 * Create actor, the velocity is zero as default.
@@ -98,11 +100,28 @@ public abstract class Actor{
 		this.vel = vel;
 	}
 	/**
+	 * Return the render color. The default color is black
+	 *  
+	 */
+	public Color getColor() {
+		return color;
+	}
+
+	/**
+	 * Set the render color. The default color is black
+	 * @return 
+	 */
+	
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	/**
 	 * Return the collision box, you use to detect collision.
 	 *
 	 * @return collision box
 	 */
-	public Rectangle getCollisionBox() {
+	protected Rectangle getCollisionBox() {
 		return collisionBox;
 	}
 	
@@ -111,7 +130,10 @@ public abstract class Actor{
 	 * @param renderer
 	 */
 	protected void drawActor(ShapeRenderer renderer){
-		shape.renderShape(renderer, pos);
+		if(color == null){
+			color = Color.BLACK;
+		}
+		shape.renderShape(renderer, pos, color);
 	}
 	
 	/**
@@ -123,6 +145,8 @@ public abstract class Actor{
 	}
 	
 	public abstract void init();
+
 	public abstract void update(float delta);
+
 	public abstract void draw(ShapeRenderer  renderer);
 }
