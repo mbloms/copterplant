@@ -22,7 +22,7 @@ public class Player extends Actor implements Collidable{
 	
 	public Player(Vector2 pos) {
 
-		super(pos, 50f);
+		super(pos);
 		
 	}
 
@@ -57,7 +57,7 @@ public class Player extends Actor implements Collidable{
 		renderer.begin(ShapeType.Line);
 		renderer.setColor(Color.CYAN);
 		
-		renderShape(renderer, getPos());
+		drawActor(renderer);
 		renderer.setColor(Color.GREEN);
 		renderer.rect(getCollisionBox().x, getCollisionBox().y,getCollisionBox().width, getCollisionBox().height);
 		
@@ -65,13 +65,13 @@ public class Player extends Actor implements Collidable{
 	}
 
 	@Override
-	public void collide(Collidable other) {
+	public void collide(Actor other) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public boolean isColliding(Collidable other) {
+	public boolean isColliding(Actor other) {
 		
 		return false;
 	}
