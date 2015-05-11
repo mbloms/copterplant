@@ -1,9 +1,11 @@
 package se.mad.copterplant.screens;
 import se.mad.copterplant.Copterplant;
+import se.mad.copterplant.actor.Ball;
 import se.mad.copterplant.actor.Player;
+import se.mad.copterplant.level.VisualMap;
 import se.mad.copterplant.util.GLUtil;
+import se.mad.copterplant.util.Settings;
 import se.mad.copterplant.util.UserInput;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
