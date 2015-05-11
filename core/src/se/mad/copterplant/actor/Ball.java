@@ -1,5 +1,6 @@
 package se.mad.copterplant.actor;
 
+import se.mad.copterplant.level.VisualMap;
 import se.mad.copterplant.screens.GameScreen;
 import se.mad.copterplant.util.Settings;
 import se.mad.copterplant.util.UserInput;
@@ -25,7 +26,7 @@ public class Ball extends Actor  implements Collidable{
 		setShape(16);
 		setShapeType(ShapeType.Filled);
 		setColor(Color.CYAN);
-		setVel(new Vector2(1,1));
+		setVel(new Vector2(0,1));
 	}
 
 	@Override
@@ -36,6 +37,13 @@ public class Ball extends Actor  implements Collidable{
 										);
 			Vector2 oldPos = getPos();
 			setPos(newPos);
+			
+			
+			if (!VisualMap.BoundsRect.contains(getCollisionBox())) {
+				collide(null);
+			}
+			
+			
 	}
 
 	@Override
@@ -47,6 +55,7 @@ public class Ball extends Actor  implements Collidable{
 
 	@Override
 	public void collide(Actor other) {
+		setVel(getVel().scl(-1));
 	}
 
 	@Override
