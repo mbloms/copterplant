@@ -1,9 +1,12 @@
 package se.mad.copterplant.actor;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import se.mad.copterplant.util.UserInput;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -41,6 +44,17 @@ public class Player extends Actor implements Collidable{
 
 	@Override
 	public void update(float delta) {
+		
+		if(Gdx.input.isKeyPressed(Keys.SPACE)){
+			visit = !visit;
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+			
 		
 		if(visit){
 			setVel(new Vector2(0, 0));
@@ -88,6 +102,24 @@ public class Player extends Actor implements Collidable{
 		renderer.begin(ShapeType.Line);
 		renderer.setColor(Color.GREEN);
 		renderer.rect(getCollisionBox().x, getCollisionBox().y,getCollisionBox().width, getCollisionBox().height);
+		
+		
+		
+		if(creatingPath){
+			Iterator<Vector2> it = path.iterator();
+			Vector2 old = null;
+			while (it.hasNext()) {
+				Vector2 c = it.next();
+				if(old != null){
+					renderer.line(old, c);
+				}
+				old = c;
+				
+			}
+		
+			renderer.line(old, getPos());
+		}
+		
 		
 		renderer.end();
 	}
