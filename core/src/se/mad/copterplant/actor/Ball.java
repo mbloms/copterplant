@@ -1,5 +1,7 @@
 package se.mad.copterplant.actor;
 
+import se.mad.copterplant.screens.GameScreen;
+import se.mad.copterplant.util.Settings;
 import se.mad.copterplant.util.UserInput;
 
 import com.badlogic.gdx.graphics.Color;
@@ -10,26 +12,30 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Ball extends Actor  implements Collidable{
 
-	
+	private float moveTimer = 0.5f;
 	public Ball(Vector2 pos) {
 		super(pos);
+		
 	}
 
 
 	@Override
 	public void init() {
 		setVel(new Vector2());
-		setShape(10);
+		setShape(16);
 		setShapeType(ShapeType.Filled);
 		setColor(Color.CYAN);
+		setVel(new Vector2(1,1));
 	}
 
 	@Override
 	public void update(float delta) {
-		setPos(getPos().add(getVel()));
-		if (UserInput.DOWN)
-			setVel(new Vector2(getVel().x,-1));
-		
+			Vector2 newPos = new Vector2(
+										(int)Math.rint(getPos().x + getVel().x),
+										(int)Math.rint(getPos().y + getVel().y)
+										);
+			Vector2 oldPos = getPos();
+			setPos(newPos);
 	}
 
 	@Override
@@ -41,18 +47,6 @@ public class Ball extends Actor  implements Collidable{
 
 	@Override
 	public void collide(Actor other) {
-		if(other.getPos().y+other.getCollisionBox().height < this.getPos().y || 
-		   other.getPos().y > this.getPos().y
-		){	
-			setVel(new Vector2(getVel().x,-1*getVel().y));	
-			return;
-		}
-		
-		if (Math.abs(this.getVel().y) > 0) {
-				setVel(new Vector2(-1*getVel().x,getVel().y));
-		}else {
-			setVel(getVel().scl(-1));
-		}
 	}
 
 	@Override
