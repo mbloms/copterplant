@@ -40,7 +40,7 @@ public class GameScreen extends SimpleScreen {
 	@Override
 	public void draw() {
 		Copterplant.CAMERA.update();
-		GLUtil.CLEAR_Window(Color.RED);
+		GLUtil.CLEAR_Window(Color.BLACK);
 		Copterplant.RENDERER.setProjectionMatrix(Copterplant.CAMERA.combined);
 		//Here we can render stuff.
 		player.draw(Copterplant.RENDERER);
