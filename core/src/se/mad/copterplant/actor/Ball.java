@@ -36,12 +36,26 @@ public class Ball extends Actor  implements Collidable{
 										(int)Math.rint(getPos().y + getVel().y)
 										);
 			Vector2 oldPos = getPos();
+			Vector2 grid = newPos.cpy();
+			
+			
+			grid.sub(320,96);
+			grid.x /=32;
+			grid.y /=32; 
+
+			System.out.println(grid);
+			
+			if (GameScreen.vMap.map.isFilled((int)grid.x,(int) grid.y)){
+				setVel(getVel().scl(-1));
+			}
 			setPos(newPos);
 			
 			
 			if (!VisualMap.BoundsRect.contains(getCollisionBox())) {
 				collide(null);
 			}
+			
+			
 			
 			
 	}
