@@ -102,6 +102,28 @@ public class BinaryArrayList {
 		return -1;
 	}
 	
+	
+	public int firstTrueBitAfter(int fromIndex){
+		int i = 32;
+		int seg = fromIndex/32+1;
+		int toCheck = (~0)<<(fromIndex%32);
+		i = Integer.numberOfTrailingZeros(segments[seg]&toCheck);
+		if(i!=32){
+			return i + seg*32;
+		}
+		seg++;
+		
+		while(seg<segments.length){
+			i = Integer.numberOfTrailingZeros(segments[seg]);
+			if(i!=32){
+				return i + seg*32;
+			}
+			seg++;
+		}
+		return -1;
+		
+	}
+	
 	/**
 	 * Calculates and returns the position of the first bit equal to 0 in the list.
 	 * @return The position of the first bit equal to 0 or -1 if all values are 1.
