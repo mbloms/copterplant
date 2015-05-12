@@ -16,8 +16,8 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Path{
 	private LinkedList<Vector2> path; 
-	private LinkedList<Rectangle> collisionBox;
-	private LinkedList<Rectangle> collisionBoxTemp;
+	private static LinkedList<Rectangle> collisionBox;
+	private static LinkedList<Rectangle> collisionBoxTemp;
 	float radius = 10;
 	
 	public Path(Vector2 node){
@@ -121,7 +121,28 @@ public class Path{
 		renderer.end();
 		
 	}
-	
+	/**
+	 * Check collision between a rectangle and the path, if it is a collision the method is return true.
+	 * @param Rectangle
+	 * @return true or false
+	 */
+	public static boolean isColliding(Rectangle rect){
+		if(collisionBox == null || collisionBoxTemp == null){
+			return false;
+		}
+		for(Rectangle r:collisionBox){
+			if(rect.overlaps(r)){
+				return true; 
+			}
+		}
+		for(Rectangle r:collisionBoxTemp){
+			if(rect.overlaps(r)){
+				return true; 
+			}	
+		}
+		
+		return false;
+	}
 	@Override
 	public String toString() {
 		return path.toString();

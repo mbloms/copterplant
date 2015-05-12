@@ -26,7 +26,7 @@ public class Ball extends Actor  implements Collidable{
 		setShape(16);
 		setShapeType(ShapeType.Filled);
 		setColor(Color.CYAN);
-		setVel(new Vector2(0,1));
+		setVel(new Vector2(2,1));
 	}
 
 	@Override
@@ -53,7 +53,9 @@ public class Ball extends Actor  implements Collidable{
 			}
 			
 			
-			
+			if(Path.isColliding(this.getCollisionBox())){
+				setVel(getVel().scl(-1));
+			}
 			
 	}
 
