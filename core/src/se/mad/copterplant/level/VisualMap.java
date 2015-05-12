@@ -35,11 +35,16 @@ public class VisualMap {
 		map = new LevelMap(20, 20);
 		BoundsRect = new Rectangle(X_OFFSET*TILE_SIZE,Y_OFFSET*TILE_SIZE,
 				MAP_WIDTH*TILE_SIZE,MAP_HEIGTH*TILE_SIZE);
+		for (int x = 0; x<MAP_WIDTH; x++) {
+			map.fillBlock(x, MAP_HEIGTH-1); // in my eyes this is essentialy zero in an array but everything is backwards.
+			map.fillBlock(x, 0); // in my eyes this is MAP_HEIGTH-1 but everything is bakwards.
+		}
+		
+		for (int y = 1; y<MAP_HEIGTH-1; y++) {
+			map.fillBlock(0, y); // in my eyes this is essentialy zero in an array but everything is backwards.
+			map.fillBlock(MAP_WIDTH-1, y); // in my eyes this is MAP_HEIGTH-1 but everything is bakwards.
+		}
 	}
-
-	public void calculateMap(){
-	}
-
 	/**
 	 * Draws the map using a tile size of 32 pixels.
 	 * Will render the grid with rectangles.
@@ -58,17 +63,11 @@ public class VisualMap {
 
 		for (int x = 0; x < MAP_WIDTH; x++) {
 			for (int y = 0; y<MAP_HEIGTH;y++){
-
 				if (map.isFilled(x, y)) {
 					renderer.rect(X_OFFSET*TILE_SIZE+x*TILE_SIZE,Y_OFFSET*TILE_SIZE+y*TILE_SIZE,TILE_SIZE,TILE_SIZE);
 				}
 			}
 		}
-
 		renderer.end();
-
-
-
-
 	}
 }
