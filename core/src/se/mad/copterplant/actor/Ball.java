@@ -44,6 +44,7 @@ public class Ball extends Actor  implements Collidable{
 			
 			if (GameScreen.vMap.map.isFilled((int)grid.x,(int) grid.y)){
 				setVel(getVel().scl(-1));
+				setPos(oldPos);
 			}else {
 				setPos(newPos);
 			}
@@ -51,9 +52,6 @@ public class Ball extends Actor  implements Collidable{
 			if (!VisualMap.BoundsRect.contains(getCollisionBox())) {
 				collide(null);
 			}
-			
-			
-			
 			
 	}
 
