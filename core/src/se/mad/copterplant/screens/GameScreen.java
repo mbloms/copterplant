@@ -23,7 +23,7 @@ public class GameScreen extends SimpleScreen {
 	public static Ball ball;
 	public static VisualMap vMap;
 	private ArrayList<Collidable> actors;
-	
+
 	public GameScreen(Game game) {
 		super(game);
 	}
@@ -34,9 +34,9 @@ public class GameScreen extends SimpleScreen {
 		player = new Player(new Vector2(10*32-50,Settings.GAME_HEIGHT/2));
 		ball = new Ball(new Vector2(Settings.GAME_WIDTH/2 - 16, Settings.GAME_HEIGHT/2));
 		vMap = new VisualMap();
-		
+
 		actors.add(ball);
-		
+
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class GameScreen extends SimpleScreen {
 		UserInput.POLL_USER_INPUT();
 		player.update(delta);
 		ball.update(delta);
-		
+
 		for (Collidable a: actors) {
 			Actor acto = (Actor)a;
 			if (player.isColliding(acto)) {
