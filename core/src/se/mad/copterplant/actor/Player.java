@@ -68,8 +68,9 @@ public class Player extends Actor implements Collidable{
 					path.removeFirst();
 				}*/
 				System.out.println(path); // TODO Send to filed
-
-				GameScreen.vMap.map.fillTrack(path.getPath());
+				if (path != null) {
+					GameScreen.vMap.map.fillTrack(path.getPath());
+				}
 				path = null;
 			}
 		}else{
@@ -103,7 +104,7 @@ public class Player extends Actor implements Collidable{
 	@Override
 	public void draw(ShapeRenderer renderer) {
 		
-		if(creatingPath){
+		if(creatingPath && path != null){
 			path.draw(renderer, getPos(), getVel());
 		}
 		
@@ -120,12 +121,14 @@ public class Player extends Actor implements Collidable{
 
 	@Override
 	public void collide(Actor other) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("Collision!");
+		setPos(new Vector2(300,200));
+		visit = true;
+		other.setVel(other.getVel().scl(-1));
 	}
 
 	@Override
 	public boolean isColliding(Actor other) {
-		return false;
+		return this.getCollisionBox().overlaps(other.getCollisionBox());
 	}
 }
