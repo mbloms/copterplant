@@ -68,7 +68,8 @@ public class LevelMap {
 	}
 	
 	
-	public void areaFill(){
+	public void areaFill(Vector2 ballPos){
+		LevelMap filledMap = new LevelMap(width, height);
 		
 	}
 
