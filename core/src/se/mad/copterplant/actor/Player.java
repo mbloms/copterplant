@@ -1,19 +1,13 @@
 package se.mad.copterplant.actor;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-
 import se.mad.copterplant.level.VisualMap;
 import se.mad.copterplant.screens.GameScreen;
 import se.mad.copterplant.util.UserInput;
-
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 /**
