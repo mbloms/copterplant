@@ -23,7 +23,7 @@ public class GameScreen extends SimpleScreen {
 	@Override
 	public void init() {
 
-		player = new Player(new Vector2(10*32-50,Settings.GAME_HEIGHT/2));
+		player = new Player(new Vector2(10*32,Settings.GAME_HEIGHT/2));
 		ball = new Ball(new Vector2(Settings.GAME_WIDTH/2 - 16, Settings.GAME_HEIGHT/2));
 		vMap = new VisualMap();
 

@@ -43,31 +43,16 @@ public class Player extends Actor implements Collidable{
 	@Override
 	public void update(float delta) {
 		
-		if(Gdx.input.isKeyPressed(Keys.SPACE)){
-			visit = !visit;
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		Vector2 temp = getPos().sub(320,96);
+		temp.x /= 32; 
+		temp.y /= 32;
+		System.out.println();
 		
-		if (VisualMap.BoundsRect.contains(getCollisionBox())){
-			visit = false;
-		}else {
-			visit = true;
-		}
-		
-		if(visit){
+		if(GameScreen.vMap.map.isFilled((int)temp.x,(int)temp.y)||!VisualMap.BoundsRect.contains(getCollisionBox())){
 			setVel(new Vector2(0, 0));
 			if(creatingPath){
 				creatingPath= false;
 				path.addNode(getPos());
-				/*if(path.getFirst().equals(path.get(1))){
-					path.removeFirst();
-				}*/
-				System.out.println(path); // TODO Send to filed
 
 				GameScreen.vMap.map.fillTrack(path.getPath());
 				path = null;
