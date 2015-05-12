@@ -61,7 +61,6 @@ public class Player extends Actor implements Collidable{
 		}
 		
 		if (VisualMap.BoundsRect.contains(getCollisionBox())){
-			System.out.println("Inside?");
 			visit = false;
 		}else {
 			visit = true;

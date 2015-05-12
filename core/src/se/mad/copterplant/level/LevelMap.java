@@ -48,7 +48,7 @@ public class LevelMap {
 		matrix.setTrue(y, x);
 	}
 
-	public void areaFill(int count){
+	public void areaFill(){
 		
 	}
 
@@ -80,35 +80,22 @@ public class LevelMap {
 						fillBlock((int)gridPos.x-x, (int)gridPos.y);
 						counter++;
 					}
-
 				}
-
 				if (delta.y > 0) {
-
 					for (int y =0 ; y<Math.abs(delta.y); y++) {
 						System.out.println(gridPos.y+y);
 						fillBlock((int)gridPos.x, (int)gridPos.y + y);
 						counter++;
 					}
 				}else {
-					
 					for (int y =0 ; y<Math.abs(delta.y); y++) {
 						System.out.println(gridPos.y-y);
 						fillBlock((int)gridPos.x, (int)gridPos.y - y);
 						counter++;
-					}
-					
+					}	
 				}
-
-
-
-
 			}
-
-
 		}
-		
-		areaFill(counter);
 		//TODO
 	}
 
