@@ -17,8 +17,7 @@ import com.badlogic.gdx.math.Vector2;
  *
  */
 public class Player extends Actor implements Collidable{
-		
-	private boolean visit = true; //TODO Get from field
+	
 	private boolean creatingPath;
 	private Vector2 prevNodeVel;
 	
