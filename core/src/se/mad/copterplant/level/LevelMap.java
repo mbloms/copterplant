@@ -22,11 +22,12 @@ public class LevelMap {
 	BinaryArrayMatrix matrix;
 	int width;
 	int height;
-
-	public LevelMap(int width, int height){
+	VisualMap vMap;
+	public LevelMap(int width, int height,VisualMap vMap){
 		this.width = width;
 		this.height = height;
 		matrix = new BinaryArrayMatrix(height, width);
+		this.vMap = vMap;
 	}
 
 	/**
@@ -41,16 +42,45 @@ public class LevelMap {
 
 	//TODO: Fix comment
 	public boolean isFilled(int x, int y){
-		return matrix.getBoolean(y, x);
+		try{
+			return matrix.getBoolean(y, x);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
 	}
-
-	public void fillBlock(int x, int y){
-		matrix.setTrue(y, x);
+	
+	/**
+	 * Fills the block with the given position.
+	 * Returns true if the block was successfully filled. False if it failed.
+	 * @param x
+	 * @param y
+	 * @return true if block was filled.
+	 */
+	public boolean fillBlock(int x, int y){
+		try{
+			matrix.setTrue(y, x);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return isFilled(x,y);
 	}
-
+	
+	
 	public void areaFill(){
 		
 	}
+
+	/**
+	 * Fills the path between corners in the input arrays.
+	 * @param x An array with the x coordinates of the points where a turn was made.
+	 * @param y An array with the y coordinates of the points where a turn was made.
+	 */
+	/*
+	public void fillTrack(int[] x, int[] y){
+*/
 
 	public void fillTrack(LinkedList<Vector2> path){
 		System.out.println("Began");
@@ -65,7 +95,7 @@ public class LevelMap {
 			if (VisualMap.BoundsRect.contains(pos) && VisualMap.BoundsRect.contains(next)) {
 				Vector2 delta = gridNext.sub(gridPos);
 				gridPos.sub(10,3);
-				System.out.println(delta);
+				
 
 				if (delta.x > 0) {
 					for (int x =0 ; x<Math.abs(delta.x); x++) {
@@ -96,7 +126,8 @@ public class LevelMap {
 				}
 			}
 		}
-		//TODO
+		
+		vMap.updateBoundingBoxes();
 	}
 
 	public void parseString(){
