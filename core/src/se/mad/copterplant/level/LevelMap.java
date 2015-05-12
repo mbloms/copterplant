@@ -41,7 +41,13 @@ public class LevelMap {
 
 	//TODO: Fix comment
 	public boolean isFilled(int x, int y){
-		return matrix.getBoolean(y, x);
+		try{
+			return matrix.getBoolean(y, x);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	/**
@@ -60,7 +66,8 @@ public class LevelMap {
 		}
 		return isFilled(x,y);
 	}
-
+	
+	
 	public void areaFill(){
 		
 	}
