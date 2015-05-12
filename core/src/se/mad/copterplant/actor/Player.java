@@ -2,7 +2,9 @@ package se.mad.copterplant.actor;
 
 import se.mad.copterplant.level.VisualMap;
 import se.mad.copterplant.screens.GameScreen;
+import se.mad.copterplant.util.Settings;
 import se.mad.copterplant.util.UserInput;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
@@ -33,7 +35,7 @@ public class Player extends Actor implements Collidable{
 
 	@Override
 	public void init() {
-		setShape(32);
+		setShape(16);
 		setShapeType(ShapeType.Filled);
 		setColor(Color.RED);
 
@@ -48,7 +50,14 @@ public class Player extends Actor implements Collidable{
 		temp.y /= 32;
 		System.out.println();
 
-		if(GameScreen.vMap.map.isFilled((int)temp.x,(int)temp.y)||!VisualMap.BoundsRect.contains(getCollisionBox())){
+		
+		if (!VisualMap.BoundsRect.contains(getCollisionBox())) {
+			creatingPath = false;
+			setVel(new Vector2(0, 0));
+		}
+		
+		
+		if(GameScreen.vMap.map.isFilled((int)temp.x,(int)temp.y)&&VisualMap.BoundsRect.contains(getCollisionBox())){
 			setVel(new Vector2(0, 0));
 			if(creatingPath){
 				creatingPath= false;
@@ -100,7 +109,7 @@ public class Player extends Actor implements Collidable{
 	@Override
 	public void collide(Actor other) {
 		System.out.println("Collision!");
-		setPos(new Vector2(300,200));
+		setPos(new Vector2(10*32,Settings.GAME_HEIGHT/2));
 		visit = true;
 		other.setVel(other.getVel().scl(-1));
 	}
