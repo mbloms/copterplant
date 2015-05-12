@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -13,11 +14,14 @@ import com.badlogic.gdx.math.Vector2;
  * @author Andreas Brommund
  *
  */
-public class Path {
-	LinkedList<Vector2> path; 
+public class Path{
+	private LinkedList<Vector2> path; 
+	private LinkedList<Rectangle> collisionBox;
+	float radius = 10;
 	
 	public Path(Vector2 node){
 		path = new LinkedList<Vector2>();
+		collisionBox =  new LinkedList<Rectangle>();
 		path.addLast(node);
 	}
 	
@@ -44,7 +48,6 @@ public class Path {
 		renderer.setColor(Color.BLUE);
 		
 		Vector2 old = null;
-		float radius = 10;
 		Iterator<Vector2> it = path.iterator(); 
 		while (it.hasNext()){
 			
@@ -56,6 +59,7 @@ public class Path {
 					float y = old.y;
 					for(int i = 0; i < times;i++){
 						renderer.circle(x, y, radius);
+						collisionBox.addLast(new Rectangle(x-radius, y-radius, radius*2, radius*2)); //Should not do this here, but I don't want to loop one more time.
 						y += Math.signum(c.y-old.y)*radius*2;
 					}
 				}else{//Moving in the X direction
@@ -64,6 +68,7 @@ public class Path {
 					float x = old.x;
 					for(int i = 0; i < times;i++){
 						renderer.circle(x, y, radius);
+						collisionBox.addLast(new Rectangle(x-radius, y-radius, radius*2, radius*2)); //Should not do this here, but I don't want to loop one more time.
 						x += Math.signum(c.x-old.x)*radius*2;
 					}
 				}
@@ -78,6 +83,7 @@ public class Path {
 			float y = old.y;
 			for(int i = 0; i < times;i++){
 				renderer.circle(x, y, radius);
+				collisionBox.addLast(new Rectangle(x-radius, y-radius, radius*2, radius*2)); //Should not do this here, but I don't want to loop one more time.
 				y += Math.signum(playerVel.y)*radius*2;
 			}
 		}else{//Moving in the X direction
@@ -86,17 +92,23 @@ public class Path {
 			float x = old.x;
 			for(int i = 0; i < times;i++){
 				renderer.circle(x, y, radius);
+				collisionBox.addLast(new Rectangle(x-radius, y-radius, radius*2, radius*2)); //Should not do this here, but I don't want to loop one more time.
 				x += Math.signum(playerVel.x)*radius*2;
 			}
 		}
 		renderer.end();
 		
+		renderer.begin(ShapeType.Line);
+		renderer.setColor(Color.ORANGE);
+		
+		for(Rectangle r:collisionBox){
+			renderer.rect(r.x, r.y, r.width, r.height);
+		}
+		renderer.end();
 	}
 	
 	@Override
 	public String toString() {
 		return path.toString();
 	}
-	
-	
 }
