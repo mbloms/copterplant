@@ -13,6 +13,7 @@ import se.mad.copterplant.util.UserInput;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 
@@ -20,7 +21,7 @@ import com.badlogic.gdx.math.Vector2;
 public class GameScreen extends SimpleScreen {
 
 	private Player player;
-	public static Ball ball;
+	private Ball ball;
 	public static VisualMap vMap;
 	private ArrayList<Collidable> actors;
 
@@ -32,8 +33,9 @@ public class GameScreen extends SimpleScreen {
 	public void init() {
 		actors = new ArrayList<Collidable>();
 		player = new Player(new Vector2(10*32,Settings.GAME_HEIGHT/2));
-		ball = new Ball(new Vector2(Settings.GAME_WIDTH/2 - 16, Settings.GAME_HEIGHT/2));
 		vMap = new VisualMap();
+		ball = new Ball(new Vector2(Settings.GAME_WIDTH/2 - 16, Settings.GAME_HEIGHT/2),vMap);
+		
 
 		actors.add(ball);
 
@@ -44,14 +46,13 @@ public class GameScreen extends SimpleScreen {
 		UserInput.POLL_USER_INPUT();
 		player.update(delta);
 		ball.update(delta);
-
 		for (Collidable a: actors) {
 			Actor acto = (Actor)a;
 			if (player.isColliding(acto)) {
 				player.collide(acto);
-				//a.collide(player);
 			}
 		}
+	
 	}
 
 	@Override

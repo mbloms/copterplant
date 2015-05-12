@@ -22,11 +22,12 @@ public class LevelMap {
 	BinaryArrayMatrix matrix;
 	int width;
 	int height;
-
-	public LevelMap(int width, int height){
+	VisualMap vMap;
+	public LevelMap(int width, int height,VisualMap vMap){
 		this.width = width;
 		this.height = height;
 		matrix = new BinaryArrayMatrix(height, width);
+		this.vMap = vMap;
 	}
 
 	/**
@@ -125,6 +126,8 @@ public class LevelMap {
 				}
 			}
 		}
+		
+		vMap.updateBoundingBoxes();
 	}
 
 	public void parseString(){
