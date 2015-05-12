@@ -107,19 +107,6 @@ public class Path{
 			}
 		}
 		renderer.end();
-		
-		renderer.begin(ShapeType.Line);
-		renderer.setColor(Color.ORANGE);
-		
-		for(Rectangle r:collisionBox){
-			renderer.rect(r.x, r.y, r.width, r.height);
-		}
-		for(Rectangle r:collisionBoxTemp){
-			renderer.rect(r.x, r.y, r.width, r.height);
-		}
-	
-		renderer.end();
-		
 	}
 	/**
 	 * Check collision between a rectangle and the path, if it is a collision the method is return true.
