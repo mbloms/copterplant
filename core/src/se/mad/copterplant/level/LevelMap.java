@@ -65,7 +65,7 @@ public class LevelMap {
 			if (VisualMap.BoundsRect.contains(pos) && VisualMap.BoundsRect.contains(next)) {
 				Vector2 delta = gridNext.sub(gridPos);
 				gridPos.sub(10,3);
-				System.out.println(delta);
+				
 
 				if (delta.x > 0) {
 					for (int x =0 ; x<Math.abs(delta.x); x++) {

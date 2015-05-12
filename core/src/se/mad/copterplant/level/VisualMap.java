@@ -38,6 +38,7 @@ public class VisualMap {
 		for (int x = 0; x<MAP_WIDTH; x++) {
 			map.fillBlock(x, MAP_HEIGTH-1); // in my eyes this is essentialy zero in an array but everything is backwards.
 			map.fillBlock(x, 0); // in my eyes this is MAP_HEIGTH-1 but everything is bakwards.
+			//map.fillBlock(x, 1); // in my eyes this is MAP_HEIGTH-1 but everything is bakwards.
 		}
 		
 		for (int y = 1; y<MAP_HEIGTH-1; y++) {
