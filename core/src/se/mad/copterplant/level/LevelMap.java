@@ -38,15 +38,33 @@ public class LevelMap {
 		return matrix.getBoolean(y, x);
 	}
 	
-	public void fillBlock(int x, int y){
-		matrix.setTrue(y, x);
+	/**
+	 * Fills the block with the given position.
+	 * Returns true if the block was successfully filled. False if it failed.
+	 * @param x
+	 * @param y
+	 * @return true if block was filled.
+	 */
+	public boolean fillBlock(int x, int y){
+		try{
+			matrix.setTrue(y, x);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return isFilled(x,y);
 	}
 	
 	public void areaFill(){
 		//TODO
 	}
 	
-	public void fillTrack(){
+	/**
+	 * Fills the path between corners in the input arrays.
+	 * @param x An array with the x coordinates of the points where a turn was made.
+	 * @param y An array with the y coordinates of the points where a turn was made.
+	 */
+	public void fillTrack(int[] x, int[] y){
 		//TODO
 	}
 	
