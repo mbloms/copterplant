@@ -14,8 +14,8 @@ import com.badlogic.gdx.math.Vector2;
 public class GameScreen extends SimpleScreen {
 
 	private Player player;
-	private Ball ball;
-	private VisualMap vMap;	
+	public static Ball ball;
+	public static VisualMap vMap;	
 	public GameScreen(Game game) {
 		super(game);
 	}
@@ -23,7 +23,7 @@ public class GameScreen extends SimpleScreen {
 	@Override
 	public void init() {
 
-		player = new Player(new Vector2(100, 100));
+		player = new Player(new Vector2(10*32-50,Settings.GAME_HEIGHT/2));
 		ball = new Ball(new Vector2(Settings.GAME_WIDTH/2 - 16, Settings.GAME_HEIGHT/2));
 		vMap = new VisualMap();
 
@@ -43,9 +43,9 @@ public class GameScreen extends SimpleScreen {
 		GLUtil.CLEAR_Window(Color.BLACK);
 		Copterplant.RENDERER.setProjectionMatrix(Copterplant.CAMERA.combined);
 		//Here we can render stuff.
-		player.draw(Copterplant.RENDERER);
 		ball.draw(Copterplant.RENDERER);
 		vMap.draw(Copterplant.RENDERER);
+		player.draw(Copterplant.RENDERER);
 	}
 
 }

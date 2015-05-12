@@ -1,16 +1,13 @@
 package se.mad.copterplant.actor;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-
+import se.mad.copterplant.level.VisualMap;
+import se.mad.copterplant.screens.GameScreen;
 import se.mad.copterplant.util.UserInput;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -36,7 +33,7 @@ public class Player extends Actor implements Collidable{
 
 	@Override
 	public void init() {
-		setShape(50f);
+		setShape(32);
 		setShapeType(ShapeType.Filled);
 		setColor(Color.RED);
 	
@@ -55,7 +52,12 @@ public class Player extends Actor implements Collidable{
 				e.printStackTrace();
 			}
 		}
-			
+		
+		if (VisualMap.BoundsRect.contains(getCollisionBox())){
+			visit = false;
+		}else {
+			visit = true;
+		}
 		
 		if(visit){
 			setVel(new Vector2(0, 0));
@@ -66,6 +68,8 @@ public class Player extends Actor implements Collidable{
 					path.removeFirst();
 				}*/
 				System.out.println(path); // TODO Send to filed
+
+				GameScreen.vMap.map.fillTrack(path.getPath());
 				path = null;
 			}
 		}else{
@@ -106,7 +110,7 @@ public class Player extends Actor implements Collidable{
 		drawActor(renderer);
 		
 		renderer.begin(ShapeType.Line);
-		renderer.setColor(Color.GREEN);
+		renderer.setColor(Color.BLUE);
 		renderer.rect(getCollisionBox().x, getCollisionBox().y,getCollisionBox().width, getCollisionBox().height);
 		
 		renderer.end();
