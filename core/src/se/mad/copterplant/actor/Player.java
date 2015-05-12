@@ -92,15 +92,7 @@ public class Player extends Actor implements Collidable{
 			path.draw(renderer, getPos(), getVel());
 		}
 		
-		drawActor(renderer);
-		
-		renderer.begin(ShapeType.Line);
-		renderer.setColor(Color.BLUE);
-		renderer.rect(getCollisionBox().x, getCollisionBox().y,getCollisionBox().width, getCollisionBox().height);
-		
-		renderer.end();
-		
-		
+		drawActor(renderer);	
 	}
 
 	@Override
