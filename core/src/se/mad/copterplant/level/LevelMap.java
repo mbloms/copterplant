@@ -22,11 +22,12 @@ public class LevelMap {
 	BinaryArrayMatrix matrix;
 	int width;
 	int height;
-
-	public LevelMap(int width, int height){
+	VisualMap vMap;
+	public LevelMap(int width, int height,VisualMap vMap){
 		this.width = width;
 		this.height = height;
 		matrix = new BinaryArrayMatrix(height, width);
+		this.vMap = vMap;
 	}
 
 	/**
@@ -95,7 +96,7 @@ public class LevelMap {
 			if (VisualMap.BoundsRect.contains(pos) && VisualMap.BoundsRect.contains(next)) {
 				Vector2 delta = gridNext.sub(gridPos);
 				gridPos.sub(10,3);
-				System.out.println(delta);
+				
 
 				if (delta.x > 0) {
 					for (int x =0 ; x<Math.abs(delta.x); x++) {
@@ -126,6 +127,8 @@ public class LevelMap {
 				}
 			}
 		}
+		
+		vMap.updateBoundingBoxes();
 	}
 
 	public void parseString(){
