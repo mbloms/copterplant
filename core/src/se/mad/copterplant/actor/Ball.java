@@ -27,7 +27,7 @@ public class Ball extends Actor  implements Collidable{
 		setShape(16);
 		setShapeType(ShapeType.Filled);
 		setColor(Color.CYAN);
-		setVel(new Vector2(2,1));
+		setVel(new Vector2(1,1));
 	}
 
 	@Override
@@ -43,24 +43,32 @@ public class Ball extends Actor  implements Collidable{
 			grid.sub(320,96);
 			grid.x /=32;
 			grid.y /=32; 
-			
+			/*
 			if (GameScreen.vMap.map.isFilled((int)grid.x,(int) grid.y)){
 				setVel(getVel().scl(-1));
 			}else {
 				setPos(newPos);
-			}
+			}*/
 			
-			if (!VisualMap.BoundsRect.contains(getCollisionBox())) {
-				collide(null);
-			}
+			setPos(newPos);
 			
+			if (!vmap.BoundsRect.contains(getCollisionBox())) {
+				setVel(getVel().scl(-1));
+			}
 			
 			if(Path.isColliding(this.getCollisionBox())){
 				setVel(getVel().scl(-1));
+			}	
+			
+			for (Rectangle rect:vmap.getBoundingBoxes()){
+				if (this.getCollisionBox().overlaps(rect)){
+					System.out.println("Hej");
+					this.setVel(this.getVel().scl(-1));
+					break;
+				}
 			}
-
-			setPos(newPos);
-					
+			
+			
 	}
 
 	@Override

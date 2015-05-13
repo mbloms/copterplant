@@ -33,6 +33,7 @@ public class VisualMap {
 		map = new LevelMap(20, 20,this);
 		BoundsRect = new Rectangle(X_OFFSET*TILE_SIZE,Y_OFFSET*TILE_SIZE,
 				MAP_WIDTH*TILE_SIZE,MAP_HEIGTH*TILE_SIZE);
+		
 		for (int x = 0; x<MAP_WIDTH; x++) {
 			map.fillBlock(x, MAP_HEIGTH-1); // in my eyes this is essentialy zero in an array but everything is backwards.
 			map.fillBlock(x, 0); // in my eyes this is MAP_HEIGTH-1 but everything is bakwards.
@@ -47,7 +48,7 @@ public class VisualMap {
 	}
 	
 	
-	public ArrayList<Rectangle> getBoundingBox(){
+	public ArrayList<Rectangle> getBoundingBoxes(){
 		return boundingBoxes;
 	}
 	
