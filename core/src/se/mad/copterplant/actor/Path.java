@@ -49,6 +49,9 @@ public class Path{
 	 * @return true or false
 	 */
 	public static boolean isColliding(Rectangle rect){
+		if(path == null){
+			return false;
+		}
 		for(PathObject p:path){
 			if(rect.overlaps(p.getCollisionBox())){
 				return true; 
