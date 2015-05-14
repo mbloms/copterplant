@@ -43,7 +43,6 @@ public class Ball extends Actor implements Collidable {
 		rectPos.add(getVel());
 
 		Vector2 deltaMove = newPos.cpy().sub(oldPos);
-		// System.out.println(rectPos+":"+newPos);
 
 		if (!vmap.BoundsRect.contains(getCollisionBox())) {
 			setVel(getVel().scl(-1));
@@ -80,17 +79,17 @@ public class Ball extends Actor implements Collidable {
 				boolean rightBottomCollision = rect.contains(rightBottom);
 
 				if (leftTopCollision) {
-					System.out.println("left top");
+					//System.out.println("left top");
 				}
 
 				if (leftBottomCollision) {
-					System.out.println("left bottom");
+					//System.out.println("left bottom");
 				}
 				if (rightTopCollision) {
-					System.out.println("right top");
+					//System.out.println("right top");
 				}
 				if (rightBottomCollision) {
-					System.out.println("right bottom");
+					//System.out.println("right bottom");
 				}
 
 				if ((leftTopCollision && leftBottomCollision)
@@ -114,9 +113,8 @@ public class Ball extends Actor implements Collidable {
 					for (int y = 1; y < getCollisionBox().height-1; y++) {
 						temp.y -= 1;
 						if (rect.contains(temp)) {
-							System.out.println(temp + ":" + leftTop);
-
-							System.out.println("Found on Left vertical side");
+							//System.out.println(temp + ":" + leftTop);
+							//System.out.println("Found on Left vertical side");
 							setVel(getXVelReflection());
 							collided = true;
 							
@@ -128,12 +126,7 @@ public class Ball extends Actor implements Collidable {
 						temp = leftTop.cpy();
 						for (int x = 1; x < getCollisionBox().width; x++) {
 							temp.x += 1;
-
-							System.out.println(rect.contains(temp) + ":" + x
-									+ ":" + temp);
 							if (rect.contains(temp)) {
-								System.out
-										.println("Found on Left horizontal side");
 								setVel(getYVelReflection());
 								collided = true;
 								
@@ -157,34 +150,21 @@ public class Ball extends Actor implements Collidable {
 					for (int y = 1; y < getCollisionBox().height; y++) {
 						temp.y += 1;
 						if (rect.contains(temp)) {
-							System.out.println("Delta move:" + deltaMove);
-							System.out.println("Found on Left vertical side");
 							setVel(getXVelReflection());
 							collided = true;
-							System.out.println(rect + ":" + temp + ":"
-									+ leftBottom);
-							// Gdx.app.exit();
 							break;
 						}
 					}
 
 					if (!collided) {
 
-						System.out.println("x = " + rect.x + " y = " + rect.y
-								+ " w = " + rect.width + " h = " + rect.height);
-
-						System.out.println(collided);
 						temp = leftBottom.cpy(); // reset vector
-						System.out.println(temp);
 
 						for (int x = 1; x < getCollisionBox().width; x++) {
 							temp.x += 1;
 
-							System.out.println(rect.contains(temp) + ":" + x
-									+ ":" + temp);
+
 							if (rect.contains(temp)) {
-								System.out
-										.println("Found on Left horizontal side");
 								setVel(getYVelReflection());
 								collided = true;
 								break;
@@ -205,11 +185,8 @@ public class Ball extends Actor implements Collidable {
 					for (int y = 1; y<getCollisionBox().height;y++) {
 						temp.y +=1;
 						if (rect.contains(temp)){
-							System.out.println("Found on right vertical side");
 							setVel(getXVelReflection());
 							collided = true;
-							System.out.println(temp+":"+rightBottom +" detla" + deltaMove);
-							
 							break;
 						}
 					}
@@ -218,7 +195,6 @@ public class Ball extends Actor implements Collidable {
 						temp = rightBottom.cpy();
 						for (int x = 1; x<getCollisionBox().width; x++) {
 							if (rect.contains(temp)){
-								System.out.println("Found on right horizontal side");
 								setVel(getYVelReflection());
 								collided = true;
 								break;
@@ -236,7 +212,6 @@ public class Ball extends Actor implements Collidable {
 					for (int y =0; y <getCollisionBox().height;y++) {
 						temp.y -=1;
 						if (rect.contains(temp)){
-							System.out.println("Found right vertical side top");
 							setVel(getXVelReflection());
 							collided = true;
 							break;
@@ -250,7 +225,6 @@ public class Ball extends Actor implements Collidable {
 						for (int x = 1; x<getCollisionBox().width; x++) {
 							temp.x -=1; 
 							if (rect.contains(temp)){
-								System.out.println("Found right horizontal side top");
 								setVel(getYVelReflection());
 								collided = true;
 								break;

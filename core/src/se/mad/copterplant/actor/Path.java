@@ -107,8 +107,6 @@ public class Path{
 		 * @param renderer
 		 */
 		public void draw(ShapeRenderer renderer){
-			System.out.println(path.size());
-			
 			renderer.begin(ShapeType.Filled);
 			renderer.setColor(Color.BLUE);
 			renderer.circle(pos.x, pos.y, radius);
