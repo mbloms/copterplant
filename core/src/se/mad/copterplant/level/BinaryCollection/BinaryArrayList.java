@@ -64,6 +64,28 @@ public class BinaryArrayList {
 	}
 	
 	/**
+	 * Sets all bits between 'from' and 'to' to true.
+	 * @param from
+	 * @param to
+	 */
+	public void setTrue(int from, int to){
+		checkOutOfBounds(from);
+		checkOutOfBounds(to);
+		if(from/32 == to/32){
+			segments[from/32] |= ((~0)<<from%32 & (~0)>>to%32);
+		}
+		else{
+			segments[from/32] |= ((~0)<<from%32);
+			int mid = from/32 + 1;
+			while(mid<to){
+				segments[mid] = ~0;
+				mid++;
+			}
+			segments[to/32] |= ((~0)>>to%32);
+		}
+	}
+	
+	/**
 	 * Calculates and returns the position of the first bit equal to 1 in the list.
 	 * @return The position of the first bit equal to 1 or -1 if all values are 0. 
 	 */

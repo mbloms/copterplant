@@ -13,7 +13,6 @@ import com.badlogic.gdx.math.Vector2;
  * @author Andreas Brommund
  *
  */
-
 public abstract class Actor{
 	private Vector2 pos;
 	private Vector2 vel;
@@ -94,8 +93,15 @@ public abstract class Actor{
 	public Vector2 getVel() {
 		return new Vector2(vel);
 	}
-
-
+	
+	public float getVelX(){
+		return vel.x;
+	}
+	
+	public float getVelY(){
+		return vel.y;
+	}
+	
 	public void setVel(Vector2 vel) {
 		this.vel = vel;
 	}
@@ -121,7 +127,7 @@ public abstract class Actor{
 	 *
 	 * @return collision box
 	 */
-	protected Rectangle getCollisionBox() {
+	public Rectangle getCollisionBox() {
 		return collisionBox;
 	}
 	
