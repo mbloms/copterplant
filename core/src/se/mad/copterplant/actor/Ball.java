@@ -13,7 +13,7 @@ public class Ball extends Actor implements Collidable {
 	private VisualMap vmap;
 	private boolean collided = false;
 	private Rectangle nextRectangle;
-
+	
 	public Ball(Vector2 pos, VisualMap vmap) {
 		super(pos);
 		this.vmap = vmap;
@@ -31,178 +31,43 @@ public class Ball extends Actor implements Collidable {
 
 	@Override
 	public void update(float delta) {
-		collided = false;
-		Vector2 oldPos = getPos();
-		Vector2 newPos = getPos().add(getVel());
-		Vector2 rectPos = getPos().sub(getCollisionBox().width / 2,
-				getCollisionBox().height / 2);
-		rectPos.add(getVel());
-
-		Vector2 deltaMove = newPos.cpy().sub(oldPos);
-
-		if (!vmap.BoundsRect.contains(getCollisionBox())) {
-			setVel(getVel().scl(-1));
-			collided = true;
-		}
-
 		Path.isColliding(this.getCollisionBox());
-
-		Vector2 leftBottom, leftTop;
-		leftBottom = new Vector2(rectPos.x, rectPos.y);
-
-		leftTop = new Vector2(rectPos.x, rectPos.y + getCollisionBox().height);
-
-		Vector2 rightBottom, rightTop;
-		rightBottom = new Vector2(rectPos.x + getCollisionBox().width,
-				rectPos.y);
-		rightTop = new Vector2(rectPos.x + getCollisionBox().width, rectPos.y
-				+ getCollisionBox().height);
-
-		// rectangle
-		Rectangle nextCollisionBox = new Rectangle(rectPos.x, rectPos.y,
-				getCollisionBox().width, getCollisionBox().height);
-		nextRectangle = new Rectangle(rectPos.x, rectPos.y,
-				getCollisionBox().width, getCollisionBox().height);
-
-		for (Rectangle rect : vmap.getBoundingBoxes()) {
-
-			if (nextCollisionBox.overlaps(rect)) {
-
-				boolean leftTopCollision = rect.contains(leftTop);
-				boolean leftBottomCollision = rect.contains(leftBottom);
-
-				boolean rightTopCollision = rect.contains(rightTop);
-				boolean rightBottomCollision = rect.contains(rightBottom);
-
-				if ((leftTopCollision && leftBottomCollision)
-						|| (rightTopCollision && rightBottomCollision)) {
-					setVel(getXVelReflection());
-					collided = true;
-					break;
-				}
-
-				if ((leftTopCollision && rightTopCollision)
-						|| (leftBottomCollision && rightBottomCollision)) {
-					setVel(getYVelReflection());
-					collided = true;
-					break;
-				}
-				//Lef Top
-				if (leftTopCollision) {
-					if (checkVerticalPixels(leftTop, deltaMove.y, rect, false)) {
-						collided = true;
-						break;
-					}
-					
-					if (!collided) {
-						if (checkHorizontalPixels(leftTop, rect, true)) {
-							collided = true;
-							break;
-						}
-					}
-
-				} // Left top
-				//Left Bottom
-				if (leftBottomCollision) {
-					if (checkVerticalPixels(leftBottom, deltaMove.y, rect, true)) {
-						collided = true;
-						break;
-					}
-					
-					if (!collided) {
-						if (checkHorizontalPixels(leftBottom, rect, true)) {
-							collided = true;
-							break;
-						}
-					}
-
-				} // Left bottom 
-				
-				
-				
-				
-				//Right Bottom
-				if (rightBottomCollision) {
-					if (checkVerticalPixels(rightBottom, deltaMove.y, rect, true)) {
-						collided = true;
-						break;
-					}
-					if (!collided) {
-						if (checkHorizontalPixels(rightBottom, rect, false)){
-							collided = true;
-							break;
-						}
-					}
-				}
-				
-				
-				//Right Top
-				if (rightTopCollision) {
-					if (checkVerticalPixels(rightTop, deltaMove.y, rect, false)) {
-						collided = true;
-						break;
-					}
-					
-					if (!collided) {
-						if (checkHorizontalPixels(rightTop, rect, false)){
-							collided = true;
-							break;
-						}
-					}
-					
-					
-				}
-				
-				
-				
-				
-
-				// Break out of foreach loop
-				if (collided) {
-					break;
-				}
-
-				// If everything else fails just do a complete reflection of the
-				// vel.
-
-				System.err.println("Did not catch the right position :( ");
-				this.setVel(this.getVel().scl(-1));
-				collided = true;
-				break;
-			}
-		}
-
-		if (!collided)
-			setPos(newPos);
-		else {
-			oldPos.add(getVel());
-			setPos(oldPos);
-		}
-
+		move();
 	}
 	
 	private void move(){
 		collided = false; 																			// starts out with the abillity to move forward.
-		
+
 		Vector2 oldPos = getPos(); 																	// the current position at the center of the ball.
 		Vector2 newPos = getPos().add(getVel()); 													// the new position that we would like to move to. At the center.
-		
+		Vector2 deltaMove = newPos.cpy().sub(oldPos); 												// calculating the delta to know how much of the ball is inside a collidable object.
+
 		Vector2 rectPos = getPos().sub(getCollisionBox().width / 2,getCollisionBox().height / 2); 	// the rectangular position of the ball. Lower left corner.
 		rectPos.add(getVel()); 																		// Changed so that the rectPos is like the next pos but in different coordinates. 
-		
-		Vector2 deltaMove = newPos.cpy().sub(oldPos); 												// calculating the delta to know how much of the ball is inside a collidable object.
+		collided = canMove(rectPos, deltaMove); 													// do collision detection and handling.
+
+		if (!collided) 																				// if we did not collide with anything, it is okay to move forward.
+			setPos(newPos);
+		else { 																						// else don't and go backwards.
+			oldPos.add(getVel());
+			setPos(oldPos);
+		}
+	}
 	
+	private boolean canMove(Vector2 rectPos, Vector2 deltaMove){
+		//First build the collision points and the rectangle
 		Vector2[] corners = updateCollisionboxCorners(rectPos);	
 		Vector2 leftBottom 	= corners[0];
 		Vector2 leftTop 	= corners[1];
 		Vector2 rightBottom = corners[2];
 		Vector2 rightTop 	= corners[3];
+
+		nextRectangle = new Rectangle(rectPos.x, rectPos.y,getCollisionBox().width, getCollisionBox().height);
 		
-		Rectangle nextCollisionBox = new Rectangle(rectPos.x, rectPos.y,getCollisionBox().width, getCollisionBox().height);
-		nextRectangle = nextCollisionBox;
 		
-		for (Rectangle rect : vmap.getBoundingBoxes()) {											// iterate over all the collisionboxes in the map
-			if (nextCollisionBox.overlaps(rect)) {
+		//Checka against all things in the world. In this case the walls.
+		for (Rectangle rect: vmap.getBoundingBoxes()) {
+			if (nextRectangle.overlaps(rect)) { // Make a rough estimate of if we collide with something
 				
 				boolean leftTopCollision = rect.contains(leftTop);
 				boolean leftBottomCollision = rect.contains(leftBottom);
@@ -212,94 +77,63 @@ public class Ball extends Actor implements Collidable {
 				
 				//Handle the easy parts first. When we hit a block perfectly with both corners.
 				if ((leftTopCollision && leftBottomCollision) || (rightTopCollision && rightBottomCollision)) {
-					setVel(getXVelReflection());
-					collided = true;
-					break;
+					setVel(getXVelReflection()); // handle the velocity change accordingly
+					return true;
 				}
 
 				if ((leftTopCollision && rightTopCollision) || (leftBottomCollision && rightBottomCollision)) {
 					setVel(getYVelReflection());
-					collided = true;
-					break;
+					return true;
+				}
+				//Precise check begins here.
+				
+				if (leftTopCollision){
+					if (checkVerticalPixels(leftTop, deltaMove.y, rect, false)){
+						return true;
+					}else {
+						if (checkHorizontalPixels(leftTop, rect, true)){
+							return true;
+						}
+					}
 				}
 				
-				
-				//Now onto the hard part.
-				if (leftTopCollision) { // Left Top
-					collided = checkVerticalPixels(leftTop, deltaMove.y, rect, false);
-					
-					if (collided) {
-						break;
+				if (leftBottomCollision){
+					if (checkVerticalPixels(leftBottom, deltaMove.y, rect, true)){
+						return true;
 					}else {
-						if (checkHorizontalPixels(leftTop, rect, true)) {
-							collided = true;
-							break;
+						if (checkHorizontalPixels(leftBottom, rect, true)) {
+							return true;
 						}	
 					}
 				}
 				
-				//Left Bottom
-				if (leftBottomCollision) {
-					if (checkVerticalPixels(leftBottom, deltaMove.y, rect, true)) {
-						collided = true;
-						break;
-					}
-					
-					if (!collided) {
-						if (checkHorizontalPixels(leftBottom, rect, true)) {
-							collided = true;
-							break;
-						}
-					}
-
-				} // Left bottom 
-				
-				
-				
-				
-				//Right Bottom
 				if (rightBottomCollision) {
 					if (checkVerticalPixels(rightBottom, deltaMove.y, rect, true)) {
-						collided = true;
-						break;
-					}
-					if (!collided) {
+						return true;
+					}else {
 						if (checkHorizontalPixels(rightBottom, rect, false)){
-							collided = true;
-							break;
+							return true;
 						}
 					}
 				}
 				
-				
-				//Right Top
 				if (rightTopCollision) {
 					if (checkVerticalPixels(rightTop, deltaMove.y, rect, false)) {
-						collided = true;
-						break;
-					}
-					
-					if (!collided) {
+						return true;
+					}else {
 						if (checkHorizontalPixels(rightTop, rect, false)){
-							collided = true;
-							break;
+							return true;
 						}
 					}
-					
-					
 				}
-				
-				
-				
-				
-				
-		
-			}//end of overlaps if
-		}//end of rectangle for loop
-		
-		
-	}// end of move
-	
+				//If every other check fails, apply standard velocity reflection.
+				this.setVel(this.getVel().scl(-1));
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private boolean checkVerticalPixels(Vector2 corner, float deltaY, Rectangle currentRectangle,boolean up){
 			Vector2 temp = corner.cpy();
 			temp.y -= deltaY;
