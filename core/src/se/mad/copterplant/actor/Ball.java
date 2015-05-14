@@ -50,10 +50,7 @@ public class Ball extends Actor implements Collidable {
 			collided = true;
 		}
 
-		if (Path.isColliding(this.getCollisionBox())) {
-			setVel(getVel().scl(-1));
-			collided = true;
-		}
+		Path.isColliding(this.getCollisionBox());
 
 		Vector2 leftBottom, leftTop;
 		leftBottom = new Vector2(rectPos.x, rectPos.y);
