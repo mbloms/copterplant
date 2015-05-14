@@ -32,9 +32,9 @@ public class GameScreen extends SimpleScreen {
 	@Override
 	public void init() {
 		actors = new ArrayList<Collidable>();
-		player = new Player(new Vector2(10*32,Settings.GAME_HEIGHT/2));
+		player = new Player(new Vector2(10*32+16,32*13 + 16));
 		vMap = new VisualMap();
-		ball = new Ball(new Vector2(Settings.GAME_WIDTH/2 - 16, Settings.GAME_HEIGHT/2),vMap);
+		ball = new Ball(new Vector2(640+16+40, 96+32*10+16),vMap);
 		
 
 		actors.add(ball);
@@ -46,12 +46,12 @@ public class GameScreen extends SimpleScreen {
 		UserInput.POLL_USER_INPUT();
 		player.update(delta);
 		ball.update(delta);
-		for (Collidable a: actors) {
-			Actor acto = (Actor)a;
-			if (player.isColliding(acto)) {
-				player.collide(acto);
-			}
+		
+		
+		if (ball.getCollisionBox().overlaps(player.getCollisionBox())){
+			player.collide(null);
 		}
+		
 	
 	}
 
@@ -61,8 +61,9 @@ public class GameScreen extends SimpleScreen {
 		GLUtil.CLEAR_Window(Color.BLACK);
 		Copterplant.RENDERER.setProjectionMatrix(Copterplant.CAMERA.combined);
 		//Here we can render stuff.
-		ball.draw(Copterplant.RENDERER);
+		
 		vMap.draw(Copterplant.RENDERER);
+		ball.draw(Copterplant.RENDERER);
 		player.draw(Copterplant.RENDERER);
 	}
 
