@@ -44,6 +44,10 @@ public class VisualMap {
 			map.fillBlock(0, y); // in my eyes this is essential zero in an array but everything is backwards.
 			map.fillBlock(MAP_WIDTH-1, y); // in my eyes this is MAP_HEIGTH-1 but everything is bakwards.
 		}
+		
+		
+		map.fillBlock(10, 10);
+		
 		updateBoundingBoxes();
 	}
 	
