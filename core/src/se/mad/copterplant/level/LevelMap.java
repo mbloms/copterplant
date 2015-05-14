@@ -83,7 +83,6 @@ public class LevelMap {
 */
 
 	public void fillTrack(LinkedList<Vector2> path){
-		System.out.println("Began");
 		int counter = 0;
 		for (int i = 0; i<path.size()-1;i++) {
 			Vector2 pos = path.get(i);
@@ -99,27 +98,23 @@ public class LevelMap {
 
 				if (delta.x > 0) {
 					for (int x =0 ; x<Math.abs(delta.x); x++) {
-						System.out.println(gridPos.x+x);
 						fillBlock((int)gridPos.x + x, (int)gridPos.y);
 						counter++;
 					}
 				}else {
 
 					for (int x =0 ; x<Math.abs(delta.x); x++) {
-						System.out.println(gridPos.x-x);
 						fillBlock((int)gridPos.x-x, (int)gridPos.y);
 						counter++;
 					}
 				}
 				if (delta.y > 0) {
 					for (int y =0 ; y<Math.abs(delta.y); y++) {
-						System.out.println(gridPos.y+y);
 						fillBlock((int)gridPos.x, (int)gridPos.y + y);
 						counter++;
 					}
 				}else {
 					for (int y =0 ; y<Math.abs(delta.y); y++) {
-						System.out.println(gridPos.y-y);
 						fillBlock((int)gridPos.x, (int)gridPos.y - y);
 						counter++;
 					}	
@@ -140,7 +135,6 @@ public class LevelMap {
 	 */
 	public double percentageFilled(){
 		//TODO
-
 		return -1.0;
 	}
 }
