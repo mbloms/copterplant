@@ -127,7 +127,7 @@ public abstract class Actor{
 	 *
 	 * @return collision box
 	 */
-	protected Rectangle getCollisionBox() {
+	public Rectangle getCollisionBox() {
 		return collisionBox;
 	}
 	
