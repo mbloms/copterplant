@@ -28,6 +28,10 @@ public class Path{
 		path.addLast(new PathObject(node));
 	}
 	
+	/**
+	 * Return the path object list.
+	 * @return LinkedList<PathObject>
+	 */
 	public LinkedList<PathObject> getPath(){
 		return path;
 	}
@@ -43,6 +47,7 @@ public class Path{
 			p.draw(renderer);
 		}
 	}
+	
 	/**
 	 * Check collision between a rectangle and the path, if it is a collision the method is return true.
 	 * @param Rectangle
@@ -70,6 +75,10 @@ public class Path{
 			this.pos = pos;
 		}
 		
+		/**
+		 * Draw the path object
+		 * @param renderer
+		 */
 		public void draw(ShapeRenderer renderer){
 			renderer.begin(ShapeType.Filled);
 			renderer.setColor(Color.BLUE);
@@ -82,10 +91,18 @@ public class Path{
 			renderer.end();
 		}
 		
+		/**
+		 * Get the collision box of the path object
+		 */
 		public Rectangle getCollisionBox() {
 			return collisionBox;
 		}
 		
+		/**
+		 * Get the position of the path object.
+		 * 
+		 * @return Vector2
+		 */
 		public Vector2 getPos() {
 			return pos;
 		}
