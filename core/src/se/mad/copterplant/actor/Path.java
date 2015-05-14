@@ -1,5 +1,6 @@
 package se.mad.copterplant.actor;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.graphics.Color;
@@ -57,8 +58,10 @@ public class Path{
 		if(path == null){
 			return false;
 		}
-		for(PathObject p:path){
-			if(rect.overlaps(p.getCollisionBox())){
+		Iterator<PathObject> it = path.iterator();
+		while(it.hasNext()){
+			if(rect.overlaps(it.next().getCollisionBox())){
+				it.remove();
 				return true; 
 			}
 		}
