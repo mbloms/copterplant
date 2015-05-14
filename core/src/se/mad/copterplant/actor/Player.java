@@ -20,7 +20,6 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Player extends Actor implements Collidable{
 	private boolean creatingPath;
-	private Vector2 prevNodeVel;
 
 	private float speed = 1;
 	private float moveTimer;
@@ -72,15 +71,13 @@ public class Player extends Actor implements Collidable{
 					
 					GameScreen.vMap.map.fillTrack(path.getPath());
 				}
-
 				path = null;
 			}
 		}else{
 			if(!creatingPath){
 				
 				creatingPath = true;
-				prevNodeVel = getVel();
-				path = new Path(getPos());
+				path = new Path();
 			}
 		}
 
@@ -97,15 +94,11 @@ public class Player extends Actor implements Collidable{
 			setVel(new Vector2(0, -speed));
 		}
 
-		if(creatingPath&&(prevNodeVel.x != getVel().x || prevNodeVel.y != getVel().y)){
-			prevNodeVel = getVel();
+		setPos(getPos().add(getVel()));
+
+		if(creatingPath){
 			path.addNode(getPos());
 		}
-		
-		
-		
-		
-		
 		if (moveTimer < 0) {
 			temp.x +=getVelX();
 			temp.y +=getVelY(); 
@@ -125,7 +118,6 @@ public class Player extends Actor implements Collidable{
 		}else {
 			moveTimer -=delta; 
 		}
-		
 	}
 
 	@Override
