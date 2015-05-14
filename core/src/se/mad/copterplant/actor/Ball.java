@@ -1,14 +1,11 @@
 package se.mad.copterplant.actor;
 
 import se.mad.copterplant.level.VisualMap;
-import se.mad.copterplant.screens.GameScreen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -29,7 +26,7 @@ public class Ball extends Actor implements Collidable {
 		setShape(16);
 		setShapeType(ShapeType.Filled);
 		setColor(Color.CYAN);
-		setVel(new Vector2(-1, 0));
+		setVel(new Vector2(MathUtils.random(3) + 1, MathUtils.random(3) + 1));
 
 	}
 
