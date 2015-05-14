@@ -80,7 +80,9 @@ public class Path{
 			if(leftIndex >= 0){
 				path.remove(leftIndex);
 			}else{
-				rightIndex--;
+				if(rightIndex != 0){
+					rightIndex--;
+				}
 			}
 			
 			if(rightIndex < path.size()){
@@ -107,7 +109,6 @@ public class Path{
 		 * @param renderer
 		 */
 		public void draw(ShapeRenderer renderer){
-			System.out.println(path.size());
 			
 			renderer.begin(ShapeType.Filled);
 			renderer.setColor(Color.BLUE);
