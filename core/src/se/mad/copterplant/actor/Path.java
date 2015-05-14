@@ -1,6 +1,5 @@
 package se.mad.copterplant.actor;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.graphics.Color;
@@ -15,16 +14,10 @@ import com.badlogic.gdx.math.Vector2;
  *
  */
 public class Path{
-	private LinkedList<Vector2> path; 
-	private static LinkedList<Rectangle> collisionBox;
-	private static LinkedList<Rectangle> collisionBoxTemp;
-	float radius = 10;
+	private static LinkedList<PathObject> path;
 	
-	public Path(Vector2 node){
-		path = new LinkedList<Vector2>();
-		collisionBox =  new LinkedList<Rectangle>();
-		collisionBoxTemp = new LinkedList<Rectangle>();
-		path.addLast(node);
+	public Path(){
+		path = new LinkedList<PathObject>();
 	}
 	
 	/**
@@ -32,19 +25,11 @@ public class Path{
 	 * @param node
 	 */
 	public void addNode(Vector2 node){
-		path.addLast(node);
-		updateCollision();
+		path.addLast(new PathObject(node));
 	}
 	
-	public LinkedList<Vector2> getPath(){
+	public LinkedList<PathObject> getPath(){
 		return path;
-	}
-	
-	private void updateCollision(){
-		
-		collisionBox.addAll(collisionBoxTemp);
-		
-		collisionBoxTemp.clear();
 	}
 	
 	/**
@@ -54,59 +39,9 @@ public class Path{
 	 * @param playerVel
 	 */
 	public void draw(ShapeRenderer renderer,Vector2 playerPos,Vector2 playerVel) {
-		collisionBoxTemp.clear();
-		
-		renderer.begin(ShapeType.Filled);
-		renderer.setColor(Color.BLUE);
-		
-		Vector2 old = null;
-		Iterator<Vector2> it = path.iterator(); 
-		while (it.hasNext()){
-			
-			Vector2 c = it.next();
-			if(old != null){
-				if(old.x == c.x){//Moving in the Y direction
-					int times = (int) (Math.abs(old.y-c.y)/(radius*2)+1);
-					float x = old.x; 
-					float y = old.y;
-					for(int i = 0; i < times;i++){
-						renderer.circle(x, y, radius);
-						y += Math.signum(c.y-old.y)*radius*2;
-					}
-				}else{//Moving in the X direction
-					int times = (int) (Math.abs(old.x-c.x)/(radius*2)+1);
-					float y = old.y; 
-					float x = old.x;
-					for(int i = 0; i < times;i++){
-						renderer.circle(x, y, radius);
-						x += Math.signum(c.x-old.x)*radius*2;
-					}
-				}
-					
-			}
-			old = c;
+		for(PathObject p:path){
+			p.draw(renderer);
 		}
-	
-		if(playerVel.x == 0){//Moving in the Y direction
-			int times = (int) (Math.abs(old.y-playerPos.y)/(radius*2)+1);
-			float x = old.x; 
-			float y = old.y;
-			for(int i = 0; i < times;i++){
-				renderer.circle(x, y, radius);
-				collisionBoxTemp.addLast(new Rectangle(x-radius, y-radius, radius*2, radius*2)); //Should not do this here, but I don't want to loop one more time.
-				y += Math.signum(playerVel.y)*radius*2;
-			}
-		}else{//Moving in the X direction
-			int times = (int) (Math.abs(old.x-playerPos.x)/(radius*2)+1);
-			float y = old.y; 
-			float x = old.x;
-			for(int i = 0; i < times;i++){
-				renderer.circle(x, y, radius);
-				collisionBoxTemp.addLast(new Rectangle(x-radius, y-radius, radius*2, radius*2)); //Should not do this here, but I don't want to loop one more time.
-				x += Math.signum(playerVel.x)*radius*2;
-			}
-		}
-		renderer.end();
 	}
 	/**
 	 * Check collision between a rectangle and the path, if it is a collision the method is return true.
@@ -114,24 +49,42 @@ public class Path{
 	 * @return true or false
 	 */
 	public static boolean isColliding(Rectangle rect){
-		if(collisionBox == null || collisionBoxTemp == null){
-			return false;
-		}
-		for(Rectangle r:collisionBox){
-			if(rect.overlaps(r)){
+		for(PathObject p:path){
+			if(rect.overlaps(p.getCollisionBox())){
 				return true; 
 			}
 		}
-		for(Rectangle r:collisionBoxTemp){
-			if(rect.overlaps(r)){
-				return true; 
-			}	
-		}
-		
 		return false;
 	}
-	@Override
-	public String toString() {
-		return path.toString();
+	
+	public class PathObject{
+		private Rectangle collisionBox; 
+		private Vector2 pos;
+		private float radius = 16;
+		
+		public PathObject(Vector2 pos) {
+			collisionBox = new Rectangle(pos.x-radius,pos.y-radius,radius*2,radius*2);
+			this.pos = pos;
+		}
+		
+		public void draw(ShapeRenderer renderer){
+			renderer.begin(ShapeType.Filled);
+			renderer.setColor(Color.BLUE);
+			renderer.circle(pos.x, pos.y, radius);
+			renderer.end();
+			
+			renderer.begin(ShapeType.Line);
+			renderer.setColor(Color.YELLOW);
+			renderer.rect(collisionBox.x,collisionBox.y,collisionBox.width,collisionBox.height);
+			renderer.end();
+		}
+		
+		public Rectangle getCollisionBox() {
+			return collisionBox;
+		}
+		
+		public Vector2 getPos() {
+			return pos;
+		}
 	}
 }
