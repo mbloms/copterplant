@@ -77,7 +77,7 @@ public class Player extends Actor implements Collidable{
 			if(!creatingPath){
 				
 				creatingPath = true;
-				path = new Path();
+				path = new Path(getPos());
 			}
 		}
 
@@ -96,9 +96,6 @@ public class Player extends Actor implements Collidable{
 
 		setPos(getPos().add(getVel()));
 
-		if(creatingPath){
-			path.addNode(getPos());
-		}
 		if (moveTimer < 0) {
 			temp.x +=getVelX();
 			temp.y +=getVelY(); 
@@ -114,6 +111,9 @@ public class Player extends Actor implements Collidable{
 			}
 
 			setPos(temp);
+			if(creatingPath){
+				path.addNode(getPos());
+			}
 			moveTimer = moveTimerStart;
 		}else {
 			moveTimer -=delta; 
