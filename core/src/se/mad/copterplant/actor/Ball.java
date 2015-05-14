@@ -56,9 +56,8 @@ public class Ball extends Actor  implements Collidable{
 				setVel(getVel().scl(-1));
 			}
 			
-			if(Path.isColliding(this.getCollisionBox())){
-				setVel(getVel().scl(-1));
-			}	
+			Path.isColliding(this.getCollisionBox());
+				
 			
 			for (Rectangle rect:vmap.getBoundingBoxes()){
 				if (this.getCollisionBox().overlaps(rect)){
