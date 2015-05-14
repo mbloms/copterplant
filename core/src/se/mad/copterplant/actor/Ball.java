@@ -5,7 +5,6 @@ import se.mad.copterplant.level.VisualMap;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -26,7 +25,7 @@ public class Ball extends Actor implements Collidable {
 		setShape(16);
 		setShapeType(ShapeType.Filled);
 		setColor(Color.CYAN);
-		setVel(new Vector2(MathUtils.random(3) + 1, MathUtils.random(3) + 1));
+		setVel(new Vector2(2,2));
 
 	}
 
@@ -75,20 +74,6 @@ public class Ball extends Actor implements Collidable {
 				boolean rightTopCollision = rect.contains(rightTop);
 				boolean rightBottomCollision = rect.contains(rightBottom);
 
-				if (leftTopCollision) {
-					//System.out.println("left top");
-				}
-
-				if (leftBottomCollision) {
-					//System.out.println("left bottom");
-				}
-				if (rightTopCollision) {
-					//System.out.println("right top");
-				}
-				if (rightBottomCollision) {
-					//System.out.println("right bottom");
-				}
-
 				if ((leftTopCollision && leftBottomCollision)
 						|| (rightTopCollision && rightBottomCollision)) {
 					setVel(getXVelReflection());
@@ -102,72 +87,33 @@ public class Ball extends Actor implements Collidable {
 					collided = true;
 					break;
 				}
-
+				//Lef Top
 				if (leftTopCollision) {
-					Vector2 temp = leftTop.cpy();
-					temp.y -=deltaMove.y; 
-
-					for (int y = 1; y < getCollisionBox().height-1; y++) {
-						temp.y -= 1;
-						if (rect.contains(temp)) {
-							//System.out.println(temp + ":" + leftTop);
-							//System.out.println("Found on Left vertical side");
-							setVel(getXVelReflection());
-							collided = true;
-							
-							break;
-						}
+					if (checkVerticalPixels(leftTop, deltaMove.y, rect, false)) {
+						collided = true;
+						break;
 					}
-
+					
 					if (!collided) {
-						temp = leftTop.cpy();
-						for (int x = 1; x < getCollisionBox().width; x++) {
-							temp.x += 1;
-							if (rect.contains(temp)) {
-								setVel(getYVelReflection());
-								collided = true;
-								
-								break;
-
-							}
-
+						if (checkHorizontalPixels(leftTop, rect, true)) {
+							collided = true;
+							break;
 						}
 					}
 
 				} // Left top
-
+				//Left Bottom
 				if (leftBottomCollision) {
-					Vector2 temp = leftBottom.cpy();
-					if (deltaMove.y < 0) {
-						temp.y -= deltaMove.y;
-					} else {
-						temp.y += deltaMove.y;
+					if (checkVerticalPixels(leftBottom, deltaMove.y, rect, true)) {
+						collided = true;
+						break;
 					}
-
-					for (int y = 1; y < getCollisionBox().height; y++) {
-						temp.y += 1;
-						if (rect.contains(temp)) {
-							setVel(getXVelReflection());
+					
+					if (!collided) {
+						if (checkHorizontalPixels(leftBottom, rect, true)) {
 							collided = true;
 							break;
 						}
-					}
-
-					if (!collided) {
-
-						temp = leftBottom.cpy(); // reset vector
-
-						for (int x = 1; x < getCollisionBox().width; x++) {
-							temp.x += 1;
-
-
-							if (rect.contains(temp)) {
-								setVel(getYVelReflection());
-								collided = true;
-								break;
-							}
-						}
-
 					}
 
 				} // Left bottom 
@@ -175,60 +121,34 @@ public class Ball extends Actor implements Collidable {
 				
 				
 				
-				
+				//Right Bottom
 				if (rightBottomCollision) {
-					Vector2 temp = rightBottom.cpy();
-					temp.y -= deltaMove.y;
-					for (int y = 1; y<getCollisionBox().height;y++) {
-						temp.y +=1;
-						if (rect.contains(temp)){
-							setVel(getXVelReflection());
+					if (checkVerticalPixels(rightBottom, deltaMove.y, rect, true)) {
+						collided = true;
+						break;
+					}
+					if (!collided) {
+						if (checkHorizontalPixels(rightBottom, rect, false)){
 							collided = true;
 							break;
 						}
 					}
-					
-					if (!collided) {
-						temp = rightBottom.cpy();
-						for (int x = 1; x<getCollisionBox().width; x++) {
-							if (rect.contains(temp)){
-								setVel(getYVelReflection());
-								collided = true;
-								break;
-							}
-						}		
-					}	
 				}
 				
 				
-				
+				//Right Top
 				if (rightTopCollision) {
-					Vector2 temp = rightTop.cpy();
-					//first check vertical
-					temp.y -=deltaMove.y;
-					for (int y =0; y <getCollisionBox().height;y++) {
-						temp.y -=1;
-						if (rect.contains(temp)){
-							setVel(getXVelReflection());
+					if (checkVerticalPixels(rightTop, deltaMove.y, rect, false)) {
+						collided = true;
+						break;
+					}
+					
+					if (!collided) {
+						if (checkHorizontalPixels(rightTop, rect, false)){
 							collided = true;
 							break;
 						}
-						
-						
 					}
-					
-					if (!collided){
-						temp = rightTop.cpy();
-						for (int x = 1; x<getCollisionBox().width; x++) {
-							temp.x -=1; 
-							if (rect.contains(temp)){
-								setVel(getYVelReflection());
-								collided = true;
-								break;
-							}
-						}
-					}
-					
 					
 					
 				}
@@ -259,6 +179,172 @@ public class Ball extends Actor implements Collidable {
 			setPos(oldPos);
 		}
 
+	}
+	
+	private void move(){
+		collided = false; 																			// starts out with the abillity to move forward.
+		
+		Vector2 oldPos = getPos(); 																	// the current position at the center of the ball.
+		Vector2 newPos = getPos().add(getVel()); 													// the new position that we would like to move to. At the center.
+		
+		Vector2 rectPos = getPos().sub(getCollisionBox().width / 2,getCollisionBox().height / 2); 	// the rectangular position of the ball. Lower left corner.
+		rectPos.add(getVel()); 																		// Changed so that the rectPos is like the next pos but in different coordinates. 
+		
+		Vector2 deltaMove = newPos.cpy().sub(oldPos); 												// calculating the delta to know how much of the ball is inside a collidable object.
+	
+		Vector2[] corners = updateCollisionboxCorners(rectPos);	
+		Vector2 leftBottom 	= corners[0];
+		Vector2 leftTop 	= corners[1];
+		Vector2 rightBottom = corners[2];
+		Vector2 rightTop 	= corners[3];
+		
+		Rectangle nextCollisionBox = new Rectangle(rectPos.x, rectPos.y,getCollisionBox().width, getCollisionBox().height);
+		nextRectangle = nextCollisionBox;
+		
+		for (Rectangle rect : vmap.getBoundingBoxes()) {											// iterate over all the collisionboxes in the map
+			if (nextCollisionBox.overlaps(rect)) {
+				
+				boolean leftTopCollision = rect.contains(leftTop);
+				boolean leftBottomCollision = rect.contains(leftBottom);
+
+				boolean rightTopCollision = rect.contains(rightTop);
+				boolean rightBottomCollision = rect.contains(rightBottom);
+				
+				//Handle the easy parts first. When we hit a block perfectly with both corners.
+				if ((leftTopCollision && leftBottomCollision) || (rightTopCollision && rightBottomCollision)) {
+					setVel(getXVelReflection());
+					collided = true;
+					break;
+				}
+
+				if ((leftTopCollision && rightTopCollision) || (leftBottomCollision && rightBottomCollision)) {
+					setVel(getYVelReflection());
+					collided = true;
+					break;
+				}
+				
+				
+				//Now onto the hard part.
+				if (leftTopCollision) { // Left Top
+					collided = checkVerticalPixels(leftTop, deltaMove.y, rect, false);
+					
+					if (collided) {
+						break;
+					}else {
+						if (checkHorizontalPixels(leftTop, rect, true)) {
+							collided = true;
+							break;
+						}	
+					}
+				}
+				
+				//Left Bottom
+				if (leftBottomCollision) {
+					if (checkVerticalPixels(leftBottom, deltaMove.y, rect, true)) {
+						collided = true;
+						break;
+					}
+					
+					if (!collided) {
+						if (checkHorizontalPixels(leftBottom, rect, true)) {
+							collided = true;
+							break;
+						}
+					}
+
+				} // Left bottom 
+				
+				
+				
+				
+				//Right Bottom
+				if (rightBottomCollision) {
+					if (checkVerticalPixels(rightBottom, deltaMove.y, rect, true)) {
+						collided = true;
+						break;
+					}
+					if (!collided) {
+						if (checkHorizontalPixels(rightBottom, rect, false)){
+							collided = true;
+							break;
+						}
+					}
+				}
+				
+				
+				//Right Top
+				if (rightTopCollision) {
+					if (checkVerticalPixels(rightTop, deltaMove.y, rect, false)) {
+						collided = true;
+						break;
+					}
+					
+					if (!collided) {
+						if (checkHorizontalPixels(rightTop, rect, false)){
+							collided = true;
+							break;
+						}
+					}
+					
+					
+				}
+				
+				
+				
+				
+				
+		
+			}//end of overlaps if
+		}//end of rectangle for loop
+		
+		
+	}// end of move
+	
+	private boolean checkVerticalPixels(Vector2 corner, float deltaY, Rectangle currentRectangle,boolean up){
+			Vector2 temp = corner.cpy();
+			temp.y -= deltaY;
+			
+			for (int y = 1; y<getCollisionBox().height;y++) {
+				if (up){
+					temp.y +=1;	
+				}else {
+					temp.y -=1;
+				}
+				
+				if (currentRectangle.contains(temp)){
+					setVel(getXVelReflection());
+					return true;
+				}
+			}
+			return false;		
+	}
+	
+	private boolean checkHorizontalPixels(Vector2 corner, Rectangle currentRectangle,boolean right){
+		Vector2 temp = corner.cpy();
+		for (int x = 1; x<getCollisionBox().width; x++) {
+			if (right) {
+				temp.x +=1; 
+			}else {
+				temp.x -=1;
+			}
+			
+			if (currentRectangle.contains(temp)){
+				setVel(getYVelReflection());
+				return true;
+			}
+		}
+		return false;
+	}
+	
+
+	private Vector2[] updateCollisionboxCorners(Vector2 rectPos){
+		Vector2[] cornernPositions = new Vector2[4];
+		cornernPositions[0] = new Vector2(rectPos.x, rectPos.y); // Left Bottom
+		cornernPositions[1]  = new Vector2(rectPos.x, rectPos.y + getCollisionBox().height); // Left Top
+		cornernPositions[2]  = new Vector2(rectPos.x + getCollisionBox().width,rectPos.y); // Right Bottom
+		cornernPositions[3] = new Vector2(rectPos.x + getCollisionBox().width, rectPos.y+ getCollisionBox().height); // Right top
+		
+		return cornernPositions;
 	}
 
 	private Vector2 getXVelReflection() {
