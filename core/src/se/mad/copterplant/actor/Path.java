@@ -59,13 +59,42 @@ public class Path{
 			return false;
 		}
 		Iterator<PathObject> it = path.iterator();
+		int i = 0;
 		while(it.hasNext()){
 			if(rect.overlaps(it.next().getCollisionBox())){
 				it.remove();
+				destroyPath(i);
 				return true; 
 			}
+			i++;
 		}
 		return false;
+	}
+	
+	private static void destroyPath(int start){
+		int leftIndex = start-1;
+		int rightIndex = start; 
+		
+		while(path.size()>0){
+			System.out.println(path.size()+"l="+leftIndex+"r="+rightIndex);
+			if(leftIndex >= 0){
+				path.remove(leftIndex);
+			}else{
+				rightIndex--;
+			}
+			
+			if(rightIndex < path.size()){
+				path.remove(rightIndex);
+			}
+			leftIndex--; 
+			
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public class PathObject{
