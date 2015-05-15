@@ -20,9 +20,10 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Player extends Actor implements Collidable{
 	private boolean creatingPath;
-	private Vector2 prevNodeVel;
 
-	private float speed = 4;
+	private float speed = 1;
+	private float moveTimer;
+	private float moveTimerStart = 0.1f;
 
 	private Path path;
 
@@ -33,11 +34,17 @@ public class Player extends Actor implements Collidable{
 
 	@Override
 	public void init() {
+		moveTimer = moveTimerStart;
 		setShape(16);
 		setShapeType(ShapeType.Filled);
 		setColor(Color.RED);
 
 		creatingPath = false;
+		
+		getCollisionBox().width -= 5;
+		getCollisionBox().height -=5;
+		getCollisionBox().x +=5;
+		getCollisionBox().y +=5;
 	}
 
 	@Override
@@ -46,30 +53,30 @@ public class Player extends Actor implements Collidable{
 		Vector2 temp = getPos().sub(320,96);
 		temp.x /= 32;
 		temp.y /= 32;
-		System.out.println();
+		
 
 		
 		if (!VisualMap.BoundsRect.contains(getCollisionBox())) {
-			creatingPath = false;
 			setVel(new Vector2(0, 0));
 		}
 		
 		
-		if(GameScreen.vMap.map.isFilled((int)temp.x,(int)temp.y)&&VisualMap.BoundsRect.contains(getCollisionBox())){
+		if(GameScreen.vMap.map.isFilled((int)temp.x,(int)temp.y)){
 			setVel(new Vector2(0, 0));
+			
 			if(creatingPath){
 				creatingPath= false;
 				path.addNode(getPos());
 				if (path != null) {
+					
 					GameScreen.vMap.map.fillTrack(path.getPath());
 				}
-
 				path = null;
 			}
 		}else{
 			if(!creatingPath){
+				
 				creatingPath = true;
-				prevNodeVel = getVel();
 				path = new Path(getPos());
 			}
 		}
@@ -87,11 +94,30 @@ public class Player extends Actor implements Collidable{
 			setVel(new Vector2(0, -speed));
 		}
 
-		if(creatingPath&&(prevNodeVel.x != getVel().x || prevNodeVel.y != getVel().y)){
-			prevNodeVel = getVel();
-			path.addNode(getPos());
-		}
 		setPos(getPos().add(getVel()));
+
+		if (moveTimer < 0) {
+			temp.x +=getVelX();
+			temp.y +=getVelY(); 
+			temp.x = (int)temp.x*32 + 320 + 16;
+			temp.y = (int)temp.y*32 +96 + 16;
+			
+			if (temp.x > 320+32*20-16) {
+				temp.x = 320+32*20-16;
+			}
+			
+			if (temp.y > 96 + 32*20-16){
+				temp.y = 96 + 32*20-16;
+			}
+
+			setPos(temp);
+			if(creatingPath){
+				path.addNode(getPos());
+			}
+			moveTimer = moveTimerStart;
+		}else {
+			moveTimer -=delta; 
+		}
 	}
 
 	@Override
@@ -102,13 +128,17 @@ public class Player extends Actor implements Collidable{
 		}
 
 		drawActor(renderer);
+		
+		renderer.begin(ShapeType.Line);
+			renderer.rect(getCollisionBox().x,getCollisionBox().y,getCollisionBox().width,getCollisionBox().height);
+		renderer.end();
 	}
 
 	@Override
 	public void collide(Actor other) {
 		System.out.println("Collision!");
-		setPos(new Vector2(10*32,Settings.GAME_HEIGHT/2));
-		other.setVel(other.getVel().scl(-1));
+		setPos(new Vector2(10*32,Settings.GAME_HEIGHT/2+16));
+		creatingPath = false;
 	}
 
 	@Override

@@ -2,6 +2,10 @@ package se.mad.copterplant.level;
 
 import java.util.LinkedList;
 import java.util.Stack;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.math.Vector2;
+import se.mad.copterplant.actor.Path.PathObject;
+import se.mad.copterplant.level.BinaryCollection.BinaryArrayList;
 import se.mad.copterplant.level.BinaryCollection.BinaryArrayMatrix;
 import com.badlogic.gdx.math.Vector2;
 
@@ -108,51 +112,17 @@ public class LevelMap extends BinaryArrayMatrix{
 	public void fillTrack(int[] x, int[] y){
 */
 
-	public void fillTrack(LinkedList<Vector2> path){
-		System.out.println("Began");
-		int counter = 0;
-		for (int i = 0; i<path.size()-1;i++) {
-			Vector2 pos = path.get(i);
-			Vector2 next = path.get(i+1);
-
-
+	public void fillTrack(LinkedList<PathObject> path){
+		for (PathObject p:path) {
+			Vector2 pos = p.getPos();
+			
 			Vector2 gridPos = new Vector2((int)(pos.x/32),(int)(pos.y/32));
-			Vector2 gridNext = new Vector2((int)(next.x/32),(int)(next.y/32));
-			if (VisualMap.BoundsRect.contains(pos) && VisualMap.BoundsRect.contains(next)) {
-				Vector2 delta = gridNext.sub(gridPos);
+	
+			if (VisualMap.BoundsRect.contains(pos)) {
 				gridPos.sub(10,3);
-				
-
-				if (delta.x > 0) {
-					for (int x =0 ; x<Math.abs(delta.x); x++) {
-						System.out.println(gridPos.x+x);
-						fillBlock((int)gridPos.x + x, (int)gridPos.y);
-						counter++;
-					}
-				}else {
-
-					for (int x =0 ; x<Math.abs(delta.x); x++) {
-						System.out.println(gridPos.x-x);
-						fillBlock((int)gridPos.x-x, (int)gridPos.y);
-						counter++;
-					}
-				}
-				if (delta.y > 0) {
-					for (int y =0 ; y<Math.abs(delta.y); y++) {
-						System.out.println(gridPos.y+y);
-						fillBlock((int)gridPos.x, (int)gridPos.y + y);
-						counter++;
-					}
-				}else {
-					for (int y =0 ; y<Math.abs(delta.y); y++) {
-						System.out.println(gridPos.y-y);
-						fillBlock((int)gridPos.x, (int)gridPos.y - y);
-						counter++;
-					}	
-				}
+				fillBlock((int)gridPos.x, (int)gridPos.y);
 			}
 		}
-		
 		vMap.updateBoundingBoxes();
 	}
 
@@ -166,7 +136,6 @@ public class LevelMap extends BinaryArrayMatrix{
 	 */
 	public double percentageFilled(){
 		//TODO
-
 		return -1.0;
 	}
 }
