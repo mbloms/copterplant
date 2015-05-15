@@ -249,6 +249,11 @@ public class BinaryArrayList {
 		return -1;
 	}
 	
+	/**
+	 * Returns the first false bit after the given index in the list. (Exclusively)
+	 * @param fromIndex Index to start searching from.
+	 * @return The index of the false bit.
+	 */
 	public int firstFalseBitAfter(int fromIndex){
 		try{
 			checkOutOfBounds(fromIndex);
