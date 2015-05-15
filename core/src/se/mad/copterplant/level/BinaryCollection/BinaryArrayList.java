@@ -64,7 +64,7 @@ public class BinaryArrayList {
 	}
 	
 	/**
-	 * Sets all bits between 'from' and 'to' to true.
+	 * Sets all bits between 'from' and 'to' to true, inclusively.
 	 * @param from
 	 * @param to
 	 */
@@ -72,7 +72,7 @@ public class BinaryArrayList {
 		checkOutOfBounds(from);
 		checkOutOfBounds(to);
 		if(from/32 == to/32){
-			segments[from/32] |= ((~0)<<from%32 & (~0)>>>to%32);
+			segments[from/32] |= ((~0)<<from%32 & (~0)>>>(31-(to%32)));
 		}
 		else{
 			segments[from/32] |= ((~0)<<from%32);
@@ -81,7 +81,7 @@ public class BinaryArrayList {
 				segments[mid] = ~0;
 				mid++;
 			}
-			segments[to/32] |= ((~0)>>>to%32);
+			segments[to/32] |= ((~0)>>>(31-(to%32)));
 		}
 	}
 	
