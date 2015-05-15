@@ -22,9 +22,7 @@ public class LevelMap extends BinaryArrayMatrix{
 	int width;
 	int height;
 	VisualMap vMap;
-	
-	BinaryArrayMatrix matrix;
-	
+		
 	public LevelMap(int width, int height, VisualMap vMap){
 		super(height, width);
 		
@@ -61,6 +59,15 @@ public class LevelMap extends BinaryArrayMatrix{
 		return isFilled(x,y);
 	}
 	
+	public static BinaryArrayList[] allTrueMatrix(int x, int y){
+		BinaryArrayList[] matrix = new BinaryArrayList[y];
+		for (int i = 0; i < matrix.length; i++) {
+			matrix[i] = new BinaryArrayList(x);
+			matrix[i].setAllTrue();
+		}
+		return matrix;
+	}
+	
 	private class intVector{
 		public int x;
 		public int y;
@@ -71,9 +78,13 @@ public class LevelMap extends BinaryArrayMatrix{
 		}
 	}
 	
+	/**
+	 * Fills the unfilled area touched by the ball.
+	 * @param x The balls x coordinate.
+	 * @param y The balls y coordinate.
+	 */
 	public void areaFill(int x, int y){
-		BinaryArrayMatrix filledMap = new BinaryArrayMatrix(height, width);
-		filledMap.setAllTrue();
+		BinaryArrayList[] matrix = allTrueMatrix(x, y);
 		
 		Stack<intVector> stack = new Stack<intVector>();
 		
@@ -91,16 +102,41 @@ public class LevelMap extends BinaryArrayMatrix{
 		
 		while(!stack.isEmpty()){
 			current = stack.pop();
-			first = rows[current.y].lastFalseBitBefore(current.x)+1;
-			last = rows[current.y].firstFalseBitAfter(current.x)-1;
-			rows[current.y].setTrue(first, last);
+			row = current.y;
+			
+			first = rows[row].lastTrueBitBefore(current.x)+1;
+			last = rows[row].firstTrueBitAfter(current.x)-1;
+			
+			matrix[row].setFalse(first, last);
+			
+			int j;
+			int upper=row+1;
+			int downer=row-1;
+			
+			if(upper<height){
+				j = rows[upper].firstFalseBitAfter(first-1);
+				while(j <= last){
+					if(!matrix[upper].getBoolean(j)){
+						stack.push(new intVector(j, upper));
+					}
+					j = rows[upper].firstTrueBitAfter(j);
+					j = rows[upper].firstFalseBitAfter(j);
+				}
+			}
+			
+			if(0<=downer){
+				j = rows[downer].firstFalseBitAfter(first-1);
+				while(j <= last){
+					if(!matrix[downer].getBoolean(j)){
+						stack.push(new intVector(j, downer));
+					}
+					j = rows[downer].firstTrueBitAfter(j);
+					j = rows[downer].firstFalseBitAfter(j);
+				}
+			}
+			
 		}
-		
-		
-	}
-	
-	private void scanlineFill(BinaryArrayMatrix matrix, int x, int y){
-		
+		rows = matrix;
 	}
 
 	/**
