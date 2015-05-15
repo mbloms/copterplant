@@ -77,7 +77,7 @@ public class BinaryArrayList {
 		else{
 			segments[from/32] |= ((~0)<<from%32);
 			int mid = from/32 + 1;
-			while(mid<to){
+			while(mid<to/32){
 				segments[mid] = ~0;
 				mid++;
 			}

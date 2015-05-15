@@ -82,6 +82,30 @@ public class BinaryArrayListTest {
 		assertEquals(false, list.getBoolean(64));
 		assertEquals(false, list.getBoolean(65));
 	}
+	
+	@Test
+	public void testSetMultipleTrue() {
+		list.setTrue(5, 25);
+		
+		for (int i = 0; i < 5; i++) {
+			assertFalse(list.getBoolean(i));
+		}
+		for (int i = 5; i < 26; i++) {
+			assertTrue(list.getBoolean(i));
+		}
+		for (int i = 26; i < 32; i++) {
+			assertFalse(list.getBoolean(i));
+		}
+		
+		list.setTrue(15, 70);
+		
+		for (int i = 15; i < 71; i++) {
+			assertTrue(list.getBoolean(i));
+		}
+		for (int i = 71; i < 90; i++) {
+			assertFalse(list.getBoolean(i));
+		}
+	}
 
 	@Test
 	public void testFirstTrueBit() {		
