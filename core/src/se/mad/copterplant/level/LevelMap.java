@@ -83,9 +83,13 @@ public class LevelMap extends BinaryArrayMatrix{
 		int first;
 		int last;
 		int row;
+		intVector current;
 		
 		while(!stack.isEmpty()){
-			rows[stack.peek().y].
+			current = stack.pop();
+			first = rows[current.y].lastFalseBitBefore(current.x)+1;
+			last = rows[current.y].firstFalseBitAfter(current.x)-1;
+			rows[current.y].setTrue(first, last);
 		}
 		
 		
