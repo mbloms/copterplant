@@ -1,13 +1,9 @@
 package se.mad.copterplant.level;
 
 import java.util.LinkedList;
-
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.math.Vector2;
-
-import se.mad.copterplant.level.BinaryCollection.BinaryArrayList;
+import java.util.Stack;
 import se.mad.copterplant.level.BinaryCollection.BinaryArrayMatrix;
-import se.mad.copterplant.screens.GameScreen;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Sry för svenska David.
@@ -18,32 +14,25 @@ import se.mad.copterplant.screens.GameScreen;
  * @author Mikael Blomstrand
  *
  */
-public class LevelMap {
-	BinaryArrayMatrix matrix;
+public class LevelMap extends BinaryArrayMatrix{
 	int width;
 	int height;
 	VisualMap vMap;
-	public LevelMap(int width, int height,VisualMap vMap){
+	
+	BinaryArrayMatrix matrix;
+	
+	public LevelMap(int width, int height, VisualMap vMap){
+		super(height, width);
+		
 		this.width = width;
 		this.height = height;
-		matrix = new BinaryArrayMatrix(height, width);
 		this.vMap = vMap;
-	}
-
-	/**
-	 * Use with caution! Returns A POINTER to the list element.
-	 * Changes to it will affect the list in the matrix.
-	 * @param i The row to return
-	 * @return A pointer to the specified list object.
-	 */
-	public BinaryArrayList getRowList(int i){
-		return matrix.getRowList(i);
 	}
 
 	//TODO: Fix comment
 	public boolean isFilled(int x, int y){
 		try{
-			return matrix.getBoolean(y, x);
+			return getBoolean(y, x);
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -60,7 +49,7 @@ public class LevelMap {
 	 */
 	public boolean fillBlock(int x, int y){
 		try{
-			matrix.setTrue(y, x);
+			setTrue(y, x);
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -68,9 +57,41 @@ public class LevelMap {
 		return isFilled(x,y);
 	}
 	
+	private class intVector{
+		public int x;
+		public int y;
+		
+		public intVector(int x, int y){
+			this.x = x;
+			this.y = y;
+		}
+	}
 	
-	public void areaFill(Vector2 ballPos){
-		LevelMap filledMap = new LevelMap(width, height);
+	public void areaFill(int x, int y){
+		BinaryArrayMatrix filledMap = new BinaryArrayMatrix(height, width);
+		filledMap.setAllTrue();
+		
+		Stack<intVector> stack = new Stack<intVector>();
+		
+		/*
+		 * Fyll rad med utgångspunkt i P.
+		 * Lägg första tomma blocket över och under raden i stacken.
+		 * För alla fyllda block som följs av ett tomt block: lägg det tomma blocket i stacken. (Ovan och under strecket)
+		 */
+		
+		stack.push(new intVector(x, y));
+		int first;
+		int last;
+		int row;
+		
+		while(!stack.isEmpty()){
+			rows[stack.peek().y].
+		}
+		
+		
+	}
+	
+	private void scanlineFill(BinaryArrayMatrix matrix, int x, int y){
 		
 	}
 
