@@ -85,6 +85,28 @@ public class BinaryArrayList {
 		}
 	}
 	
+	/**
+	 * Sets all bits between 'from' and 'to' to false, inclusively.
+	 * @param from
+	 * @param to
+	 */
+	public void setFalse(int from, int to){
+		checkOutOfBounds(from);
+		checkOutOfBounds(to);
+		if(from/32 == to/32){
+			segments[from/32] &= ~((~0)<<from%32 & (~0)>>>(31-(to%32)));
+		}
+		else{
+			segments[from/32] &= ~((~0)<<from%32);
+			int mid = from/32 + 1;
+			while(mid<to/32){
+				segments[mid] = 0;
+				mid++;
+			}
+			segments[to/32] &= ~((~0)>>>(31-(to%32)));
+		}
+	}
+	
 	public void setAllTrue(){
 		for (int i = 0; i < segments.length; i++) {
 			segments[i] = ~0;
