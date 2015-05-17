@@ -13,10 +13,12 @@ public class Ball extends Actor implements Collidable {
 	private VisualMap vmap;
 	private boolean collided = false;
 	private Rectangle nextRectangle;
+	private Player player;
 	
-	public Ball(Vector2 pos, VisualMap vmap) {
+	public Ball(Vector2 pos, VisualMap vmap, Player player) {
 		super(pos);
 		this.vmap = vmap;
+		this.player = player; 
 	}
 
 	@Override
@@ -31,7 +33,7 @@ public class Ball extends Actor implements Collidable {
 
 	@Override
 	public void update(float delta) {
-		Path.isColliding(this.getCollisionBox());
+		player.isCollidingPath(this.getCollisionBox());
 		move();
 	}
 	

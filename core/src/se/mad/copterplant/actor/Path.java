@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.actions.RemoveAction;
 
 /**
  *
@@ -15,11 +16,28 @@ import com.badlogic.gdx.math.Vector2;
  *
  */
 public class Path{
-	private static LinkedList<PathObject> path;
+	private LinkedList<PathObject> path;
 
-	public Path(Vector2 pos){
+	private Player player;
+	
+	//Remove the path stuff
+	private boolean destroyPath; 
+	private int removeIndex;
+	//Timer stuff
+	private float deltaTime;
+	private float startTimer;
+	
+	public Path(Vector2 pos, Player player){
 		path = new LinkedList<PathObject>();
 		path.add(new PathObject(pos));
+		
+		this.player = player;
+		
+		destroyPath = false;
+		removeIndex = 0;
+		deltaTime = .01f; //In seconds
+		startTimer = 0;
+		
 	}
 
 	/**
@@ -44,7 +62,7 @@ public class Path{
 	 * @param playerPos
 	 * @param playerVel
 	 */
-	public void draw(ShapeRenderer renderer,Vector2 playerPos,Vector2 playerVel) {
+	public void draw(ShapeRenderer renderer) {
 		for(PathObject p:path){
 			p.draw(renderer);
 		}
@@ -55,8 +73,9 @@ public class Path{
 	 * @param Rectangle
 	 * @return true or false
 	 */
-	public static boolean isColliding(Rectangle rect){
+	public boolean isColliding(Rectangle rect){
 		if(path == null){
+			player.die();
 			return false;
 		}
 		Iterator<PathObject> it = path.iterator();
@@ -64,7 +83,11 @@ public class Path{
 		while(it.hasNext()){
 			if(rect.overlaps(it.next().getCollisionBox())){
 				it.remove();
-				destroyPath(i);
+				
+				if(!destroyPath){
+					destroyPath = true; 
+					removeIndex = i-1;
+				}
 				return true;
 			}
 			i++;
@@ -72,28 +95,44 @@ public class Path{
 		return false;
 	}
 
-	private static void destroyPath(int start){
-		int leftIndex = start-1;
-		int rightIndex = start;
-
-		while(path.size()>0){
-			if(leftIndex >= 0){
-				path.remove(leftIndex);
-			}else{
-				if(rightIndex != 0){
-					rightIndex--;
-				}
+	private void destroyPath(){
+		
+		if(removeIndex == path.size()){
+			player.die();
+			return;
+		}
+		
+		if(removeIndex < 0){
+			removeIndex = 0;
+		}
+		
+		if(path.size()>0){
+			if(removeIndex > 0){
+				path.remove(removeIndex);
+				removeIndex--;
 			}
-
-			if(rightIndex < path.size()){
-				path.remove(rightIndex);
-			}
-			leftIndex--;
-
-
+			path.remove(removeIndex);
+		}else{
+			destroyPath = false;
+			removeIndex = 0;
 		}
 	}
 
+	/**
+	 * Update the Path
+	 * @param delta
+	 */
+	public void update(float delta){
+		if(startTimer <= 0){
+			if(destroyPath){
+				destroyPath();
+			}
+			startTimer = deltaTime;
+		}else{
+			startTimer -= delta;
+		}
+	}
+	
 	public class PathObject{
 		private Rectangle collisionBox;
 		private Vector2 pos;

@@ -10,6 +10,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -77,7 +78,7 @@ public class Player extends Actor implements Collidable{
 			if(!creatingPath){
 				
 				creatingPath = true;
-				path = new Path(getPos());
+				path = new Path(getPos(),this);
 			}
 		}
 
@@ -118,13 +119,18 @@ public class Player extends Actor implements Collidable{
 		}else {
 			moveTimer -=delta; 
 		}
+		if(path != null){
+			path.update(delta);
+		}
+		
+		
 	}
 
 	@Override
 	public void draw(ShapeRenderer renderer) {
 
 		if(creatingPath && path != null){
-			path.draw(renderer, getPos(), getVel());
+			path.draw(renderer);
 		}
 
 		drawActor(renderer);
@@ -137,12 +143,28 @@ public class Player extends Actor implements Collidable{
 	@Override
 	public void collide(Actor other) {
 		System.out.println("Collision!");
-		setPos(new Vector2(10*32,Settings.GAME_HEIGHT/2+16));
-		creatingPath = false;
+		die();
 	}
 
 	@Override
 	public boolean isColliding(Actor other) {
 		return this.getCollisionBox().overlaps(other.getCollisionBox());
+	}
+	
+	public void die(){
+		setPos(new Vector2(10*32,Settings.GAME_HEIGHT/2+16));
+		creatingPath = false;
+		path = null;
+	}
+	
+	/**
+	 * Check if a object is colliding with players path.
+	 * @return true if colliding
+	 */
+	public boolean isCollidingPath(Rectangle rect) {
+		if(path == null){
+			return false;
+		}
+		return path.isColliding(rect);
 	}
 }

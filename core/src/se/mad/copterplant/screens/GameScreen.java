@@ -34,7 +34,7 @@ public class GameScreen extends SimpleScreen {
 		actors = new ArrayList<Collidable>();
 		player = new Player(new Vector2(10*32+16,32*13 + 16));
 		vMap = new VisualMap();
-		ball = new Ball(new Vector2(640-32, 96+32*9),vMap);
+		ball = new Ball(new Vector2(640-32, 96+32*9),vMap,player);
 		
 
 		actors.add(ball);
