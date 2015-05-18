@@ -1,14 +1,13 @@
 package se.mad.copterplant.level;
 
 import java.util.LinkedList;
-
+import java.util.Stack;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector2;
-
 import se.mad.copterplant.actor.Path.PathObject;
 import se.mad.copterplant.level.BinaryCollection.BinaryArrayList;
 import se.mad.copterplant.level.BinaryCollection.BinaryArrayMatrix;
-import se.mad.copterplant.screens.GameScreen;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Sry för svenska David.
@@ -19,32 +18,23 @@ import se.mad.copterplant.screens.GameScreen;
  * @author Mikael Blomstrand
  *
  */
-public class LevelMap {
-	BinaryArrayMatrix matrix;
+public class LevelMap extends BinaryArrayMatrix{
 	int width;
 	int height;
 	VisualMap vMap;
-	public LevelMap(int width, int height,VisualMap vMap){
+		
+	public LevelMap(int width, int height, VisualMap vMap){
+		super(height, width);
+		
 		this.width = width;
 		this.height = height;
-		matrix = new BinaryArrayMatrix(height, width);
 		this.vMap = vMap;
-	}
-
-	/**
-	 * Use with caution! Returns A POINTER to the list element.
-	 * Changes to it will affect the list in the matrix.
-	 * @param i The row to return
-	 * @return A pointer to the specified list object.
-	 */
-	public BinaryArrayList getRowList(int i){
-		return matrix.getRowList(i);
 	}
 
 	//TODO: Fix comment
 	public boolean isFilled(int x, int y){
 		try{
-			return matrix.getBoolean(y, x);
+			return getBoolean(y, x);
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -61,7 +51,7 @@ public class LevelMap {
 	 */
 	public boolean fillBlock(int x, int y){
 		try{
-			matrix.setTrue(y, x);
+			setTrue(y, x);
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -69,9 +59,84 @@ public class LevelMap {
 		return isFilled(x,y);
 	}
 	
+	public static BinaryArrayList[] allTrueMatrix(int x, int y){
+		BinaryArrayList[] matrix = new BinaryArrayList[y];
+		for (int i = 0; i < matrix.length; i++) {
+			matrix[i] = new BinaryArrayList(x);
+			matrix[i].setAllTrue();
+		}
+		return matrix;
+	}
 	
-	public void areaFill(){
+	private class intVector{
+		public int x;
+		public int y;
 		
+		public intVector(int x, int y){
+			this.x = x;
+			this.y = y;
+		}
+	}
+	
+	/**
+	 * Fills the unfilled area touched by the ball.
+	 * @param x The balls x coordinate.
+	 * @param y The balls y coordinate.
+	 */
+	public void areaFill(int x, int y){
+		BinaryArrayList[] matrix = allTrueMatrix(x, y);
+		
+		Stack<intVector> stack = new Stack<intVector>();
+		
+		/*
+		 * Fyll rad med utgångspunkt i P.
+		 * Lägg första tomma blocket över och under raden i stacken.
+		 * För alla fyllda block som följs av ett tomt block: lägg det tomma blocket i stacken. (Ovan och under strecket)
+		 */
+		
+		stack.push(new intVector(x, y));
+		int first;
+		int last;
+		int row;
+		intVector current;
+		
+		while(!stack.isEmpty()){
+			current = stack.pop();
+			row = current.y;
+			
+			first = rows[row].lastTrueBitBefore(current.x)+1;
+			last = rows[row].firstTrueBitAfter(current.x)-1;
+			
+			matrix[row].setFalse(first, last);
+			
+			int j;
+			int upper=row+1;
+			int downer=row-1;
+			
+			if(upper<height){
+				j = rows[upper].firstFalseBitAfter(first-1);
+				while(j <= last){
+					if(!matrix[upper].getBoolean(j)){
+						stack.push(new intVector(j, upper));
+					}
+					j = rows[upper].firstTrueBitAfter(j);
+					j = rows[upper].firstFalseBitAfter(j);
+				}
+			}
+			
+			if(0<=downer){
+				j = rows[downer].firstFalseBitAfter(first-1);
+				while(j <= last){
+					if(!matrix[downer].getBoolean(j)){
+						stack.push(new intVector(j, downer));
+					}
+					j = rows[downer].firstTrueBitAfter(j);
+					j = rows[downer].firstFalseBitAfter(j);
+				}
+			}
+			
+		}
+		rows = matrix;
 	}
 
 	/**
