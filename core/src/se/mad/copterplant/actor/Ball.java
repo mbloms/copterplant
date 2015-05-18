@@ -23,6 +23,7 @@ public class Ball extends Actor implements Collidable {
 	public void init() {
 		setVel(new Vector2());
 		setShape(16);
+		setPos(getPos().add(16,16));
 		setShapeType(ShapeType.Filled);
 		setColor(Color.CYAN);
 		setVel(new Vector2(2,2));
