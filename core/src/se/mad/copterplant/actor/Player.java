@@ -57,19 +57,20 @@ public class Player extends Actor implements Collidable {
 		temp.x /= 32;
 		temp.y /= 32;
 
-		if (!VisualMap.BoundsRect.contains(getCollisionBox())) {
+		if (!VisualMap.BoundsRect.contains(getCollisionBox())
+				|| Level01.V_MAP.map.isFilled((int) temp.x, (int) temp.y)) {
 			setVel(new Vector2(0, 0));
 		}
 
-
-		if(Level01.V_MAP.map.isFilled((int)temp.x,(int)temp.y)){
-			setVel(new Vector2(0, 0));
+		if (Level01.V_MAP.map.isFilled((int) temp.x, (int) temp.y)) {
 
 			if (creatingPath) {
 				creatingPath = false;
 				path.addNode(getPos());
 				if (path != null) {
 					Level01.V_MAP.map.fillTrack(path.getPath());
+					int gridPos[] = VisualMap.ScreenToLevelCoordinates(GameScreen.ball[0].getPos());
+					Level01.V_MAP.map.areaFill(gridPos[0],gridPos[1]);
 				}
 				path = null;
 			}
@@ -94,8 +95,6 @@ public class Player extends Actor implements Collidable {
 			setVel(new Vector2(0, -speed));
 		}
 
-		setPos(getPos().add(getVel()));
-
 		if (moveTimer < 0) {
 			temp.x += getVelX();
 			temp.y += getVelY();
@@ -111,6 +110,7 @@ public class Player extends Actor implements Collidable {
 			}
 
 			setPos(temp);
+			isCollidingPath(getCollisionBox());
 			if (creatingPath) {
 				path.addNode(getPos());
 			}
@@ -133,10 +133,10 @@ public class Player extends Actor implements Collidable {
 
 		drawActor(renderer);
 
-		renderer.begin(ShapeType.Line);
-		renderer.rect(getCollisionBox().x, getCollisionBox().y,
-				getCollisionBox().width, getCollisionBox().height);
-		renderer.end();
+		//TODO Draw collision box
+		//renderer.begin(ShapeType.Line);
+		//renderer.rect(getCollisionBox().x, getCollisionBox().y,getCollisionBox().width, getCollisionBox().height);
+		//renderer.end();
 	}
 
 	@Override

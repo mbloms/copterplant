@@ -74,11 +74,12 @@ public class VisualMap {
 	 * @param renderer
 	 */
 	public void draw(ShapeRenderer renderer){
-		renderer.setColor(Color.GREEN);
-		renderer.begin(ShapeType.Line);
-		renderer.rect(X_OFFSET*TILE_SIZE,Y_OFFSET*TILE_SIZE,
-				MAP_WIDTH*TILE_SIZE,MAP_HEIGTH*TILE_SIZE);
-		renderer.end();
+		//TODO Draw collision box
+		//renderer.setColor(Color.GREEN);
+		//renderer.begin(ShapeType.Line);
+		//renderer.rect(X_OFFSET*TILE_SIZE,Y_OFFSET*TILE_SIZE,
+		//		MAP_WIDTH*TILE_SIZE,MAP_HEIGTH*TILE_SIZE);
+		//renderer.end();
 
 		renderer.setColor(Color.GREEN);
 		renderer.begin(ShapeType.Filled);
@@ -93,12 +94,13 @@ public class VisualMap {
 		}
 		renderer.end();
 		
-		for(Rectangle r:boundingBoxes){
-			renderer.setColor(Color.RED);
-			renderer.begin(ShapeType.Line);
-				renderer.rect(r.x,r.y,r.width,r.height);
-			renderer.end();
-		}	
+		//TODO Draw collision box
+		//for(Rectangle r:boundingBoxes){
+		//	renderer.setColor(Color.RED);
+		//	renderer.begin(ShapeType.Line);
+		//		renderer.rect(r.x,r.y,r.width,r.height);
+		//	renderer.end();
+		//}	
 	}
 	
 	

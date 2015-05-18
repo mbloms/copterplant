@@ -7,7 +7,7 @@ package se.mad.copterplant.level.BinaryCollection;
 public class BinaryArrayMatrix {
 	private int m;
 	private int n;
-	private BinaryArrayList[] rows;
+	protected BinaryArrayList[] rows;
 	
 	/**
 	 * Constructs a Binary Matrix with the specified capacity.
@@ -71,6 +71,12 @@ public class BinaryArrayMatrix {
 		rows[i].setFalse(j);
 	}
 	
+	public void setAllTrue(){
+		for (int i = 0; i < rows.length; i++) {
+			rows[i].setAllTrue();
+		}
+	}
+	
 	/**
 	 * Use with caution! Returns A POINTER to the list element.
 	 * Changes to it will affect the list in the matrix.
@@ -80,6 +86,7 @@ public class BinaryArrayMatrix {
 	public BinaryArrayList getRowList(int i){
 		return rows[i];
 	}
+	
 	
 	/**
 	 * Checks if i or j is out of the lists bounds. 
