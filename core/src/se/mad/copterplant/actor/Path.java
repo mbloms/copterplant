@@ -171,11 +171,11 @@ public class Path {
 			renderer.circle(pos.x, pos.y, radius);
 			renderer.end();
 
-			renderer.begin(ShapeType.Line);
-			renderer.setColor(Color.YELLOW);
-			renderer.rect(collisionBox.x, collisionBox.y, collisionBox.width,
-					collisionBox.height);
-			renderer.end();
+			//TODO Draw collision box
+			//renderer.begin(ShapeType.Line);
+			//renderer.setColor(Color.YELLOW);
+			//renderer.rect(collisionBox.x, collisionBox.y, collisionBox.width,collisionBox.height);
+			//renderer.end();
 		}
 
 		/**

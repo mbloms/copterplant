@@ -142,8 +142,7 @@ public class Ball extends Actor implements Collidable {
 		return false;
 	}
 
-	private boolean checkVerticalPixels(Vector2 corner, float deltaY,
-			Rectangle currentRectangle, boolean up) {
+	private boolean checkVerticalPixels(Vector2 corner, float deltaY,Rectangle currentRectangle, boolean up) {
 		Vector2 temp = corner.cpy();
 		temp.y -= deltaY;
 
@@ -162,8 +161,7 @@ public class Ball extends Actor implements Collidable {
 		return false;
 	}
 
-	private boolean checkHorizontalPixels(Vector2 corner,
-			Rectangle currentRectangle, boolean right) {
+	private boolean checkHorizontalPixels(Vector2 corner,Rectangle currentRectangle, boolean right) {
 		Vector2 temp = corner.cpy();
 		for (int x = 1; x < getCollisionBox().width; x++) {
 			if (right) {
@@ -204,11 +202,13 @@ public class Ball extends Actor implements Collidable {
 	public void draw(ShapeRenderer renderer) {
 		renderer.setColor(Color.GREEN);
 		drawActor(renderer);
-		renderer.begin(ShapeType.Line);
-		renderer.setColor(Color.RED);
-		renderer.rect(nextRectangle.x, nextRectangle.y, nextRectangle.width,nextRectangle.height);
+		
+		//TODO Draw collision box
+		//renderer.begin(ShapeType.Line);
+		//renderer.setColor(Color.RED);
+		//renderer.rect(nextRectangle.x, nextRectangle.y, nextRectangle.width,nextRectangle.height);
 		// renderer.setColor(Color.WHITE); renderer.rect(getCollisionBox().x,getCollisionBox().y,getCollisionBox().width,getCollisionBox().height);
-		renderer.end();
+		//renderer.end();
 	}
 
 	@Override
