@@ -40,7 +40,7 @@ public class Path {
 
 		destroyPath = false;
 		removeIndex = 0;
-		deltaTime = .01f; // In seconds
+		deltaTime = .03f; // In seconds
 		startTimer = 0;
 
 	}

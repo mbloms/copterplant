@@ -14,7 +14,9 @@ public class Ball extends Actor implements Collidable {
 	private boolean collided = false;
 	private Rectangle nextRectangle;
 	private Player player;
-
+	private float speed;
+	private float radius;
+	
 	public Ball(Vector2 pos, VisualMap vmap, Player player) {
 		super(pos);
 		this.vmap = vmap;
@@ -23,15 +25,26 @@ public class Ball extends Actor implements Collidable {
 
 	@Override
 	public void init() {
+		radius = 16;
 		setVel(new Vector2());
-		setShape(16);
+		setShape(radius);
 		setPos(getPos().add(16,16));
 		setShapeType(ShapeType.Filled);
 		setColor(Color.CYAN);
-		setVel(new Vector2(2, 2));
+		speed = 2.8f;
+		setRandomVel();
+		
 
 	}
 
+	private void setRandomVel(){
+		Vector2 vel = new Vector2((float)Math.random(),(float)Math.random());
+		if(vel.len() == 0){
+			setRandomVel();
+		}
+		setVel(vel.nor().scl(speed));
+	}
+	
 	@Override
 	public void update(float delta) {
 		player.isCollidingPath(this.getCollisionBox());
@@ -213,10 +226,23 @@ public class Ball extends Actor implements Collidable {
 
 	@Override
 	public void collide(Actor other) {
+		if(other instanceof Ball){
+			Vector2 tempVel = other.getVel();
+			other.setVel(getVel());
+			setVel(tempVel);
+		}
 	}
 
 	@Override
 	public boolean isColliding(Actor other) {
 		return getCollisionBox().contains(other.getCollisionBox());
+	}
+	
+	/**
+	 * Get the radius of the ball
+	 * @return radius
+	 */
+	public float getRadius() {
+		return radius;
 	}
 }
