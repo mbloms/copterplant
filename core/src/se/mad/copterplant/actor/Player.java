@@ -70,6 +70,8 @@ public class Player extends Actor implements Collidable {
 				path.addNode(getPos());
 				if (path != null) {
 					Level01.V_MAP.map.fillTrack(path.getPath());
+					int gridPos[] = VisualMap.ScreenToLevelCoordinates(GameScreen.ball.getPos());
+					Level01.V_MAP.map.areaFill(gridPos[0],gridPos[1]);
 				}
 				path = null;
 			}
