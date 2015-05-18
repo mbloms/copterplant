@@ -84,7 +84,7 @@ public class LevelMap extends BinaryArrayMatrix{
 	 * @param y The balls y coordinate.
 	 */
 	public void areaFill(int x, int y){
-		BinaryArrayList[] matrix = allTrueMatrix(x, y);
+		BinaryArrayList[] matrix = allTrueMatrix(width, height);
 		
 		Stack<intVector> stack = new Stack<intVector>();
 		
@@ -107,7 +107,7 @@ public class LevelMap extends BinaryArrayMatrix{
 			first = rows[row].lastTrueBitBefore(current.x)+1;
 			last = rows[row].firstTrueBitAfter(current.x)-1;
 			
-			matrix[row].setFalse(first, last);
+			matrix[row].setFalse(first, last); // sätter allt där bollen är
 			
 			int j;
 			int upper=row+1;
@@ -115,8 +115,9 @@ public class LevelMap extends BinaryArrayMatrix{
 			
 			if(upper<height){
 				j = rows[upper].firstFalseBitAfter(first-1);
-				while(j <= last){
-					if(!matrix[upper].getBoolean(j)){
+				
+				while(j <= last && j!=-1){
+					if(matrix[upper].getBoolean(j)){
 						stack.push(new intVector(j, upper));
 					}
 					j = rows[upper].firstTrueBitAfter(j);
@@ -126,17 +127,21 @@ public class LevelMap extends BinaryArrayMatrix{
 			
 			if(0<=downer){
 				j = rows[downer].firstFalseBitAfter(first-1);
-				while(j <= last){
-					if(!matrix[downer].getBoolean(j)){
+				while(j <= last && j!=-1){
+					if(matrix[downer].getBoolean(j)){
 						stack.push(new intVector(j, downer));
 					}
 					j = rows[downer].firstTrueBitAfter(j);
+					if(j==-1){
+						break;
+					}
 					j = rows[downer].firstFalseBitAfter(j);
 				}
 			}
 			
 		}
 		rows = matrix;
+		vMap.updateBoundingBoxes();
 	}
 
 	/**
@@ -164,6 +169,7 @@ public class LevelMap extends BinaryArrayMatrix{
 
 	public void parseString(){
 		//TODO
+		
 	}
 
 	/**
