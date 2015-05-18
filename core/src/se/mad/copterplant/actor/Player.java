@@ -57,13 +57,12 @@ public class Player extends Actor implements Collidable {
 		temp.x /= 32;
 		temp.y /= 32;
 
-		if (!VisualMap.BoundsRect.contains(getCollisionBox())) {
+		if (!VisualMap.BoundsRect.contains(getCollisionBox())
+				|| Level01.V_MAP.map.isFilled((int) temp.x, (int) temp.y)) {
 			setVel(new Vector2(0, 0));
 		}
 
-
-		if(Level01.V_MAP.map.isFilled((int)temp.x,(int)temp.y)){
-			setVel(new Vector2(0, 0));
+		if (Level01.V_MAP.map.isFilled((int) temp.x, (int) temp.y)) {
 
 			if (creatingPath) {
 				creatingPath = false;
@@ -94,8 +93,6 @@ public class Player extends Actor implements Collidable {
 			setVel(new Vector2(0, -speed));
 		}
 
-		setPos(getPos().add(getVel()));
-
 		if (moveTimer < 0) {
 			temp.x += getVelX();
 			temp.y += getVelY();
@@ -111,6 +108,7 @@ public class Player extends Actor implements Collidable {
 			}
 
 			setPos(temp);
+			isCollidingPath(getCollisionBox());
 			if (creatingPath) {
 				path.addNode(getPos());
 			}
