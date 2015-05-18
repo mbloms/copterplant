@@ -26,7 +26,8 @@ public class GameScreen extends SimpleScreen {
 	public void init() {
 		level = new Level01("");
 		player = new Player(VisualMap.LevelCoordinatesToScreen(0, 10));
-		ball = new Ball(VisualMap.LevelCoordinatesToScreen(1, 1),level.getVisualMap());
+		ball = new Ball(VisualMap.LevelCoordinatesToScreen(1, 1),level.getVisualMap(),player);
+
 	}
 
 	@Override
@@ -35,12 +36,12 @@ public class GameScreen extends SimpleScreen {
 		player.update(delta);
 		ball.update(delta);
 		level.update(delta);
-		
+
 		if (ball.getCollisionBox().overlaps(player.getCollisionBox())){
 			player.collide(null);
 		}
-		
-	
+
+
 	}
 
 	@Override
