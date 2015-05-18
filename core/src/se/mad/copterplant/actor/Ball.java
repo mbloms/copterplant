@@ -128,6 +128,7 @@ public class Ball extends Actor implements Collidable {
 					}
 				}
 				//If every other check fails, apply standard velocity reflection.
+				System.err.println("Could not find right collision");
 				this.setVel(this.getVel().scl(-1));
 				return true;
 			}
