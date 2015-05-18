@@ -24,8 +24,8 @@ public class Ball extends Actor implements Collidable {
 	@Override
 	public void init() {
 		setVel(new Vector2());
-		setShape(16);
-		setPos(getPos().add(16,16));
+		setShape(8);
+		setPos(getPos().add(8,8));
 		setShapeType(ShapeType.Filled);
 		setColor(Color.CYAN);
 		setVel(new Vector2(2, 2));
