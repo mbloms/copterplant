@@ -1,5 +1,6 @@
 package se.mad.copterplant.screens;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import se.mad.copterplant.Copterplant;
 import se.mad.copterplant.actor.Actor;
@@ -34,7 +35,8 @@ public class GameScreen extends SimpleScreen {
 		actors = new ArrayList<Collidable>();
 		player = new Player(new Vector2(10*32+16,32*13 + 16));
 		vMap = new VisualMap();
-		ball = new Ball(new Vector2(640-32, 96+32*9),vMap);
+		Vector2 ballStart = VisualMap.LevelCoordinatesToScreen(1, 1);
+		ball = new Ball(ballStart,vMap);
 		
 
 		actors.add(ball);
