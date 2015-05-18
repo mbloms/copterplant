@@ -15,7 +15,7 @@ import com.badlogic.gdx.graphics.Color;
 public class GameScreen extends SimpleScreen {
 	private Level01 level;
 	private Player player;
-	private Ball ball;
+	public static Ball ball;
 
 
 	public GameScreen(Game game) {
