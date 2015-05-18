@@ -28,7 +28,7 @@ public class GameScreen extends SimpleScreen {
 	public void init() {
 		level = new Level01("");
 		player = new Player(VisualMap.LevelCoordinatesToScreen(0, 10));
-		ball = new Ball[2]; //Don't add to many balls (balls < 40)
+		ball = new Ball[1]; //Don't add to many balls (balls < 40)
 		for(int i = 0;i < ball.length;i++){
 			Vector2 pos = randomPos();
 
