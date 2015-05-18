@@ -1,12 +1,11 @@
 package se.mad.copterplant.actor;
 
 import se.mad.copterplant.level.VisualMap;
+import se.mad.copterplant.level.levels.Level01;
 import se.mad.copterplant.screens.GameScreen;
 import se.mad.copterplant.util.Settings;
 import se.mad.copterplant.util.UserInput;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -61,7 +60,7 @@ public class Player extends Actor implements Collidable{
 		}
 		
 		
-		if(GameScreen.vMap.map.isFilled((int)temp.x,(int)temp.y)){
+		if(Level01.V_MAP.map.isFilled((int)temp.x,(int)temp.y)){
 			setVel(new Vector2(0, 0));
 			
 			if(creatingPath){
@@ -69,7 +68,7 @@ public class Player extends Actor implements Collidable{
 				path.addNode(getPos());
 				if (path != null) {
 					
-					GameScreen.vMap.map.fillTrack(path.getPath());
+					Level01.V_MAP.map.fillTrack(path.getPath());
 				}
 				path = null;
 			}
