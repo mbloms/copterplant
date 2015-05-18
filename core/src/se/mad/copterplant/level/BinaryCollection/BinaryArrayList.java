@@ -38,7 +38,7 @@ public class BinaryArrayList {
 	 */
 	public boolean getBoolean(int i){
 		checkOutOfBounds(i);
-		if (((segments[i/32] >> (i % 32)) & 1) == 1){
+		if (((segments[i/32] >>> (i % 32)) & 1) == 1){
 			return true;
 		}
 		else{
@@ -64,7 +64,7 @@ public class BinaryArrayList {
 	}
 	
 	/**
-	 * Sets all bits between 'from' and 'to' to true.
+	 * Sets all bits between 'from' and 'to' to true, inclusively.
 	 * @param from
 	 * @param to
 	 */
@@ -72,16 +72,44 @@ public class BinaryArrayList {
 		checkOutOfBounds(from);
 		checkOutOfBounds(to);
 		if(from/32 == to/32){
-			segments[from/32] |= ((~0)<<from%32 & (~0)>>to%32);
+			segments[from/32] |= ((~0)<<from%32 & (~0)>>>(31-(to%32)));
 		}
 		else{
 			segments[from/32] |= ((~0)<<from%32);
 			int mid = from/32 + 1;
-			while(mid<to){
+			while(mid<to/32){
 				segments[mid] = ~0;
 				mid++;
 			}
-			segments[to/32] |= ((~0)>>to%32);
+			segments[to/32] |= ((~0)>>>(31-(to%32)));
+		}
+	}
+	
+	/**
+	 * Sets all bits between 'from' and 'to' to false, inclusively.
+	 * @param from
+	 * @param to
+	 */
+	public void setFalse(int from, int to){
+		checkOutOfBounds(from);
+		checkOutOfBounds(to);
+		if(from/32 == to/32){
+			segments[from/32] &= ~((~0)<<from%32 & (~0)>>>(31-(to%32)));
+		}
+		else{
+			segments[from/32] &= ~((~0)<<from%32);
+			int mid = from/32 + 1;
+			while(mid<to/32){
+				segments[mid] = 0;
+				mid++;
+			}
+			segments[to/32] &= ~((~0)>>>(31-(to%32)));
+		}
+	}
+	
+	public void setAllTrue(){
+		for (int i = 0; i < segments.length; i++) {
+			segments[i] = ~0;
 		}
 	}
 	
@@ -143,6 +171,146 @@ public class BinaryArrayList {
 	public int lastFalseBit(){
 		int i = -1;
 		int seg = segments.length-1;
+		while(0<=seg){
+			i = 31-Integer.numberOfLeadingZeros(~segments[seg]);
+			if(i!=-1){
+				return i + seg*32;
+			}
+			seg--;
+		}
+		return -1;
+	}
+	
+	public int firstTrueBitAfter(int fromIndex){
+		try{
+			checkOutOfBounds(fromIndex);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			if(fromIndex<0){
+				firstTrueBit();
+			}
+			else{
+				return -1;
+			}
+		}
+		int i = 32;
+		fromIndex++;
+		int seg = fromIndex/32;
+		int toCheck = (~0)<<(fromIndex%32);
+		i = Integer.numberOfTrailingZeros(segments[seg]&toCheck);
+		if(i!=32){
+			return i + seg*32;
+		}
+		seg++;
+		
+		while(seg<segments.length){
+			i = Integer.numberOfTrailingZeros(segments[seg]);
+			if(i!=32){
+				return i + seg*32;
+			}
+			seg++;
+		}
+		return -1;
+		
+	}
+	
+	public int lastTrueBitBefore(int fromIndex){
+		try{
+			checkOutOfBounds(fromIndex);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			if(fromIndex>size){
+				lastTrueBit();
+			}
+			else{
+				return -1;
+			}
+		}
+		checkOutOfBounds(fromIndex);
+		int i = -1;
+		int seg = (fromIndex-1)/32;
+		int toCheck = (-1)>>>(32 - (fromIndex%32));
+		
+		i = 31-Integer.numberOfLeadingZeros(segments[seg]&toCheck);
+		if(i!=-1){
+			return i + seg*32;
+		}
+		seg--;
+		
+		while(0<=seg){
+			i = 31-Integer.numberOfLeadingZeros(segments[seg]);
+			if(i!=-1){
+				return i + seg*32;
+			}
+			seg--;
+		}
+		return -1;
+	}
+	
+	/**
+	 * Returns the first false bit after the given index in the list. (Exclusively)
+	 * @param fromIndex Index to start searching from.
+	 * @return The index of the false bit.
+	 */
+	public int firstFalseBitAfter(int fromIndex){
+		try{
+			checkOutOfBounds(fromIndex);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			if(fromIndex<0){
+				firstTrueBit();
+			}
+			else{
+				return -1;
+			}
+		}
+		int i = 32;
+		fromIndex++;
+		int seg = fromIndex/32;
+		int toCheck = (~0)<<(fromIndex%32);
+		i = Integer.numberOfTrailingZeros(~(segments[seg]|~toCheck));
+		if(i!=32){
+			return i + seg*32;
+		}
+		seg++;
+		
+		while(seg<segments.length){
+			i = Integer.numberOfTrailingZeros(~segments[seg]);
+			if(i!=32){
+				return i + seg*32;
+			}
+			seg++;
+		}
+		return -1;
+	}
+
+	public int lastFalseBitBefore(int fromIndex){
+		try{
+			checkOutOfBounds(fromIndex);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			if(fromIndex>size){
+				lastTrueBit();
+			}
+			else{
+				return -1;
+			}
+		}
+		checkOutOfBounds(fromIndex);
+		int i = -1;
+		int seg = (fromIndex)/32;
+		int toCheck = (~0)<<(fromIndex%32);
+		
+		i = 31-Integer.numberOfLeadingZeros(~(segments[seg]|toCheck));
+		if(i!=-1){
+			return i + seg*32;
+		}
+		seg--;
+		
 		while(0<=seg){
 			i = 31-Integer.numberOfLeadingZeros(~segments[seg]);
 			if(i!=-1){

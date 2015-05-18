@@ -1,29 +1,24 @@
 package se.mad.copterplant.screens;
-import java.util.ArrayList;
-
 import se.mad.copterplant.Copterplant;
-import se.mad.copterplant.actor.Actor;
 import se.mad.copterplant.actor.Ball;
-import se.mad.copterplant.actor.Collidable;
 import se.mad.copterplant.actor.Player;
 import se.mad.copterplant.level.VisualMap;
+import se.mad.copterplant.level.levels.Level01;
 import se.mad.copterplant.util.GLUtil;
-import se.mad.copterplant.util.Settings;
 import se.mad.copterplant.util.UserInput;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 
 
 public class GameScreen extends SimpleScreen {
-
+	private Level01 level;
 	private Player player;
-	private Ball ball;
-	public static VisualMap vMap;
-	private ArrayList<Collidable> actors;
+	public static Ball[] ball;
+
+
 
 	public GameScreen(Game game) {
 		super(game);
@@ -31,28 +26,64 @@ public class GameScreen extends SimpleScreen {
 
 	@Override
 	public void init() {
-		actors = new ArrayList<Collidable>();
-		player = new Player(new Vector2(10*32+16,32*13 + 16));
-		vMap = new VisualMap();
-		ball = new Ball(new Vector2(640-32, 96+32*9),vMap);
-		
+		level = new Level01("");
+		player = new Player(VisualMap.LevelCoordinatesToScreen(0, 10));
+		ball = new Ball[1]; //Don't add to many balls (balls < 40)
+		for(int i = 0;i < ball.length;i++){
+			Vector2 pos = randomPos();
 
-		actors.add(ball);
-
+			ball[i] = new Ball(VisualMap.LevelCoordinatesToScreen((int)pos.x, (int)pos.y),level.getVisualMap(),player);
+		}
 	}
 
+	private Vector2 randomPos(){
+		Vector2 pos = new Vector2((int)(Math.random()*18)+1, (int)(Math.random()*18)+1);
+
+		boolean free = false;
+		while(!free){ // Check if you can spawn here
+			free = true;
+			if(Level01.V_MAP.map.isFilled((int)pos.x, (int)pos.y)){// Check if the maps is clear
+				free = false;
+				pos = new Vector2((int)(Math.random()*18)+1, (int)(Math.random()*18)+1);
+				continue;
+			}
+			Vector2 screenPos = VisualMap.LevelCoordinatesToScreen((int)pos.x, (int)pos.y);
+			for(Ball b:ball){
+				if(b != null){// Check if you the ball is spawning on a ball.
+					int radius = (int)b.getRadius();
+					if(screenPos.dst(b.getPos().sub(radius, radius))<radius*2){
+						free = false;
+						pos = new Vector2((int)(Math.random()*18)+1, (int)(Math.random()*18)+1);
+						break;
+					}
+				}
+			}
+
+		}
+		return pos;
+	}
 	@Override
 	public void update(float delta) {
 		UserInput.POLL_USER_INPUT();
 		player.update(delta);
-		ball.update(delta);
-		
-		
-		if (ball.getCollisionBox().overlaps(player.getCollisionBox())){
-			player.collide(null);
+
+		for(Ball b:ball){
+			b.update(delta);
+			if (b.getCollisionBox().overlaps(player.getCollisionBox())){
+				player.collide(null);
+			}
+			for(Ball e:ball){
+				if(b.getCollisionBox().overlaps(e.getCollisionBox())&&b != e){
+					b.collide(e);
+				}
+			}
 		}
-		
-	
+
+		level.update(delta);
+
+
+
+
 	}
 
 	@Override
@@ -61,9 +92,10 @@ public class GameScreen extends SimpleScreen {
 		GLUtil.CLEAR_Window(Color.BLACK);
 		Copterplant.RENDERER.setProjectionMatrix(Copterplant.CAMERA.combined);
 		//Here we can render stuff.
-		
-		vMap.draw(Copterplant.RENDERER);
-		ball.draw(Copterplant.RENDERER);
+		level.draw(Copterplant.RENDERER);
+		for(Ball b:ball){
+			b.draw(Copterplant.RENDERER);
+		}
 		player.draw(Copterplant.RENDERER);
 	}
 
