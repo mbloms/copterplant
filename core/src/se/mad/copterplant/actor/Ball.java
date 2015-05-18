@@ -41,26 +41,16 @@ public class Ball extends Actor implements Collidable {
 	private void move() {
 		collided = false; // starts out with the abillity to move forward.
 
-		Vector2 oldPos = getPos(); // the current position at the center of the
-		// ball.
-		Vector2 newPos = getPos().add(getVel()); // the new position that we
-		// would like to move to. At
-		// the center.
-		Vector2 deltaMove = newPos.cpy().sub(oldPos); // calculating the delta
-		// to know how much of
-		// the ball is inside a
-		// collidable object.
+		Vector2 oldPos = getPos(); // the current position at the center of the ball.
+		Vector2 newPos = getPos().add(getVel()); // the new position that we would like to move to. At the center.
+		Vector2 deltaMove = newPos.cpy().sub(oldPos); // calculating the delta to know how much of the ball is inside a collidable object.
+		
+		Vector2 rectPos = getPos().sub(getCollisionBox().width / 2,getCollisionBox().height / 2); // the rectangular position of the ball. Lower left corner.
+		rectPos.add(getVel()); // Changed so that the rectPos is like the next pos but in different coordinates.
+		
+		collided = canMove(rectPos, deltaMove); // do collision detection and handling.
 
-		Vector2 rectPos = getPos().sub(getCollisionBox().width / 2,
-				getCollisionBox().height / 2); // the rectangular position of
-		// the ball. Lower left corner.
-		rectPos.add(getVel()); // Changed so that the rectPos is like the next
-		// pos but in different coordinates.
-		collided = canMove(rectPos, deltaMove); // do collision detection and
-		// handling.
-
-		if (!collided) // if we did not collide with anything, it is okay to
-			// move forward.
+		if (!collided) // if we did not collide with anything, it is okay to move forward.
 			setPos(newPos);
 		else { // else don't and go backwards.
 			oldPos.add(getVel());
@@ -79,10 +69,9 @@ public class Ball extends Actor implements Collidable {
 		nextRectangle = new Rectangle(rectPos.x, rectPos.y,
 				getCollisionBox().width, getCollisionBox().height);
 
-		// Checka against all things in the world. In this case the walls.
+		// Check against all things in the world. In this case the walls.
 		for (Rectangle rect : vmap.getBoundingBoxes()) {
-			if (nextRectangle.overlaps(rect)) { // Make a rough estimate of if
-				// we collide with something
+			if (nextRectangle.overlaps(rect)) { // Make a rough estimate of if we collide with something
 
 				boolean leftTopCollision = rect.contains(leftTop);
 				boolean leftBottomCollision = rect.contains(leftBottom);
@@ -90,12 +79,10 @@ public class Ball extends Actor implements Collidable {
 				boolean rightTopCollision = rect.contains(rightTop);
 				boolean rightBottomCollision = rect.contains(rightBottom);
 
-				// Handle the easy parts first. When we hit a block perfectly
-				// with both corners.
+				// Handle the easy parts first. When we hit a block perfectly with both corners.
 				if ((leftTopCollision && leftBottomCollision)
 						|| (rightTopCollision && rightBottomCollision)) {
-					setVel(getXVelReflection()); // handle the velocity change
-					// accordingly
+					setVel(getXVelReflection()); // handle the velocity change accordingly
 					return true;
 				}
 
@@ -146,8 +133,7 @@ public class Ball extends Actor implements Collidable {
 						}
 					}
 				}
-				// If every other check fails, apply standard velocity
-				// reflection.
+				// If every other check fails, apply standard velocity reflection.
 				System.err.println("Could not find right collision");
 				this.setVel(this.getVel().scl(-1));
 				return true;
@@ -197,12 +183,9 @@ public class Ball extends Actor implements Collidable {
 	private Vector2[] updateCollisionboxCorners(Vector2 rectPos) {
 		Vector2[] cornernPositions = new Vector2[4];
 		cornernPositions[0] = new Vector2(rectPos.x, rectPos.y); // Left Bottom
-		cornernPositions[1] = new Vector2(rectPos.x, rectPos.y
-				+ getCollisionBox().height); // Left Top
-		cornernPositions[2] = new Vector2(rectPos.x + getCollisionBox().width,
-				rectPos.y); // Right Bottom
-		cornernPositions[3] = new Vector2(rectPos.x + getCollisionBox().width,
-				rectPos.y + getCollisionBox().height); // Right top
+		cornernPositions[1] = new Vector2(rectPos.x, rectPos.y + getCollisionBox().height); // Left Top
+		cornernPositions[2] = new Vector2(rectPos.x + getCollisionBox().width,rectPos.y); // Right Bottom
+		cornernPositions[3] = new Vector2(rectPos.x + getCollisionBox().width,rectPos.y + getCollisionBox().height); // Right top
 
 		return cornernPositions;
 	}
@@ -223,10 +206,8 @@ public class Ball extends Actor implements Collidable {
 		drawActor(renderer);
 		renderer.begin(ShapeType.Line);
 		renderer.setColor(Color.RED);
-		renderer.rect(nextRectangle.x, nextRectangle.y, nextRectangle.width,
-				nextRectangle.height);
-		// renderer.setColor(Color.WHITE);
-		// renderer.rect(getCollisionBox().x,getCollisionBox().y,getCollisionBox().width,getCollisionBox().height);
+		renderer.rect(nextRectangle.x, nextRectangle.y, nextRectangle.width,nextRectangle.height);
+		// renderer.setColor(Color.WHITE); renderer.rect(getCollisionBox().x,getCollisionBox().y,getCollisionBox().width,getCollisionBox().height);
 		renderer.end();
 	}
 
