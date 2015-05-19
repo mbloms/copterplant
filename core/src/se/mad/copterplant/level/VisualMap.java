@@ -119,8 +119,8 @@ public class VisualMap {
 	public static int[] ScreenToLevelCoordinates(Vector2 position) {
 		int[] levelPos = new int[2];
 		position.sub(X_OFFSET*TILE_SIZE, Y_OFFSET*TILE_SIZE);
-		int gridX = (int)Math.round(position.x/TILE_SIZE);
-		int gridY = (int)Math.round(position.y/TILE_SIZE);
+		int gridX = (int)position.x/TILE_SIZE;
+		int gridY = (int)position.y/TILE_SIZE;
 		levelPos[0] = gridX;
 		levelPos[1] = gridY;
 		return levelPos;
