@@ -99,6 +99,9 @@ public class GameScreen extends SimpleScreen {
 		if (level.isPassed()) {
 			playing = false;
 		}
+		if(level.isDead()){
+			playing = false;
+		}
 	}
 
 	@Override
@@ -120,7 +123,11 @@ public class GameScreen extends SimpleScreen {
 			font.draw(sb, glyphLayout, Settings.GAME_WIDTH/2-glyphLayout.width/2, Settings.GAME_HEIGHT/2-glyphLayout.height/2);
 			sb.end();
 		}
-		
-		
+		if(level.isDead()){
+			glyphLayout = new GlyphLayout(font, "YOU LOST!!!!!!");
+			sb.begin();
+			font.draw(sb, glyphLayout, Settings.GAME_WIDTH/2-glyphLayout.width/2, Settings.GAME_HEIGHT/2-glyphLayout.height/2);
+			sb.end();
+		}
 	}
 }
