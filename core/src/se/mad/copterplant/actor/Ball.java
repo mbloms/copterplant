@@ -95,10 +95,7 @@ public class Ball extends Actor implements Collidable {
 					}
 					
 				}
-				
-				
-				
-				
+
 				if ((currPos.y) >= collidedRectangle.y+collidedRectangle.height) {
 					setVel(getYVelReflection());
 				}
