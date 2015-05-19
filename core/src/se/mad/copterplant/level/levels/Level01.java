@@ -25,7 +25,7 @@ public class Level01 extends Level {
 		font = new BitmapFont();
 		V_MAP =getVisualMap(); 
 		
-		setWinCondition(70);
+		setWinCondition(90);
 	}
 
 	@Override
