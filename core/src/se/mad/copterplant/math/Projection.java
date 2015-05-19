@@ -42,7 +42,10 @@ public class Projection {
 	}
 	
 	public double getOverlap(Projection other){
-		return this.max - other.min;
+		if (this.overlaps(other)) {
+			return Math.min(this.max, other.max) - Math.max(this.min, other.min);
+		}
+		return 0;
 	}
 	
 	
