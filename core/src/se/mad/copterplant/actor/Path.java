@@ -147,7 +147,7 @@ public class Path {
 	public class PathObject {
 		private Rectangle collisionBox;
 		private Vector2 pos;
-		private float radius = 16;
+		private float radius =8;
 
 		/**
 		 * A new path object
@@ -155,8 +155,8 @@ public class Path {
 		 * @param the pos of the path object.
 		 */
 		public PathObject(Vector2 pos) {
-			collisionBox = new Rectangle(pos.x - radius, pos.y - radius,
-					radius * 2, radius * 2);
+			collisionBox = new Rectangle(pos.x - 16, pos.y - 16,
+					16 * 2, 16 * 2);
 			this.pos = pos;
 		}
 
@@ -166,8 +166,8 @@ public class Path {
 		 * @param renderer
 		 */
 		public void draw(ShapeRenderer renderer) {
-			renderer.begin(ShapeType.Filled);
-			renderer.setColor(Color.BLUE);
+			renderer.begin(ShapeType.Line);
+			renderer.setColor(Color.MAROON);
 			renderer.circle(pos.x, pos.y, radius);
 			renderer.end();
 
