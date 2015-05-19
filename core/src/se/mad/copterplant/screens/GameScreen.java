@@ -25,8 +25,10 @@ public class GameScreen extends SimpleScreen {
 	private Player player;
 	public static Ball[] ball;
 	private boolean playing = true;
-
-
+	private SpriteBatch sb;
+	private BitmapFont font;
+	private GlyphLayout glyphLayout;
+	
 	public GameScreen(Game game) {
 		super(game);
 	}
@@ -41,6 +43,8 @@ public class GameScreen extends SimpleScreen {
 
 			ball[i] = new Ball(VisualMap.LevelCoordinatesToScreen((int)pos.x, (int)pos.y),level.getVisualMap(),player);
 		}
+		sb = new SpriteBatch();
+		font = new BitmapFont(Gdx.files.internal("font.fnt"));
 	}
 
 	private Vector2 randomPos(){
@@ -92,7 +96,9 @@ public class GameScreen extends SimpleScreen {
 		}
 
 		level.update(delta);	
-
+		if (level.isPassed()) {
+			playing = false;
+		}
 	}
 
 	@Override
@@ -109,11 +115,7 @@ public class GameScreen extends SimpleScreen {
 		
 		
 		if (level.isPassed()) {
-			SpriteBatch sb= new SpriteBatch();
-			BitmapFont font = new BitmapFont(Gdx.files.internal("font.fnt"));
-			playing = false;
-			
-			GlyphLayout glyphLayout = new GlyphLayout(font, "YOU WON!!!!!!");
+			glyphLayout = new GlyphLayout(font, "YOU WON!!!!!!");
 			sb.begin();
 			font.draw(sb, glyphLayout, Settings.GAME_WIDTH/2-glyphLayout.width/2, Settings.GAME_HEIGHT/2-glyphLayout.height/2);
 			sb.end();
