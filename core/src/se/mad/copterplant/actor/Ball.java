@@ -1,7 +1,9 @@
 package se.mad.copterplant.actor;
 
 import se.mad.copterplant.level.VisualMap;
+import se.mad.copterplant.math.Projection;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -12,10 +14,11 @@ public class Ball extends Actor implements Collidable {
 
 	private VisualMap vmap;
 	private boolean collided = false;
-	private Rectangle nextRectangle;
+	private Rectangle nextRectangle,collidedRectangle;
 	private Player player;
 	private float speed;
 	private float radius;
+	private Vector2 MTV;
 
 	public Ball(Vector2 pos, VisualMap vmap, Player player) {
 		super(pos);
@@ -31,11 +34,11 @@ public class Ball extends Actor implements Collidable {
 		setShape(radius);
 		setPos(getPos().add(radius,radius));
 
-		setShapeType(ShapeType.Filled);
+		setShapeType(ShapeType.Line);
 		setColor(Color.CYAN);
-		speed = 2.8f;
-		setRandomVel();
-
+		speed = 3f;
+		//setRandomVel();
+		setVel(new Vector2(3, 3));
 
 	}
 
@@ -62,16 +65,174 @@ public class Ball extends Actor implements Collidable {
 
 		Vector2 rectPos = getPos().sub(getCollisionBox().width / 2,getCollisionBox().height / 2); // the rectangular position of the ball. Lower left corner.
 		rectPos.add(getVel()); // Changed so that the rectPos is like the next pos but in different coordinates.
-
-		collided = canMove(rectPos, deltaMove); // do collision detection and handling.
-
-		if (!collided) // if we did not collide with anything, it is okay to move forward.
-			setPos(newPos);
-		else { // else don't and go backwards.
-			oldPos.add(getVel());
-			setPos(oldPos);
+		
+		nextRectangle = new Rectangle(rectPos.x, rectPos.y,
+				getCollisionBox().width, getCollisionBox().height);
+		
+		
+		collided = checkCollision(nextRectangle); // do collision detection and handling.
+		//System.out.println(collided);
+	
+		
+		if (!collided){
+			this.setPos(newPos);
+		}else {
+			this.setPos(newPos);
+			if (MTV != null) {
+				Vector2 currMTV = MTV.cpy();
+				//System.out.println(currMTV);
+				this.setPos(getPos().add(currMTV));
+				
+				
+				Vector2 currPos = new Vector2(getCollisionBox().x,getCollisionBox().y);
+				System.out.println(getCollisionBox()+":"+ collidedRectangle);
+				
+				if((currPos.x+getCollisionBox().width) <= collidedRectangle.x ) {
+					if (currPos.y<=collidedRectangle.y) {
+						setVel(getYVelReflection());
+					}else {
+						setVel(getXVelReflection());
+					}
+					
+				}
+				
+				
+				
+				
+				if ((currPos.y) >= collidedRectangle.y+collidedRectangle.height) {
+					setVel(getYVelReflection());
+				}
+				
+				
+				if (currPos.x >= collidedRectangle.x) {
+					if (currPos.y <= collidedRectangle.y){
+						setVel(getYVelReflection());
+					}
+					
+				}
+				
+				
+				if (currPos.x >= collidedRectangle.x +collidedRectangle.width) {
+					setVel(getXVelReflection());
+				}
+				
+				
+				
+				
+				
+				
+			}
 		}
+		
+		
+		
 	}
+	
+	private boolean checkCollision(Rectangle nextRectangle){
+		for (Rectangle r:vmap.getBoundingBoxes()){
+			if (detectCollision(nextRectangle, r)) {
+				collidedRectangle = r;
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	/**
+	 * SAT collision checking.
+	 * @param A
+	 * @param B
+	 * @return
+	 */
+	private boolean detectCollision(Rectangle A,Rectangle B){
+
+		double overlap = Integer.MAX_VALUE;
+		Vector2 smallest = null;
+		
+		Vector2[] axis1 = generateNormals(A);
+		Vector2[] axis2 = generateNormals(B);
+		
+		for (int i = 0; i<axis1.length; i++) {
+			Vector2 normal = axis1[i];
+			Projection p1 = Projection.Project(getVerticies(A),normal);
+			Projection p2 = Projection.Project(getVerticies(B),normal);
+			if (!p1.overlaps(p2)) 
+				return false;
+			else {
+				double currOverlap = p1.getOverlap(p2);
+				if (currOverlap<overlap){
+					overlap = currOverlap;
+					smallest = normal;
+				}
+			}
+		}
+		
+		for (int i = 0; i<axis2.length; i++) {
+			Vector2 normal = axis2[i];
+			Projection p1 = Projection.Project(getVerticies(A),normal);
+			Projection p2 = Projection.Project(getVerticies(B),normal);
+			if (!p1.overlaps(p2)) 
+				return false;
+			else {
+				double currOverlap = p1.getOverlap(p2);
+				if (currOverlap<overlap){
+					overlap = currOverlap;
+					smallest = normal;
+				}
+			}
+		}
+		
+		MTV = smallest.scl((float) overlap);
+		
+		Vector2 centerA = new Vector2(A.x,A.y); // shape a center;
+		Vector2 centerB = new Vector2(B.x,B.y); // shape a center;
+		
+		Vector2 centerBtoCenterA = centerB.sub(centerA);
+		if (MTV.dot(centerBtoCenterA) > 0) {
+			MTV.scl(-1);
+		}
+		
+		//If we get here, no gaps where found and we are sure we have a collision.
+		
+		return true;
+		
+	}
+	
+	private Vector2[] generateNormals(Rectangle rect) {
+		Vector2[] axis = new Vector2[4];//As we are dealing with rectangle, we can always assume 4 sides.
+		Vector2[] verts = getVerticies(rect);
+		for (int i = 0; i<verts.length; i++) {
+			//current vertex
+			Vector2 p1 = verts[i].cpy();
+			Vector2 p2;
+			if (i + 1 == verts.length) {
+				p2 = verts[0].cpy();
+			}else {
+				p2 = verts[i+1].cpy();
+			}
+			
+			Vector2 edge = p1.sub(p2);
+			Vector2 normal = getNormal(edge);
+			axis[i] = normal;
+		}
+		return axis;
+	}
+	
+	private Vector2 getNormal(Vector2 vec){
+		return new Vector2(-vec.y,vec.x);
+	}
+	
+	
+	private Vector2[] getVerticies(Rectangle rect){
+		Vector2[] verticies = new Vector2[4];//As we are dealing with rectangle, we can always assume 4 sides.
+		verticies[0] = new Vector2(rect.x,rect.y); // lower left
+		verticies[1] = new Vector2(rect.x,rect.y + rect.height); // left top
+		verticies[2] = new Vector2(rect.x + rect.width,rect.y + rect.height); // right top
+		verticies[3] = new Vector2(rect.x + rect.width,rect.y); // right bottom
+		return verticies;
+	}
+	
+	
 
 	private boolean canMove(Vector2 rectPos, Vector2 deltaMove) {
 		// First build the collision points and the rectangle
@@ -219,11 +380,14 @@ public class Ball extends Actor implements Collidable {
 		drawActor(renderer);
 
 		//TODO Draw collision box
-		//renderer.begin(ShapeType.Line);
-		//renderer.setColor(Color.RED);
+		renderer.begin(ShapeType.Line);
+		renderer.setColor(Color.MAGENTA);
+			if (collidedRectangle != null)
+			renderer.rect(collidedRectangle.x,collidedRectangle.y,collidedRectangle.width,collidedRectangle.height);
+		
 		//renderer.rect(nextRectangle.x, nextRectangle.y, nextRectangle.width,nextRectangle.height);
 		// renderer.setColor(Color.WHITE); renderer.rect(getCollisionBox().x,getCollisionBox().y,getCollisionBox().width,getCollisionBox().height);
-		//renderer.end();
+		renderer.end();
 	}
 
 	@Override
