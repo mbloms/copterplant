@@ -1,6 +1,7 @@
 package se.mad.copterplant;
-import se.mad.copterplant.screens.GameScreen;
+import se.mad.copterplant.screens.SatSceen;
 import se.mad.copterplant.util.Settings;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -23,7 +24,7 @@ public class Copterplant extends Game {
 		CAMERA = new OrthographicCamera();
 		CAMERA.setToOrtho(false,Settings.GAME_WIDTH,Settings.GAME_HEIGHT);
 		RENDERER = new ShapeRenderer();
-		this.setScreen(new GameScreen(this));
+		this.setScreen(new SatSceen(this));
 	}
 	@Override
 	public void render() {
