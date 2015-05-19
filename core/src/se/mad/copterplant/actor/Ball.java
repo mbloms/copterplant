@@ -80,12 +80,10 @@ public class Ball extends Actor implements Collidable {
 			this.setPos(newPos);
 			if (MTV != null) {
 				Vector2 currMTV = MTV.cpy();
-				//System.out.println(currMTV);
 				this.setPos(getPos().add(currMTV));
 				
 				
 				Vector2 currPos = new Vector2(getCollisionBox().x,getCollisionBox().y);
-				System.out.println(getCollisionBox()+":"+ collidedRectangle);
 				
 				if((currPos.x+getCollisionBox().width) <= collidedRectangle.x ) {
 					if (currPos.y<=collidedRectangle.y) {
