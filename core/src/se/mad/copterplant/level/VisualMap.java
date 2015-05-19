@@ -81,18 +81,24 @@ public class VisualMap {
 		//		MAP_WIDTH*TILE_SIZE,MAP_HEIGTH*TILE_SIZE);
 		//renderer.end();
 
-		renderer.setColor(Color.GREEN);
-		renderer.begin(ShapeType.Filled);
+		
 
 
 		for (int x = 0; x < MAP_WIDTH; x++) {
 			for (int y = 0; y<MAP_HEIGTH;y++){
 				if (map.isFilled(x, y)) {
-					renderer.rect(X_OFFSET*TILE_SIZE+x*TILE_SIZE,Y_OFFSET*TILE_SIZE+y*TILE_SIZE,TILE_SIZE,TILE_SIZE);	
+					renderer.setColor(Color.TEAL);
+					renderer.begin(ShapeType.Line);
+						renderer.rect(X_OFFSET*TILE_SIZE+x*TILE_SIZE,Y_OFFSET*TILE_SIZE+y*TILE_SIZE,TILE_SIZE,TILE_SIZE);	
+					renderer.end();
+				}else{
+					renderer.begin(ShapeType.Filled);
+					renderer.rect(X_OFFSET*TILE_SIZE+x*TILE_SIZE,Y_OFFSET*TILE_SIZE+y*TILE_SIZE,TILE_SIZE,TILE_SIZE);
+					renderer.end();
 				}
 			}
 		}
-		renderer.end();
+		
 		
 		//TODO Draw collision box
 		//for(Rectangle r:boundingBoxes){

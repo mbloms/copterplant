@@ -6,6 +6,7 @@ import se.mad.copterplant.screens.GameScreen;
 import se.mad.copterplant.util.Settings;
 import se.mad.copterplant.util.UserInput;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -24,6 +25,8 @@ public class Player extends Actor implements Collidable {
 	private float speed = 1;
 	private float moveTimer;
 	private float moveTimerStart = 0.1f;
+	
+	private float radius;
 
 	private Path path;
 
@@ -37,10 +40,11 @@ public class Player extends Actor implements Collidable {
 
 	@Override
 	public void init() {
+		radius = 13;
 		moveTimer = moveTimerStart;
-		setShape(16);
-		setShapeType(ShapeType.Filled);
-		setColor(Color.RED);
+		setShape(radius);
+		setShapeType(ShapeType.Line);
+		setColor(Color.WHITE);
 
 		creatingPath = false;
 
@@ -109,11 +113,13 @@ public class Player extends Actor implements Collidable {
 				temp.y = 96 + 32 * 20 - 16;
 			}
 
-			setPos(temp);
-			isCollidingPath(getCollisionBox());
+			
+			
 			if (creatingPath) {
 				path.addNode(getPos());
 			}
+			setPos(temp);
+			isCollidingPath(getCollisionBox());
 			moveTimer = moveTimerStart;
 		} else {
 			moveTimer -= delta;
@@ -131,8 +137,9 @@ public class Player extends Actor implements Collidable {
 			path.draw(renderer);
 		}
 
+		Gdx.gl.glLineWidth(2);
 		drawActor(renderer);
-
+		Gdx.gl.glLineWidth(1);
 		//TODO Draw collision box
 		//renderer.begin(ShapeType.Line);
 		//renderer.rect(getCollisionBox().x, getCollisionBox().y,getCollisionBox().width, getCollisionBox().height);

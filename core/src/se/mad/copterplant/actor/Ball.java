@@ -31,8 +31,8 @@ public class Ball extends Actor implements Collidable {
 		setShape(radius);
 		setPos(getPos().add(radius,radius));
 
-		setShapeType(ShapeType.Filled);
-		setColor(Color.CYAN);
+		setShapeType(ShapeType.Line);
+		setColor(Color.WHITE);
 		speed = 2.8f;
 		setRandomVel();
 
@@ -215,7 +215,6 @@ public class Ball extends Actor implements Collidable {
 
 	@Override
 	public void draw(ShapeRenderer renderer) {
-		renderer.setColor(Color.GREEN);
 		drawActor(renderer);
 
 		//TODO Draw collision box
