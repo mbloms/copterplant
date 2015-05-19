@@ -111,6 +111,7 @@ public class GameScreen extends SimpleScreen {
 		if (level.isPassed()) {
 			SpriteBatch sb= new SpriteBatch();
 			BitmapFont font = new BitmapFont(Gdx.files.internal("font.fnt"));
+			playing = false;
 			
 			GlyphLayout glyphLayout = new GlyphLayout(font, "YOU WON!!!!!!");
 			sb.begin();
