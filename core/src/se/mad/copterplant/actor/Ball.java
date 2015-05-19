@@ -373,7 +373,6 @@ public class Ball extends Actor implements Collidable {
 
 	@Override
 	public void draw(ShapeRenderer renderer) {
-		renderer.setColor(Color.GREEN);
 		drawActor(renderer);
 
 		//TODO Draw collision box
