@@ -40,7 +40,7 @@ public class Player extends Actor implements Collidable {
 
 	@Override
 	public void init() {
-		radius = 13;
+		radius = 12;
 		moveTimer = moveTimerStart;
 		setShape(radius);
 		setShapeType(ShapeType.Line);
@@ -137,7 +137,7 @@ public class Player extends Actor implements Collidable {
 			path.draw(renderer);
 		}
 
-		Gdx.gl.glLineWidth(2);
+		Gdx.gl.glLineWidth(400);
 		drawActor(renderer);
 		Gdx.gl.glLineWidth(1);
 		//TODO Draw collision box
