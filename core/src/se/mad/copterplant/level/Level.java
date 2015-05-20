@@ -54,4 +54,17 @@ public abstract class Level {
 	public boolean isDead(){
 		return levelTimer.currentScore() <= 0;
 	}
+	
+	/**
+	 * Return how many percent you have filled and how many you need to fill.
+	 * Index 0 = current percentage filled
+	 * Index 1 = win condition
+	 * @return string[] 
+	 */
+	public String[] getMapStatus(){
+		String[] s = new String[2];
+		s[0] = ""+(int)getLevelMap().percentageFilled();
+		s[1] = ""+(int)winCondition;
+		return s;
+	}
 }

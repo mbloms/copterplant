@@ -27,7 +27,7 @@ public class GameScreen extends SimpleScreen {
 	public static Ball[] ball;
 	private boolean playing = true;
 	private SpriteBatch sb;
-	private BitmapFont font;
+	private BitmapFont font, defaultFont;
 	private GlyphLayout glyphLayout;
 
 	public GameScreen(Game game) {
@@ -50,6 +50,7 @@ public class GameScreen extends SimpleScreen {
 
 		sb = new SpriteBatch();
 		font = new BitmapFont(Gdx.files.internal("font.fnt"));
+		defaultFont = new BitmapFont();
 	}
 
 	private Vector2 randomPos(){
@@ -139,5 +140,9 @@ public class GameScreen extends SimpleScreen {
 			font.draw(sb, glyphLayout, Settings.GAME_WIDTH/2-glyphLayout.width/2, Settings.GAME_HEIGHT/2-glyphLayout.height/2);
 			sb.end();
 		}
+		sb.begin();
+		String[] status = level[Settings.CURRENT_LEVEL].getMapStatus(); 
+		defaultFont.draw(sb, "You have filled "+status[0]+"%\nWin condition "+status[1]+"%",Settings.GAME_WIDTH - 200, Settings.GAME_HEIGHT-150);
+		sb.end();
 	}
 }
