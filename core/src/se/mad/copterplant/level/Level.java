@@ -47,4 +47,11 @@ public abstract class Level {
 	public boolean isPassed(){
 		return win;
 	}
+	
+	/**
+	 * Return true if you have lost. 
+	 */
+	public boolean isDead(){
+		return levelTimer.currentScore() <= 0;
+	}
 }
