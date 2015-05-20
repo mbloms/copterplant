@@ -82,7 +82,11 @@ public class GameScreen extends SimpleScreen {
 	public void update(float delta) {
 		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
 			if(level[Settings.CURRENT_LEVEL].isPassed()){
+				
 				Settings.CURRENT_LEVEL++;
+				if(level.length <= Settings.CURRENT_LEVEL){
+					Settings.CURRENT_LEVEL = 0;
+				}
 			}
 			getGame().setScreen(new GameScreen(getGame()));
 		}
