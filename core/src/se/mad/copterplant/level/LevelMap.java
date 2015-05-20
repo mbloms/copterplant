@@ -1,12 +1,16 @@
 package se.mad.copterplant.level;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.LinkedList;
 import java.util.Stack;
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.math.Vector2;
+
 import se.mad.copterplant.actor.Path.PathObject;
 import se.mad.copterplant.level.BinaryCollection.BinaryArrayList;
 import se.mad.copterplant.level.BinaryCollection.BinaryArrayMatrix;
+import se.mad.copterplant.util.FileUtil;
+
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -167,8 +171,29 @@ public class LevelMap extends BinaryArrayMatrix{
 		vMap.updateBoundingBoxes();
 	}
 
-	public void parseString(){
-		//TODO
+	public void parseString(String filepath){
+		
+	    StringReader reader = new StringReader(FileUtil.readFile(filepath));
+	    BufferedReader br = new BufferedReader(reader);
+	    String line;
+	    int col = 0;
+	    int row = height-1;
+	    try {
+			while((line=br.readLine())!=null)
+			{
+				for (String mark:line.split("")){
+					//System.out.println("Mark:" + mark);
+					if (mark.equals("#")) {
+						fillBlock(col, row);
+					}
+					col++;
+				}
+				col = 0;
+				row--;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
