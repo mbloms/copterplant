@@ -36,7 +36,7 @@ public class GameScreen extends SimpleScreen {
 	@Override
 	public void init() {
 		level = new Level01("map.mad");
-		player = new Player(VisualMap.LevelCoordinatesToScreen(0, 10));
+		player = new Player(VisualMap.LevelCoordinatesToScreen(0, 10),level);
 		ball = new Ball[1]; //Don't add to many balls (balls < 40)
 		for(int i = 0;i < ball.length;i++){
 			Vector2 pos = randomPos();
@@ -53,7 +53,7 @@ public class GameScreen extends SimpleScreen {
 		boolean free = false;
 		while(!free){ // Check if you can spawn here
 			free = true;
-			if(Level01.V_MAP.map.isFilled((int)pos.x, (int)pos.y)){// Check if the maps is clear
+			if(level.getLevelMap().isFilled((int)pos.x, (int)pos.y)){// Check if the maps is clear
 				free = false;
 				pos = new Vector2((int)(Math.random()*18)+1, (int)(Math.random()*18)+1);
 				continue;
