@@ -1,5 +1,7 @@
 package se.mad.copterplant.actor;
 
+import java.util.ArrayList;
+
 import se.mad.copterplant.level.VisualMap;
 import se.mad.copterplant.level.levels.Level01;
 import se.mad.copterplant.screens.GameScreen;
@@ -73,8 +75,19 @@ public class Player extends Actor implements Collidable {
 				path.addNode(getPos());
 				if (path != null) {
 					Level01.V_MAP.map.fillTrack(path.getPath());
-					int gridPos[] = VisualMap.ScreenToLevelCoordinates(GameScreen.ball[0].getPos());
-					Level01.V_MAP.map.areaFill(gridPos[0],gridPos[1]);
+					
+					Ball[] ball = GameScreen.ball;
+					int ballSize = ball.length;
+					
+					int[] gridPosX = new int[ballSize ];
+					int[] gridPosY = new int[ballSize ];
+					
+					for(int i = 0; i < ballSize ;i++){
+						int[] tempPos = VisualMap.ScreenToLevelCoordinates(ball[i].getPos());
+						gridPosX[i] = tempPos[0];
+						gridPosY[i] = tempPos[1];
+					}
+					Level01.V_MAP.map.areaFill(gridPosX,gridPosY);
 				}
 				path = null;
 			}
