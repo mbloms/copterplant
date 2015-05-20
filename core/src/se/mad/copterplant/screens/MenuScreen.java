@@ -33,18 +33,18 @@ public class MenuScreen extends SimpleScreen{
 		table = new Table();
 		
 		Gdx.input.setInputProcessor(stage);
-		font = new BitmapFont();
+		font = new BitmapFont(Gdx.files.internal("font.fnt"));
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		play = new TextButton("Play!", skin);
 		nameLabel = new Label("CopterPlant", skin);
-		nameLabel.setFontScale(5);
+		nameLabel.setFontScale(2);
 		table.setFillParent(true);
 		table.setDebug(false);
 		stage.addActor(table);
 		table.add(nameLabel);
 		table.add().row();
-		table.add().row();
-		table.add(play).width(150).height(96);
+		table.add().height(100).row();
+		table.add(play).width(200).height(110);
 		play.addListener(new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
 		    	getGame().setScreen(new GameScreen(getGame()));
