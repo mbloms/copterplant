@@ -128,12 +128,7 @@ public class GameScreen extends SimpleScreen {
 			}
 			getGame().setScreen(new GameScreen(getGame()));
 		}
-<<<<<<< HEAD
 
-
-
-=======
->>>>>>> 822616535432f13a9ceebb3bd73f87ca3ba2c042
 		if (!playing) return;
 		UserInput.POLL_USER_INPUT();
 		player.update(delta);
@@ -180,7 +175,14 @@ public class GameScreen extends SimpleScreen {
 			glyphLayout = new GlyphLayout(font, "YOU LOST!!!!!!");
 			font.draw(sb, glyphLayout, Settings.GAME_WIDTH/2-glyphLayout.width/2, Settings.GAME_HEIGHT/2-glyphLayout.height/2);
 		}
-<<<<<<< HEAD
+		
+		
+		String[] status = level[Settings.CURRENT_LEVEL].getMapStatus();
+		glyphLayout = new GlyphLayout(defaultFont, "You have filled "+status[0]+"%\nWin condition "+status[1]+"%");
+		defaultFont.draw(sb, glyphLayout,Settings.GAME_WIDTH/2-glyphLayout.width/2-200, 70);
+		glyphLayout = new GlyphLayout(defaultFont, "Score: " +  level[Settings.CURRENT_LEVEL].getLevelTimer().currentScore());
+		defaultFont.draw(sb, glyphLayout, Settings.GAME_WIDTH/2-glyphLayout.width/2+200, 70);
+		sb.end();
 
 
 		stage.draw();
@@ -190,14 +192,6 @@ public class GameScreen extends SimpleScreen {
 	public void resize(int width, int height) {
 		super.resize(width, height);
 		stage.getViewport().update(width, height, true);
-=======
-		String[] status = level[Settings.CURRENT_LEVEL].getMapStatus();
-		glyphLayout = new GlyphLayout(defaultFont, "You have filled "+status[0]+"%\nWin condition "+status[1]+"%");
-		defaultFont.draw(sb, glyphLayout,Settings.GAME_WIDTH/2-glyphLayout.width/2-200, 70);
-		glyphLayout = new GlyphLayout(defaultFont, "Score: " +  level[Settings.CURRENT_LEVEL].getLevelTimer().currentScore());
-		defaultFont.draw(sb, glyphLayout, Settings.GAME_WIDTH/2-glyphLayout.width/2+200, 70);
-		sb.end();
->>>>>>> 822616535432f13a9ceebb3bd73f87ca3ba2c042
 	}
 
 
