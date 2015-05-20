@@ -69,8 +69,16 @@ public class MenuScreen extends SimpleScreen{
 	}
 	
 	@Override
+	public void hide() {
+		super.hide();
+		Gdx.input.setInputProcessor(null);
+	}
+	
+	@Override
 	public void dispose() {
+		super.dispose();
 		stage.dispose();
+		
 		
 	}
 	
