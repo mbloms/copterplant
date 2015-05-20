@@ -25,14 +25,16 @@ import com.badlogic.gdx.math.Vector2;
 public class LevelMap extends BinaryArrayMatrix{
 	int width;
 	int height;
-	VisualMap vMap;
+	Level currentLevel;
 		
-	public LevelMap(int width, int height, VisualMap vMap){
+	public LevelMap(int width, int height, Level currLevel){
 		super(height, width);
 		
 		this.width = width;
 		this.height = height;
-		this.vMap = vMap;
+		this.currentLevel = currLevel;
+		
+		parseString(currentLevel.filepath);
 	}
 
 	//TODO: Fix comment
@@ -145,7 +147,7 @@ public class LevelMap extends BinaryArrayMatrix{
 			
 		}
 		rows = matrix;
-		vMap.updateBoundingBoxes();
+		currentLevel.getVisualMap().updateBoundingBoxes();
 	}
 
 	/**
@@ -161,14 +163,13 @@ public class LevelMap extends BinaryArrayMatrix{
 		for (PathObject p:path) {
 			Vector2 pos = p.getPos();
 			
-			Vector2 gridPos = new Vector2((int)(pos.x/32),(int)(pos.y/32));
-	
-			if (VisualMap.BoundsRect.contains(pos)) {
-				gridPos.sub(10,3);
-				fillBlock((int)gridPos.x, (int)gridPos.y);
+			Vector2 gridPosNew = VisualMap.ScreenToLevelVector2(pos.cpy());
+			
+			if (currentLevel.getVisualMap().getLevelBounds().contains(pos)) {
+				fillBlock((int)gridPosNew.x, (int)gridPosNew.y);
 			}
 		}
-		vMap.updateBoundingBoxes();
+		currentLevel.getVisualMap().updateBoundingBoxes();
 	}
 
 	public void parseString(String filepath){
