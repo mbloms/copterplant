@@ -28,21 +28,25 @@ public class GameScreen extends SimpleScreen {
 	private SpriteBatch sb;
 	private BitmapFont font;
 	private GlyphLayout glyphLayout;
-	
+
 	public GameScreen(Game game) {
 		super(game);
 	}
 
 	@Override
 	public void init() {
+
 		level = new Level01("map.mad");
 		player = new Player(VisualMap.LevelCoordinatesToScreen(0, 10),level);
-		ball = new Ball[1]; //Don't add to many balls (balls < 40)
+
+		ball = new Ball[5]; //Don't add to many balls
+
 		for(int i = 0;i < ball.length;i++){
 			Vector2 pos = randomPos();
 
 			ball[i] = new Ball(VisualMap.LevelCoordinatesToScreen((int)pos.x, (int)pos.y),level.getVisualMap(),player);
 		}
+
 		sb = new SpriteBatch();
 		font = new BitmapFont(Gdx.files.internal("font.fnt"));
 	}
@@ -78,7 +82,7 @@ public class GameScreen extends SimpleScreen {
 		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
 			getGame().setScreen(new GameScreen(getGame()));
 		}
-		
+
 		if (!playing) return;
 		UserInput.POLL_USER_INPUT();
 		player.update(delta);
@@ -95,7 +99,7 @@ public class GameScreen extends SimpleScreen {
 			}
 		}
 
-		level.update(delta);	
+		level.update(delta);
 		if (level.isPassed()) {
 			playing = false;
 		}
@@ -115,8 +119,8 @@ public class GameScreen extends SimpleScreen {
 			b.draw(Copterplant.RENDERER);
 		}
 		player.draw(Copterplant.RENDERER);
-		
-		
+
+
 		if (level.isPassed()) {
 			glyphLayout = new GlyphLayout(font, "YOU WON!!!!!!");
 			sb.begin();

@@ -89,7 +89,7 @@ public class LevelMap extends BinaryArrayMatrix{
 	 * @param x The balls x coordinate.
 	 * @param y The balls y coordinate.
 	 */
-	public void areaFill(int x, int y){
+	public void areaFill(int[] x, int[] y){
 		BinaryArrayList[] matrix = allTrueMatrix(width, height);
 		
 		Stack<intVector> stack = new Stack<intVector>();
@@ -99,8 +99,9 @@ public class LevelMap extends BinaryArrayMatrix{
 		 * Lägg första tomma blocket över och under raden i stacken.
 		 * För alla fyllda block som följs av ett tomt block: lägg det tomma blocket i stacken. (Ovan och under strecket)
 		 */
-		
-		stack.push(new intVector(x, y));
+		for(int i = 0;i < x.length;i++){
+			stack.push(new intVector(x[i], y[i]));
+		}
 		int first;
 		int last;
 		int row;
