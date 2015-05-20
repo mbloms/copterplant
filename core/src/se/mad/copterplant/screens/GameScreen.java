@@ -143,6 +143,7 @@ public class GameScreen extends SimpleScreen {
 		sb.begin();
 		String[] status = level[Settings.CURRENT_LEVEL].getMapStatus(); 
 		defaultFont.draw(sb, "You have filled "+status[0]+"%\nWin condition "+status[1]+"%",Settings.GAME_WIDTH - 200, Settings.GAME_HEIGHT-150);
+		defaultFont.draw(sb, "Score: " +  level[Settings.CURRENT_LEVEL].getLevelTimer().currentScore(), Settings.GAME_WIDTH - 200, Settings.GAME_HEIGHT-100);
 		sb.end();
 	}
 }
