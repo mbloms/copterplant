@@ -17,6 +17,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 
 
@@ -28,14 +36,43 @@ public class GameScreen extends SimpleScreen {
 	private SpriteBatch sb;
 	private BitmapFont font;
 	private GlyphLayout glyphLayout;
-
+	
+	private Stage stage;
+	private TextButton back;
+	private Skin skin;
+	private Table table;
+	
 	public GameScreen(Game game) {
 		super(game);
 	}
-
+	
+	
+	private void createUI(){
+		stage = new Stage(new ScreenViewport());
+		Gdx.input.setInputProcessor(stage);
+		table = new Table();
+		table.setFillParent(true);
+		stage.addActor(table);
+		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		back = new TextButton("Menu",skin);
+		table.top().left();
+		table.add(back);
+	
+		back.addListener(new ChangeListener() {
+		    public void changed (ChangeEvent event, Actor actor) {
+		    	getGame().setScreen(new MenuScreen(getGame()));
+		    }
+		});
+		
+		
+	}
 	@Override
 	public void init() {
-
+		
+		
+		createUI();
+		
+		
 		level = new Level01("map.mad");
 		player = new Player(VisualMap.LevelCoordinatesToScreen(0, 10),level);
 
@@ -79,10 +116,14 @@ public class GameScreen extends SimpleScreen {
 	}
 	@Override
 	public void update(float delta) {
+		stage.act(delta);
+		
 		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
 			getGame().setScreen(new GameScreen(getGame()));
 		}
-
+		
+		
+		
 		if (!playing) return;
 		UserInput.POLL_USER_INPUT();
 		player.update(delta);
@@ -113,6 +154,7 @@ public class GameScreen extends SimpleScreen {
 		Copterplant.CAMERA.update();
 		GLUtil.CLEAR_Window(Color.BLACK);
 		Copterplant.RENDERER.setProjectionMatrix(Copterplant.CAMERA.combined);
+
 		//Here we can render stuff.
 		level.draw(Copterplant.RENDERER);
 		for(Ball b:ball){
@@ -133,5 +175,17 @@ public class GameScreen extends SimpleScreen {
 			font.draw(sb, glyphLayout, Settings.GAME_WIDTH/2-glyphLayout.width/2, Settings.GAME_HEIGHT/2-glyphLayout.height/2);
 			sb.end();
 		}
+	
+	
+		stage.draw();
+	
 	}
+	@Override
+	public void resize(int width, int height) {
+		super.resize(width, height);
+		stage.getViewport().update(width, height, true);
+	}
+	
+	
+	
 }

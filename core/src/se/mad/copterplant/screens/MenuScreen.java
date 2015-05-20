@@ -90,7 +90,6 @@ public class MenuScreen extends SimpleScreen{
 	@Override
 	public void hide() {
 		super.hide();
-		Gdx.input.setInputProcessor(null);
 	}
 	
 	@Override
