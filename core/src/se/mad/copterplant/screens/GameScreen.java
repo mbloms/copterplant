@@ -50,7 +50,7 @@ public class GameScreen extends SimpleScreen {
 
 		sb = new SpriteBatch();
 		font = new BitmapFont(Gdx.files.internal("font.fnt"));
-		defaultFont = new BitmapFont();
+		defaultFont = new BitmapFont(Gdx.files.internal("font1.fnt"));
 	}
 
 	private Vector2 randomPos(){
@@ -127,23 +127,20 @@ public class GameScreen extends SimpleScreen {
 			b.draw(Copterplant.RENDERER);
 		}
 		player.draw(Copterplant.RENDERER);
-		
+		sb.begin();
 		if (level[Settings.CURRENT_LEVEL].isPassed()) {
 			glyphLayout = new GlyphLayout(font, "YOU WON!!!!!!");
-			sb.begin();
 			font.draw(sb, glyphLayout, Settings.GAME_WIDTH/2-glyphLayout.width/2, Settings.GAME_HEIGHT/2-glyphLayout.height/2);
-			sb.end();
 		}
 		if(level[Settings.CURRENT_LEVEL].isDead()){
 			glyphLayout = new GlyphLayout(font, "YOU LOST!!!!!!");
-			sb.begin();
 			font.draw(sb, glyphLayout, Settings.GAME_WIDTH/2-glyphLayout.width/2, Settings.GAME_HEIGHT/2-glyphLayout.height/2);
-			sb.end();
 		}
-		sb.begin();
-		String[] status = level[Settings.CURRENT_LEVEL].getMapStatus(); 
-		defaultFont.draw(sb, "You have filled "+status[0]+"%\nWin condition "+status[1]+"%",Settings.GAME_WIDTH - 200, Settings.GAME_HEIGHT-150);
-		defaultFont.draw(sb, "Score: " +  level[Settings.CURRENT_LEVEL].getLevelTimer().currentScore(), Settings.GAME_WIDTH - 200, Settings.GAME_HEIGHT-100);
+		String[] status = level[Settings.CURRENT_LEVEL].getMapStatus();
+		glyphLayout = new GlyphLayout(defaultFont, "You have filled "+status[0]+"%\nWin condition "+status[1]+"%");
+		defaultFont.draw(sb, glyphLayout,Settings.GAME_WIDTH/2-glyphLayout.width/2-200, 70);
+		glyphLayout = new GlyphLayout(defaultFont, "Score: " +  level[Settings.CURRENT_LEVEL].getLevelTimer().currentScore());
+		defaultFont.draw(sb, glyphLayout, Settings.GAME_WIDTH/2-glyphLayout.width/2+200, 70);
 		sb.end();
 	}
 }
