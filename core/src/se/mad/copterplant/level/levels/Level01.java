@@ -13,18 +13,15 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 public class Level01 extends Level {
 	private SpriteBatch batcher;
 	private BitmapFont font;
-	public static VisualMap V_MAP;
 	
 	public Level01(String filepath) {
 		super(filepath);
 		levelTimer = new LevelTimer(100, 1);
-		visualMap = new VisualMap(filepath);
-		levelMap = visualMap.map;
+		levelMap = new LevelMap(20, 20,this);
+		visualMap = new VisualMap(this);
 		levelTimer.start();
 		batcher = new SpriteBatch();
 		font = new BitmapFont();
-		V_MAP =getVisualMap(); 
-		
 		setWinCondition(90);
 	}
 
@@ -32,7 +29,7 @@ public class Level01 extends Level {
 	public void update(float delta) {
 		levelTimer.update(delta);
 		
-		if(V_MAP.map.percentageFilled() >= getWinCondition()){
+		if(getLevelMap().percentageFilled() >= getWinCondition()){
 			win = true;
 			levelTimer.stop();
 			
