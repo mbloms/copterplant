@@ -1,13 +1,13 @@
 package se.mad.copterplant.actor;
 
-import java.util.ArrayList;
 
+import se.mad.copterplant.level.Level;
+import java.util.ArrayList;
 import se.mad.copterplant.level.VisualMap;
 import se.mad.copterplant.level.levels.Level01;
 import se.mad.copterplant.screens.GameScreen;
 import se.mad.copterplant.util.Settings;
 import se.mad.copterplant.util.UserInput;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -27,17 +27,19 @@ public class Player extends Actor implements Collidable {
 	private float speed = 1;
 	private float moveTimer;
 	private float moveTimerStart = 0.1f;
-	
+
 	private float radius;
 
 	private Path path;
+	private Level currentLevel;
 
 	/**
 	 *
 	 * @param pos is the start pos of the player.
 	 */
-	public Player(Vector2 pos) {
+	public Player(Vector2 pos,Level currentLevel) {
 		super(pos);
+		this.currentLevel = currentLevel;
 	}
 
 	@Override
@@ -63,31 +65,30 @@ public class Player extends Actor implements Collidable {
 		temp.x /= 32;
 		temp.y /= 32;
 
-		if (!VisualMap.BoundsRect.contains(getCollisionBox())
-				|| Level01.V_MAP.map.isFilled((int) temp.x, (int) temp.y)) {
+		if ( currentLevel.getLevelMap().isFilled((int) temp.x, (int) temp.y)) {
 			setVel(new Vector2(0, 0));
-		}
-
-		if (Level01.V_MAP.map.isFilled((int) temp.x, (int) temp.y)) {
 
 			if (creatingPath) {
 				creatingPath = false;
 				path.addNode(getPos());
 				if (path != null) {
-					Level01.V_MAP.map.fillTrack(path.getPath());
-					
+
+					currentLevel.getLevelMap().fillTrack(path.getPath());
+					int gridPos[] = VisualMap.ScreenToLevelCoordinates(GameScreen.ball[0].getPos());
+
 					Ball[] ball = GameScreen.ball;
 					int ballSize = ball.length;
-					
+
 					int[] gridPosX = new int[ballSize ];
 					int[] gridPosY = new int[ballSize ];
-					
+
 					for(int i = 0; i < ballSize ;i++){
 						int[] tempPos = VisualMap.ScreenToLevelCoordinates(ball[i].getPos());
 						gridPosX[i] = tempPos[0];
 						gridPosY[i] = tempPos[1];
 					}
-					Level01.V_MAP.map.areaFill(gridPosX,gridPosY);
+					currentLevel.getLevelMap().areaFill(gridPosX,gridPosY);
+
 				}
 				path = null;
 			}
@@ -126,8 +127,8 @@ public class Player extends Actor implements Collidable {
 				temp.y = 96 + 32 * 20 - 16;
 			}
 
-			
-			
+
+
 			if (creatingPath) {
 				path.addNode(getPos());
 			}

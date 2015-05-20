@@ -1,12 +1,16 @@
 package se.mad.copterplant.level;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.LinkedList;
 import java.util.Stack;
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.math.Vector2;
+
 import se.mad.copterplant.actor.Path.PathObject;
 import se.mad.copterplant.level.BinaryCollection.BinaryArrayList;
 import se.mad.copterplant.level.BinaryCollection.BinaryArrayMatrix;
+import se.mad.copterplant.util.FileUtil;
+
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -21,14 +25,16 @@ import com.badlogic.gdx.math.Vector2;
 public class LevelMap extends BinaryArrayMatrix{
 	int width;
 	int height;
-	VisualMap vMap;
+	Level currentLevel;
 		
-	public LevelMap(int width, int height, VisualMap vMap){
+	public LevelMap(int width, int height, Level currLevel){
 		super(height, width);
 		
 		this.width = width;
 		this.height = height;
-		this.vMap = vMap;
+		this.currentLevel = currLevel;
+		
+		parseString(currentLevel.filepath);
 	}
 
 	//TODO: Fix comment
@@ -142,7 +148,7 @@ public class LevelMap extends BinaryArrayMatrix{
 			
 		}
 		rows = matrix;
-		vMap.updateBoundingBoxes();
+		currentLevel.getVisualMap().updateBoundingBoxes();
 	}
 
 	/**
@@ -158,18 +164,38 @@ public class LevelMap extends BinaryArrayMatrix{
 		for (PathObject p:path) {
 			Vector2 pos = p.getPos();
 			
-			Vector2 gridPos = new Vector2((int)(pos.x/32),(int)(pos.y/32));
-	
-			if (VisualMap.BoundsRect.contains(pos)) {
-				gridPos.sub(10,3);
-				fillBlock((int)gridPos.x, (int)gridPos.y);
+			Vector2 gridPosNew = VisualMap.ScreenToLevelVector2(pos.cpy());
+			
+			if (currentLevel.getVisualMap().getLevelBounds().contains(pos)) {
+				fillBlock((int)gridPosNew.x, (int)gridPosNew.y);
 			}
 		}
-		vMap.updateBoundingBoxes();
+		currentLevel.getVisualMap().updateBoundingBoxes();
 	}
 
-	public void parseString(){
-		//TODO
+	public void parseString(String filepath){
+		
+	    StringReader reader = new StringReader(FileUtil.readFile(filepath));
+	    BufferedReader br = new BufferedReader(reader);
+	    String line;
+	    int col = 0;
+	    int row = height-1;
+	    try {
+			while((line=br.readLine())!=null)
+			{
+				for (String mark:line.split("")){
+					//System.out.println("Mark:" + mark);
+					if (mark.equals("#")) {
+						fillBlock(col, row);
+					}
+					col++;
+				}
+				col = 0;
+				row--;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 	}
 

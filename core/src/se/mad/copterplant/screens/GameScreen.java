@@ -29,7 +29,7 @@ public class GameScreen extends SimpleScreen {
 	private SpriteBatch sb;
 	private BitmapFont font;
 	private GlyphLayout glyphLayout;
-	
+
 	public GameScreen(Game game) {
 		super(game);
 	}
@@ -37,7 +37,7 @@ public class GameScreen extends SimpleScreen {
 	@Override
 	public void init() {
 		level = new Level[1];
-		level[0] = new Level01("");
+		level[0] = new Level01("map.mad");
 		
 		player = new Player(VisualMap.LevelCoordinatesToScreen(0, 10));
 		ball = new Ball[1]; //Don't add to many balls
@@ -46,6 +46,7 @@ public class GameScreen extends SimpleScreen {
 
 			ball[i] = new Ball(VisualMap.LevelCoordinatesToScreen((int)pos.x, (int)pos.y),level[Settings.CURRENT_LEVEL].getVisualMap(),player);
 		}
+
 		sb = new SpriteBatch();
 		font = new BitmapFont(Gdx.files.internal("font.fnt"));
 	}
@@ -56,7 +57,7 @@ public class GameScreen extends SimpleScreen {
 		boolean free = false;
 		while(!free){ // Check if you can spawn here
 			free = true;
-			if(Level01.V_MAP.map.isFilled((int)pos.x, (int)pos.y)){// Check if the maps is clear
+			if(level.getLevelMap().isFilled((int)pos.x, (int)pos.y)){// Check if the maps is clear
 				free = false;
 				pos = new Vector2((int)(Math.random()*18)+1, (int)(Math.random()*18)+1);
 				continue;
@@ -84,9 +85,6 @@ public class GameScreen extends SimpleScreen {
 			}
 			getGame().setScreen(new GameScreen(getGame()));
 		}
-		
-		System.out.println(Settings.CURRENT_LEVEL);
-		
 		if (!playing) return;
 		UserInput.POLL_USER_INPUT();
 		player.update(delta);
@@ -123,7 +121,6 @@ public class GameScreen extends SimpleScreen {
 			b.draw(Copterplant.RENDERER);
 		}
 		player.draw(Copterplant.RENDERER);
-		
 		
 		if (level[Settings.CURRENT_LEVEL].isPassed()) {
 			glyphLayout = new GlyphLayout(font, "YOU WON!!!!!!");
