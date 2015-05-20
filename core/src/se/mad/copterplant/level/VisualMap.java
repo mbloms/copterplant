@@ -117,6 +117,19 @@ public class VisualMap {
 		levelPos[1] = gridY;
 		return levelPos;
 	}
+	
+	public static Vector2 ScreenToLevelVector2(Vector2 position) {
+		Vector2 levelPos = new Vector2();
+		position.sub(X_OFFSET*TILE_SIZE, Y_OFFSET*TILE_SIZE);
+		int gridX = (int)position.x/TILE_SIZE;
+		int gridY = (int)position.y/TILE_SIZE;
+		levelPos.x= gridX;
+		levelPos.y = gridY;
+		return levelPos;
+	}
+	
+	
+	
 	/**
 	 * Transforms a level coordinate to a screen coordinate.
 	 * This is relative to the bottom-left corner of the the screen.
