@@ -17,8 +17,8 @@ public class Level01 extends Level {
 	
 	public Level01(String filepath) {
 		super(filepath);
-		levelTimer = new LevelTimer(10, 1);
-		visualMap = new VisualMap();
+		levelTimer = new LevelTimer(100, 1);
+		visualMap = new VisualMap(filepath);
 		levelMap = visualMap.map;
 		levelTimer.start();
 		batcher = new SpriteBatch();

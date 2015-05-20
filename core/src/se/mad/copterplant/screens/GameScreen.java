@@ -35,7 +35,7 @@ public class GameScreen extends SimpleScreen {
 
 	@Override
 	public void init() {
-		level = new Level01("");
+		level = new Level01("map.mad");
 		player = new Player(VisualMap.LevelCoordinatesToScreen(0, 10));
 		ball = new Ball[1]; //Don't add to many balls (balls < 40)
 		for(int i = 0;i < ball.length;i++){

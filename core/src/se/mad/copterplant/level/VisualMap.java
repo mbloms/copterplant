@@ -29,26 +29,12 @@ public class VisualMap {
 	Texture pixmaptex;
 	SpriteBatch spritebatch;
 
-	public VisualMap() {
+	public VisualMap(String filepath) {
 		boundingBoxes = new ArrayList<>();
 		map = new LevelMap(20, 20,this);
+		map.parseString(filepath);
 		BoundsRect = new Rectangle(X_OFFSET*TILE_SIZE,Y_OFFSET*TILE_SIZE,
-				MAP_WIDTH*TILE_SIZE,MAP_HEIGTH*TILE_SIZE);
-		
-		for (int x = 0; x<MAP_WIDTH; x++) {
-			map.fillBlock(x, MAP_HEIGTH-1); // in my eyes this is essentialy zero in an array but everything is backwards.
-			map.fillBlock(x, 0); // in my eyes this is MAP_HEIGTH-1 but everything is bakwards.
-			//map.fillBlock(x, 1); // in my eyes this is MAP_HEIGTH-1 but everything is bakwards.
-		}
-		
-		for (int y = 1; y<MAP_HEIGTH-1; y++) {
-			map.fillBlock(0, y); // in my eyes this is essential zero in an array but everything is backwards.
-			map.fillBlock(MAP_WIDTH-1, y); // in my eyes this is MAP_HEIGTH-1 but everything is bakwards.
-		}
-		
-		
-		map.fillBlock(10, 10);
-		
+				MAP_WIDTH*TILE_SIZE,MAP_HEIGTH*TILE_SIZE);	
 		updateBoundingBoxes();
 	}
 	
