@@ -23,18 +23,14 @@ public class VisualMap {
 	public static int MAP_HEIGTH = 20;
 	public static int X_OFFSET = 10;
 	public static int Y_OFFSET = 3;
-	public LevelMap map;
-	public static Rectangle BoundsRect;
+	
 	private ArrayList<Rectangle> boundingBoxes;
-	Texture pixmaptex;
-	SpriteBatch spritebatch;
-
-	public VisualMap(String filepath) {
+	private Level currentLevel;
+	private Rectangle levelBounds;
+	public VisualMap(Level currentLevel) {
+		this.currentLevel = currentLevel;
 		boundingBoxes = new ArrayList<>();
-		map = new LevelMap(20, 20,this);
-		map.parseString(filepath);
-		BoundsRect = new Rectangle(X_OFFSET*TILE_SIZE,Y_OFFSET*TILE_SIZE,
-				MAP_WIDTH*TILE_SIZE,MAP_HEIGTH*TILE_SIZE);	
+		levelBounds = new Rectangle(X_OFFSET*TILE_SIZE,Y_OFFSET*TILE_SIZE,MAP_WIDTH*TILE_SIZE,MAP_HEIGTH*TILE_SIZE);
 		updateBoundingBoxes();
 	}
 	
@@ -47,7 +43,7 @@ public class VisualMap {
 		boundingBoxes.clear();
 		for (int x = 0; x < MAP_WIDTH; x++) {
 			for (int y = 0; y<MAP_HEIGTH;y++){
-				if (map.isFilled(x, y)) {
+				if (currentLevel.getLevelMap().isFilled(x, y)) {
 					boundingBoxes.add(new Rectangle(X_OFFSET*TILE_SIZE+x*TILE_SIZE,Y_OFFSET*TILE_SIZE+y*TILE_SIZE,TILE_SIZE,TILE_SIZE));
 				}
 			}
@@ -60,19 +56,10 @@ public class VisualMap {
 	 * @param renderer
 	 */
 	public void draw(ShapeRenderer renderer){
-		//TODO Draw collision box
-		//renderer.setColor(Color.GREEN);
-		//renderer.begin(ShapeType.Line);
-		//renderer.rect(X_OFFSET*TILE_SIZE,Y_OFFSET*TILE_SIZE,
-		//		MAP_WIDTH*TILE_SIZE,MAP_HEIGTH*TILE_SIZE);
-		//renderer.end();
-
-		
-
 
 		for (int x = 0; x < MAP_WIDTH; x++) {
 			for (int y = 0; y<MAP_HEIGTH;y++){
-				if (map.isFilled(x, y)) {
+				if (currentLevel.getLevelMap().isFilled(x, y)) {
 					renderer.setColor(Color.TEAL);
 					renderer.begin(ShapeType.Line);
 						renderer.rect(X_OFFSET*TILE_SIZE+x*TILE_SIZE,Y_OFFSET*TILE_SIZE+y*TILE_SIZE,TILE_SIZE,TILE_SIZE);	
@@ -86,18 +73,16 @@ public class VisualMap {
 		}
 		
 		
-		//TODO Draw collision box
-		//for(Rectangle r:boundingBoxes){
-		//	renderer.setColor(Color.RED);
-		//	renderer.begin(ShapeType.Line);
-		//		renderer.rect(r.x,r.y,r.width,r.height);
-		//	renderer.end();
-		//}	
 	}
 	
+	/**
+	 * @return the levelBounds
+	 */
+	public Rectangle getLevelBounds() {
+		return levelBounds;
+	}
 	
-	
-	
+
 	/**
 	 * Takes a Vector2 screen position and returns an int array with the position
 	 * relative the level. The position is returned in grid space, which means that 
@@ -145,19 +130,5 @@ public class VisualMap {
 		screenPos.y = screenY;
 		return screenPos;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }
