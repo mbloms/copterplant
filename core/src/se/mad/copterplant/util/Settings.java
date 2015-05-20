@@ -10,4 +10,5 @@ public class Settings {
 	public static final String GAME_NAME = "CopterPlant";
 	public static final int GAME_WIDTH = 1280;
 	public static final int GAME_HEIGHT = 800;
+	public static int CURRENT_LEVEL = 0;
 }

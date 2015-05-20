@@ -17,7 +17,7 @@ public class Level01 extends Level {
 	
 	public Level01(String filepath) {
 		super(filepath);
-		levelTimer = new LevelTimer(10, 1);
+		levelTimer = new LevelTimer(100, 1);
 		visualMap = new VisualMap();
 		levelMap = visualMap.map;
 		levelTimer.start();
