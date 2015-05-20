@@ -1,5 +1,6 @@
 package se.mad.copterplant.actor;
 
+import se.mad.copterplant.level.Level;
 import se.mad.copterplant.level.VisualMap;
 import se.mad.copterplant.level.levels.Level01;
 import se.mad.copterplant.screens.GameScreen;
@@ -29,13 +30,15 @@ public class Player extends Actor implements Collidable {
 	private float radius;
 
 	private Path path;
+	private Level currentLevel;
 
 	/**
 	 *
 	 * @param pos is the start pos of the player.
 	 */
-	public Player(Vector2 pos) {
+	public Player(Vector2 pos,Level currentLevel) {
 		super(pos);
+		this.currentLevel = currentLevel;
 	}
 
 	@Override
@@ -61,20 +64,16 @@ public class Player extends Actor implements Collidable {
 		temp.x /= 32;
 		temp.y /= 32;
 
-		if (!VisualMap.BoundsRect.contains(getCollisionBox())
-				|| Level01.V_MAP.map.isFilled((int) temp.x, (int) temp.y)) {
+		if ( currentLevel.getLevelMap().isFilled((int) temp.x, (int) temp.y)) {
 			setVel(new Vector2(0, 0));
-		}
-
-		if (Level01.V_MAP.map.isFilled((int) temp.x, (int) temp.y)) {
-
+			
 			if (creatingPath) {
 				creatingPath = false;
 				path.addNode(getPos());
 				if (path != null) {
-					Level01.V_MAP.map.fillTrack(path.getPath());
+					currentLevel.getLevelMap().fillTrack(path.getPath());
 					int gridPos[] = VisualMap.ScreenToLevelCoordinates(GameScreen.ball[0].getPos());
-					Level01.V_MAP.map.areaFill(gridPos[0],gridPos[1]);
+					currentLevel.getLevelMap().areaFill(gridPos[0],gridPos[1]);
 				}
 				path = null;
 			}
