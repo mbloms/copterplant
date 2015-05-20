@@ -81,18 +81,24 @@ public class VisualMap {
 		//		MAP_WIDTH*TILE_SIZE,MAP_HEIGTH*TILE_SIZE);
 		//renderer.end();
 
-		renderer.setColor(Color.GREEN);
-		renderer.begin(ShapeType.Filled);
+		
 
 
 		for (int x = 0; x < MAP_WIDTH; x++) {
 			for (int y = 0; y<MAP_HEIGTH;y++){
 				if (map.isFilled(x, y)) {
-					renderer.rect(X_OFFSET*TILE_SIZE+x*TILE_SIZE,Y_OFFSET*TILE_SIZE+y*TILE_SIZE,TILE_SIZE,TILE_SIZE);	
+					renderer.setColor(Color.TEAL);
+					renderer.begin(ShapeType.Line);
+						renderer.rect(X_OFFSET*TILE_SIZE+x*TILE_SIZE,Y_OFFSET*TILE_SIZE+y*TILE_SIZE,TILE_SIZE,TILE_SIZE);	
+					renderer.end();
+				}else{
+					renderer.begin(ShapeType.Filled);
+					renderer.rect(X_OFFSET*TILE_SIZE+x*TILE_SIZE,Y_OFFSET*TILE_SIZE+y*TILE_SIZE,TILE_SIZE,TILE_SIZE);
+					renderer.end();
 				}
 			}
 		}
-		renderer.end();
+		
 		
 		//TODO Draw collision box
 		//for(Rectangle r:boundingBoxes){
@@ -119,8 +125,8 @@ public class VisualMap {
 	public static int[] ScreenToLevelCoordinates(Vector2 position) {
 		int[] levelPos = new int[2];
 		position.sub(X_OFFSET*TILE_SIZE, Y_OFFSET*TILE_SIZE);
-		int gridX = (int)Math.round(position.x/TILE_SIZE);
-		int gridY = (int)Math.round(position.y/TILE_SIZE);
+		int gridX = (int)position.x/TILE_SIZE;
+		int gridY = (int)position.y/TILE_SIZE;
 		levelPos[0] = gridX;
 		levelPos[1] = gridY;
 		return levelPos;

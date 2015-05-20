@@ -1,14 +1,21 @@
 package se.mad.copterplant.screens;
+
 import se.mad.copterplant.Copterplant;
 import se.mad.copterplant.actor.Ball;
 import se.mad.copterplant.actor.Player;
 import se.mad.copterplant.level.VisualMap;
 import se.mad.copterplant.level.levels.Level01;
 import se.mad.copterplant.util.GLUtil;
+import se.mad.copterplant.util.Settings;
 import se.mad.copterplant.util.UserInput;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 
@@ -17,9 +24,11 @@ public class GameScreen extends SimpleScreen {
 	private Level01 level;
 	private Player player;
 	public static Ball[] ball;
-
-
-
+	private boolean playing = true;
+	private SpriteBatch sb;
+	private BitmapFont font;
+	private GlyphLayout glyphLayout;
+	
 	public GameScreen(Game game) {
 		super(game);
 	}
@@ -34,6 +43,8 @@ public class GameScreen extends SimpleScreen {
 
 			ball[i] = new Ball(VisualMap.LevelCoordinatesToScreen((int)pos.x, (int)pos.y),level.getVisualMap(),player);
 		}
+		sb = new SpriteBatch();
+		font = new BitmapFont(Gdx.files.internal("font.fnt"));
 	}
 
 	private Vector2 randomPos(){
@@ -64,6 +75,11 @@ public class GameScreen extends SimpleScreen {
 	}
 	@Override
 	public void update(float delta) {
+		if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+			getGame().setScreen(new GameScreen(getGame()));
+		}
+		
+		if (!playing) return;
 		UserInput.POLL_USER_INPUT();
 		player.update(delta);
 
@@ -79,11 +95,13 @@ public class GameScreen extends SimpleScreen {
 			}
 		}
 
-		level.update(delta);
-
-
-
-
+		level.update(delta);	
+		if (level.isPassed()) {
+			playing = false;
+		}
+		if(level.isDead()){
+			playing = false;
+		}
 	}
 
 	@Override
@@ -97,6 +115,19 @@ public class GameScreen extends SimpleScreen {
 			b.draw(Copterplant.RENDERER);
 		}
 		player.draw(Copterplant.RENDERER);
+		
+		
+		if (level.isPassed()) {
+			glyphLayout = new GlyphLayout(font, "YOU WON!!!!!!");
+			sb.begin();
+			font.draw(sb, glyphLayout, Settings.GAME_WIDTH/2-glyphLayout.width/2, Settings.GAME_HEIGHT/2-glyphLayout.height/2);
+			sb.end();
+		}
+		if(level.isDead()){
+			glyphLayout = new GlyphLayout(font, "YOU LOST!!!!!!");
+			sb.begin();
+			font.draw(sb, glyphLayout, Settings.GAME_WIDTH/2-glyphLayout.width/2, Settings.GAME_HEIGHT/2-glyphLayout.height/2);
+			sb.end();
+		}
 	}
-
 }

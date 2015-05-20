@@ -14,22 +14,31 @@ public class Level01 extends Level {
 	private SpriteBatch batcher;
 	private BitmapFont font;
 	public static VisualMap V_MAP;
+	
 	public Level01(String filepath) {
 		super(filepath);
-		levelTimer = new LevelTimer(60, 10);
+		levelTimer = new LevelTimer(10, 1);
 		visualMap = new VisualMap();
 		levelMap = visualMap.map;
 		levelTimer.start();
 		batcher = new SpriteBatch();
 		font = new BitmapFont();
 		V_MAP =getVisualMap(); 
+		
+		setWinCondition(90);
 	}
 
 	@Override
 	public void update(float delta) {
 		levelTimer.update(delta);
+		
+		if(V_MAP.map.percentageFilled() >= getWinCondition()){
+			win = true;
+			levelTimer.stop();
+			
+		}
 	}
-
+	
 	@Override
 	public void draw(ShapeRenderer renderer) {
 		visualMap.draw(renderer);

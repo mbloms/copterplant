@@ -177,7 +177,14 @@ public class LevelMap extends BinaryArrayMatrix{
 	 * @return A double with the quote "filled area" divided by "total area".
 	 */
 	public double percentageFilled(){
-		//TODO
-		return -1.0;
+		float filled = 0;
+		for(int x = 0;x < width;x++){
+			for(int y = 0;y < height;y++){
+				if(isFilled(x, y)){
+					filled++;
+				}
+			}
+		}
+		return filled/(width*height)*100;
 	}
 }
