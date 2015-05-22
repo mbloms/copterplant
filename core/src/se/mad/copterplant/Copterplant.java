@@ -33,5 +33,12 @@ public class Copterplant extends Game {
 		if (Gdx.input.isKeyPressed(Keys.ESCAPE)){
 			Gdx.app.exit();
 		}
+		if (Gdx.input.isKeyPressed(Keys.F)){
+			if (!Gdx.graphics.isFullscreen()) {
+				Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, true);
+			}else {
+				Gdx.graphics.setDisplayMode(Settings.GAME_WIDTH,Settings.GAME_HEIGHT, false);
+			}
+		}
 	}
 }
