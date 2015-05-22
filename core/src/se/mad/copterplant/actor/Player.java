@@ -158,7 +158,6 @@ public class Player extends Actor implements Collidable {
 
 	@Override
 	public void collide(Actor other) {
-		System.out.println("Collision!");
 		die();
 	}
 
