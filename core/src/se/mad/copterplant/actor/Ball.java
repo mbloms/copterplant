@@ -57,7 +57,7 @@ public class Ball extends Actor implements Collidable {
 
 	private void move() {
 		collided = false; // starts out with the abillity to move forward.
-
+		Vector2 oldPos = getPos();
 		Vector2 newPos = getPos().add(getVel()); // the new position that we would like to move to. At the center.
 		Vector2 rectPos = getPos().sub(getCollisionBox().width / 2,getCollisionBox().height / 2); // the rectangular position of the ball. Lower left corner.
 		rectPos.add(getVel()); // Changed so that the rectPos is like the next pos but in different coordinates.
@@ -72,45 +72,25 @@ public class Ball extends Actor implements Collidable {
 		if (!collided){
 			this.setPos(newPos);
 		}else {
-			//this.setPos(newPos);
+			this.setPos(oldPos);
 			if (MTV != null) {
 				Vector2 currMTV = MTV.cpy();
-				this.setPos(getPos().add(currMTV));
+				this.setPos(oldPos.add(currMTV));
 				
 				
 				Vector2 currPos = new Vector2(getCollisionBox().x,getCollisionBox().y);
 				
-				if((currPos.x+getCollisionBox().width) <= collidedRectangle.x ) {
-					if (currPos.y<=collidedRectangle.y) {
-						setVel(getYVelReflection());
-					}else {
-						setVel(getXVelReflection());
-					}
-					
-				}
-
-				if ((currPos.y) >= collidedRectangle.y+collidedRectangle.height) {
-					setVel(getYVelReflection());
-				}
-				
-				
-				if (currPos.x >= collidedRectangle.x) {
-					if (currPos.y <= collidedRectangle.y){
-						setVel(getYVelReflection());
-					}
-					
-				}
-				
-				
-				if (currPos.x >= collidedRectangle.x +collidedRectangle.width) {
+				if ((currPos.x < collidedRectangle.x && currPos.y < collidedRectangle.y + collidedRectangle.height && currPos.x + getCollisionBox().width < collidedRectangle.x )||
+					(currPos.x > collidedRectangle.x + collidedRectangle.width)
+						){
 					setVel(getXVelReflection());
+					
+				}else if(( currPos.y < collidedRectangle.y)||(currPos.y > collidedRectangle.y + collidedRectangle.height)){
+					setVel(getYVelReflection());
+				}else{
+					System.err.println("Did not reflect correctly.");
+				setVel(getVel().scl(-1));
 				}
-				
-				
-				
-				
-				
-				
 			}
 		}
 		
