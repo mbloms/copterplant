@@ -373,14 +373,11 @@ public class Ball extends Actor implements Collidable {
 	public void draw(ShapeRenderer renderer) {
 		drawActor(renderer);
 
-		//TODO Draw collision box
 		renderer.begin(ShapeType.Line);
 		renderer.setColor(Color.MAGENTA);
 			if (collidedRectangle != null)
 			renderer.rect(collidedRectangle.x,collidedRectangle.y,collidedRectangle.width,collidedRectangle.height);
 		
-		//renderer.rect(nextRectangle.x, nextRectangle.y, nextRectangle.width,nextRectangle.height);
-		// renderer.setColor(Color.WHITE); renderer.rect(getCollisionBox().x,getCollisionBox().y,getCollisionBox().width,getCollisionBox().height);
 		renderer.end();
 	}
 

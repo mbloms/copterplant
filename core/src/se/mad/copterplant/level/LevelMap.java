@@ -37,7 +37,12 @@ public class LevelMap extends BinaryArrayMatrix{
 		parseString(currentLevel.filepath);
 	}
 
-	//TODO: Fix comment
+	/**
+	 * Checks if the specified block is filled or not.
+	 * @param x x coordinate
+	 * @param y y coordinate
+	 * @return True if the block is filled, False otherwise.
+	 */
 	public boolean isFilled(int x, int y){
 		try{
 			return getBoolean(y, x);

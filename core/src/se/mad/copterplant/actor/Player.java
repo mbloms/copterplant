@@ -154,10 +154,6 @@ public class Player extends Actor implements Collidable {
 		Gdx.gl.glLineWidth(400);
 		drawActor(renderer);
 		Gdx.gl.glLineWidth(1);
-		//TODO Draw collision box
-		//renderer.begin(ShapeType.Line);
-		//renderer.rect(getCollisionBox().x, getCollisionBox().y,getCollisionBox().width, getCollisionBox().height);
-		//renderer.end();
 	}
 
 	@Override
