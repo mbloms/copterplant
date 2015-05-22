@@ -60,7 +60,7 @@ public class BinaryArrayList {
 	 */
 	public void setFalse(int i){
 		checkOutOfBounds(i);
-		segments[i/32] ^= (1 << (i%32));
+		segments[i/32] &= ~(1 << (i%32));
 	}
 	
 	/**

@@ -9,6 +9,7 @@ public abstract class Level {
 	protected LevelTimer levelTimer;
 	private float winCondition;
 	protected boolean win;
+	private int nrOfBalls;
 	
 	public Level(String filepath) {
 		this.filepath = filepath;
@@ -53,5 +54,30 @@ public abstract class Level {
 	 */
 	public boolean isDead(){
 		return levelTimer.currentScore() <= 0;
+	}
+	
+	/**
+	 * Return how many percent you have filled and how many you need to fill.
+	 * Index 0 = current percentage filled
+	 * Index 1 = win condition
+	 * @return string[] 
+	 */
+	public String[] getMapStatus(){
+		String[] s = new String[2];
+		s[0] = ""+(int)getLevelMap().percentageFilled();
+		s[1] = ""+(int)winCondition;
+		return s;
+	}
+	/**
+	 * @return the nrOfBalls
+	 */
+	public int getNrOfBalls() {
+		return nrOfBalls;
+	}
+	/**
+	 * @param nrOfBalls the nrOfBalls to set
+	 */
+	public void setNrOfBalls(int nrOfBalls) {
+		this.nrOfBalls = nrOfBalls;
 	}
 }
