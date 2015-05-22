@@ -9,6 +9,7 @@ public abstract class Level {
 	protected LevelTimer levelTimer;
 	private float winCondition;
 	protected boolean win;
+	private int nrOfBalls;
 	
 	public Level(String filepath) {
 		this.filepath = filepath;
@@ -66,5 +67,17 @@ public abstract class Level {
 		s[0] = ""+(int)getLevelMap().percentageFilled();
 		s[1] = ""+(int)winCondition;
 		return s;
+	}
+	/**
+	 * @return the nrOfBalls
+	 */
+	public int getNrOfBalls() {
+		return nrOfBalls;
+	}
+	/**
+	 * @param nrOfBalls the nrOfBalls to set
+	 */
+	public void setNrOfBalls(int nrOfBalls) {
+		this.nrOfBalls = nrOfBalls;
 	}
 }
