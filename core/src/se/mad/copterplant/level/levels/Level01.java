@@ -4,10 +4,6 @@ import se.mad.copterplant.level.Level;
 import se.mad.copterplant.level.LevelMap;
 import se.mad.copterplant.level.LevelTimer;
 import se.mad.copterplant.level.VisualMap;
-import se.mad.copterplant.util.Settings;
-
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Level01 extends Level {
@@ -18,7 +14,7 @@ public class Level01 extends Level {
 		levelMap = new LevelMap(20, 20,this);
 		visualMap = new VisualMap(this);
 		levelTimer.start();
-		setWinCondition(90);
+		setWinCondition(85);
 		setNrOfBalls(3);
 	}
 
