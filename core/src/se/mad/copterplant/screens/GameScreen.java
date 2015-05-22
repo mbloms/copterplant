@@ -6,6 +6,7 @@ import se.mad.copterplant.actor.Player;
 import se.mad.copterplant.level.Level;
 import se.mad.copterplant.level.VisualMap;
 import se.mad.copterplant.level.levels.Level01;
+import se.mad.copterplant.level.levels.Level02;
 import se.mad.copterplant.util.GLUtil;
 import se.mad.copterplant.util.Settings;
 import se.mad.copterplant.util.UserInput;
@@ -73,9 +74,9 @@ public class GameScreen extends SimpleScreen {
 
 		level = new Level[2];
 		level[0] = new Level01("map.mad");
-		level[1] = new Level01("map2.mad");
+		level[1] = new Level02("map2.mad");
 		player = new Player(VisualMap.LevelCoordinatesToScreen(0, 10),level[Settings.CURRENT_LEVEL]);
-		ball = new Ball[2]; //Don't add to many balls
+		ball = new Ball[level[Settings.CURRENT_LEVEL].getNrOfBalls()]; //Don't add to many balls
 		
 		for(int i = 0;i < ball.length;i++){
 			Vector2 pos = randomPos();

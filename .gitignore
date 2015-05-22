@@ -62,3 +62,6 @@ build/
 
 ## OS Specific
 .DS_Store
+core/Copterplant2.ucls
+core/src/se/mad/copterplant/Copterplant.png
+core/src/se/mad/copterplant/Copterplant.ucls
